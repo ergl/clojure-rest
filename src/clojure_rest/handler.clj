@@ -11,8 +11,7 @@
 
 ;; () -> ring.util.response<Success, Error>
 (defroutes app-routes
-  ; (GET "/" [] (resource-response "index.html" {:root "public"}))
-  (GET "/" [] "Hello world!")
+  (GET "/" [] (resource-response "index.html" {:root "public"}))
  	(route/resources "/")
   (context "/api" [] 
            
