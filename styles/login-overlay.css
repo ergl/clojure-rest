@@ -140,17 +140,17 @@
 .submit-button {
   cursor: pointer;
   color: #ffffff;
-  background-color: #439AF1;
+  background-color: #895B93;
   outline: none;
   border: none;
   padding: 1rem 6rem;
-  box-shadow: 0px 5px 0px 0px #3880C8;
+  box-shadow: 0px 5px 0px 0px #764F7E;
   border-radius: 5px;
 }
 
 .submit-button:hover {
-  background-color: #3880C8;
-  box-shadow: 0px 5px 0px 0px #2d669f;
+  background-color: #764F7E;
+  box-shadow: 0px 5px 0px 0px #634369;
 }
 
 
