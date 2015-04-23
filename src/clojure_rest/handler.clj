@@ -40,7 +40,8 @@
                                                             (PUT "/" {body :body} (comments/update-comment id body))
                                                             (DELETE "/" [] (comments/delete-comment id))))))
            
-           (route/not-found "Not Found")))
+           (route/not-found "Not Found"))
+  (route/not-found {:status 404}))
 
 
 ;; HTTPRequest -> JSONResponse
