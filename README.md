@@ -10,6 +10,8 @@ You will need [Leiningen](https://github.com/technomancy/leiningen) 2.0.0 or abo
 
 To start a web server for the application, run `lein run` inside the project folder. Then point your browser to `http://localhost:5000`
 
+You may run `lein test` first to check that all tests pass (they should!).
+
 ## Licensing
 
 This project is distributed under the GPLv3 license. For more information, please check the [License](./LICENSE).
