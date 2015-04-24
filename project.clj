@@ -7,8 +7,10 @@
                  [c3p0/c3p0 "0.9.1.2"]
                  [org.clojure/java.jdbc "0.2.3"]
                  [com.h2database/h2 "1.3.168"]
-                 [cheshire "4.0.3"]]
+                 [cheshire "4.0.3"]
+                 [ring/ring-jetty-adapter "1.1.6"]]
   :plugins [[lein-ring "0.7.3"]]
   :ring {:handler clojure-rest.handler/app}
   :profiles
-  {:dev {:dependencies [[ring-mock "0.1.3"]]}})
+  {:dev {:dependencies [[ring-mock "0.1.3"]]}}
+  :main clojure-rest.app)

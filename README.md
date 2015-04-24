@@ -8,7 +8,7 @@ You will need [Leiningen](https://github.com/technomancy/leiningen) 2.0.0 or abo
 
 ### Getting it up and running
 
-To start a web server for the application, run `lein ring server` inside the project folder. Then point your browser to `http://localhost:3000`
+To start a web server for the application, run `lein run` inside the project folder. Then point your browser to `http://localhost:5000`
 
 ## Licensing
 
