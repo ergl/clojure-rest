@@ -12,6 +12,7 @@
                                                  ["select * from users"]
                                                  (into [] results)))))
 
+
 ;; UUID -> ring.util.response<SQLQuery, 404Error>
 (defn get-user [id]
   (sql/with-connection (db/db-connection)

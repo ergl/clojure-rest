@@ -43,5 +43,3 @@
   (sql/with-connection (db/db-connection)
                        (sql/delete-rows :coordinates ["coordinatesId=?" id]))
   {:status 204})
-
-
