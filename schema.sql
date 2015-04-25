@@ -21,6 +21,12 @@ create table users_users (
 	friendId uuid references users(usersId)
 );
 
+create table coordinates (
+	coordinatesId uuid primary key,
+	latitude decimal not null,
+	longitude decimal not null
+);
+
 create table events (
 	eventsId uuid primary key,
 	title varchar(50) not null,
@@ -28,18 +34,8 @@ create table events (
 	author uuid references users(usersId),
 	attending int not null,
 	initialDate date not null,
-	finalDate date
-);
-
-create table coordinates (
-	coordinatesId uuid primary key,
-	latitude decimal not null,
-	longitude decimal not null
-);
-
-create table events_coordinates (
-	eventsId uuid references events(eventsId),
-	coordinatesId uuid references coordinates(coordinatesId)
+	finalDate date,
+	coordinatesId uuid references coordinates (coordinatesId)
 );
 
 create table comments (
@@ -81,28 +77,6 @@ insert into users_users values (
 	'e5806d71-8b80-4159-bb53-b481e617ca95'
 );
 
-insert into events values (
-	'8da83e0d-32dd-4b1a-968c-a79e13ee57bf',
-	'This is a title',
-	'This is a description',
-	-- author: John
-	'e5806d71-8b80-4159-bb53-b481e617ca95',
-	20,
-	'2015-05-02',
-	'2015-05-04'
-);
-
-insert into events values (
-	'bd6d92e5-2abf-4289-83cf-e8926ca78e3f',
-	'This is another title',
-	'This is another description',
-	-- author: Alex
-	'b338c989-9074-4ab4-b4a5-d45e9ae8d8da',
-	20,
-	'2015-04-01',
-	'2015-05-29'
-);
-
 insert into coordinates values (
 	'b6578372-628e-4987-a38c-ef7cacc44d0d',
 	-40.32,
@@ -115,13 +89,27 @@ insert into coordinates values (
 	-60.5
 );
 
-insert into events_coordinates values (
+insert into events values (
 	'8da83e0d-32dd-4b1a-968c-a79e13ee57bf',
+	'This is a title',
+	'This is a description',
+	-- author: John
+	'e5806d71-8b80-4159-bb53-b481e617ca95',
+	20,
+	'2015-05-02',
+	'2015-05-04',
 	'b6578372-628e-4987-a38c-ef7cacc44d0d'
 );
 
-insert into events_coordinates values (
+insert into events values (
 	'bd6d92e5-2abf-4289-83cf-e8926ca78e3f',
+	'This is another title',
+	'This is another description',
+	-- author: Alex
+	'b338c989-9074-4ab4-b4a5-d45e9ae8d8da',
+	20,
+	'2015-04-01',
+	'2015-05-29',
 	'5af853c7-94bb-4ca9-b6a5-28782b89ee0f'
 );
 
