@@ -1,6 +1,5 @@
 (ns clojure-rest.db
-  (:import com.mchange.v2.c3p0.ComboPooledDataSource)
-  (:use ring.util.response))
+  (:import com.mchange.v2.c3p0.ComboPooledDataSource))
 
 
 ;; () -> java.util.UUID
