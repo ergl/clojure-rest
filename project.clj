@@ -1,16 +1,24 @@
 (defproject clojure-rest "0.1.0-SNAPSHOT"
   :description "REST service for saleokase.github.io"
   :url "http://github.com/ergl/clojure-rest"
-  :dependencies [[org.clojure/clojure "1.4.0"]
-                 [compojure "1.1.1"]
-                 [ring/ring-json "0.1.2"]
-                 [c3p0/c3p0 "0.9.1.2"]
+  :license {:name "General Public License - v 3"
+            :url "https://www.gnu.org/licenses/gpl-3.0-standalone.html"
+            :distribution :repo}
+  :dependencies [[org.clojure/clojure "1.6.0"]
+                 [compojure "1.3.3"]
+                 [ring/ring-json "0.3.1"]
+                 [com.mchange/c3p0 "0.9.2.1"]
+                 ;; Last version has new syntax
+                 ;; TODO: Upgrade to new syntax
                  [org.clojure/java.jdbc "0.2.3"]
-                 [com.h2database/h2 "1.3.168"]
-                 [cheshire "4.0.3"]
-                 [ring/ring-jetty-adapter "1.1.6"]]
-  :plugins [[lein-ring "0.7.3"]]
+                 [com.h2database/h2 "1.4.187"]
+                 [cheshire "5.4.0"]
+                 [ring/ring-jetty-adapter "1.3.2"]]
+  :plugins [[lein-ring "0.9.3"]]
   :ring {:handler clojure-rest.handler/app}
   :profiles
-  {:dev {:dependencies [[ring-mock "0.1.3"]]}}
+  {:dev {:dependencies [[ring/ring-mock "0.2.0"]]}}
   :main clojure-rest.app)
+
+;; documentation may be found here
+;; https://github.com/technomancy/leiningen/blob/stable/sample.project.clj
