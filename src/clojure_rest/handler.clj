@@ -10,6 +10,11 @@
             [clojure-rest.events :as events]
             [clojure-rest.comments :as comments]))
 
+(defn wrap-log-requests [handler]
+  (fn [req]
+    (println req)
+    (handler req)))
+
 ;; () -> ring.util.response<Success, Error>
 (defroutes app-routes
   (GET "/" [] (resource-response "index.html" {:root "public"}))
@@ -59,5 +64,6 @@
 ;; HTTPRequest -> JSONResponse
 (def app
   (-> (handler/api app-routes)
+      (wrap-log-requests)
       (middleware/wrap-json-body)
       (middleware/wrap-json-response)))
