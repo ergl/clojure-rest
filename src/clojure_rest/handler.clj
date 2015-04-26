@@ -15,6 +15,13 @@
  	(route/resources "/")
   (context "/api" [] 
            
+           (OPTIONS "/" [] (-> (response {:version "0.1.0-SNAPSHOT"})
+                               (header "Allow" "OPTIONS")))
+
+           (ANY "/" [] (-> (response nil)
+                           (status 405)
+                           (header "Allow" "OPTIONS")))
+
            (context "/events" [] (defroutes event-routes
                                    (GET "/" [] (events/get-all-events))
                                    (POST "/" {body :body} (events/create-new-event body))
