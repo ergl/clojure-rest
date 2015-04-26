@@ -15,7 +15,9 @@
                  [cheshire "5.4.0"]
                  [ring/ring-jetty-adapter "1.3.2"]]
   :plugins [[lein-ring "0.9.3"]]
-  :ring {:handler clojure-rest.handler/app}
+  :ring {:handler clojure-rest.handler/app
+         :auto-reload? true
+         :auto-refresh? false}
   :profiles
   {:dev {:dependencies [[ring/ring-mock "0.2.0"]]}}
   :main clojure-rest.app)
