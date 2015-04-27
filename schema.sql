@@ -6,6 +6,10 @@ drop table if exists events cascade;
 drop table if exists coordinates cascade;
 drop table if exists events_coordinates cascade;
 drop table if exists comments cascade;
+drop table if exists reports cascade;
+drop table if exists events_reports cascade;
+drop table if exists comments_reports cascade;
+
 
 create table users (
 	usersId uuid primary key,
@@ -38,6 +42,11 @@ create table events (
 	coordinatesId uuid references coordinates (coordinatesId)
 );
 
+create table users_events (
+	usersId uuid references users(usersId),
+	eventsId uuid references events(eventsId)
+);
+
 create table comments (
 	commentsId uuid primary key,
 	eventId uuid references events(eventsId),
@@ -47,6 +56,22 @@ create table comments (
 	author uuid references users(usersId),
 	positiveVotes int,
 	negativeVotes int
+);
+
+create table reports (
+	reportsId uuid primary key,
+	author uuid references users(usersId),
+	content varchar
+);
+
+create table events_reports (
+	reportsId uuid references reports(reportsId) on delete cascade,
+	eventsId uuid references events(eventsId) on delete cascade
+);
+
+create table comments_reports (
+	reportsId uuid references reports(reportsId) on delete cascade,
+	commentsId uuid references comments(commentsId) on delete cascade
 );
 
 -- Dummy Inserts
