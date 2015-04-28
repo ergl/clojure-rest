@@ -10,12 +10,15 @@
             [clojure-rest.events :as events]
             [clojure-rest.comments :as comments]))
 
+
+;; Response -> Response
+;; Prints the content of the Response to stdout
 (defn wrap-log-requests [handler]
   (fn [req]
     (println req)
     (handler req)))
 
-;; () -> ring.util.response<Success, Error>
+;; () -> Response
 (defroutes app-routes
   (GET "/" [] (resource-response "index.html" {:root "public"}))
  	(route/resources "/")
@@ -61,7 +64,7 @@
   (route/not-found {:status 404}))
 
 
-;; HTTPRequest -> JSONResponse
+;; Request -> Response
 (def app
   (-> (handler/api app-routes)
       (wrap-log-requests)

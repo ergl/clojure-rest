@@ -15,7 +15,7 @@
     (let [response (app (mock/request :get "/invalid"))]
       (is (= (:status response) 404))))
 
-  ;; A OPTIONS request to the /api route should return the version of the api
+  ;; An OPTIONS request to the /api route should return the version of the api
   (testing "options response"
     (let [response (app (mock/request :options "/api"))]
       (is (= ((parse-string (:body response)) "version") "0.1.0-SNAPSHOT"))

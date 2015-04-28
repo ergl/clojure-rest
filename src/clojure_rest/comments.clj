@@ -4,7 +4,8 @@
             [clojure-rest.db :as db]))
 
 
-;; () -> ring.util.response<SQLQuery>
+;; () -> Response[:body String]
+;; Returns a response with the contents of all the comments in the database
 (defn get-all-comments []
   (response
     (sql/with-connection (db/db-connection)
@@ -12,7 +13,9 @@
                                                  ["select * from comments"]
                                                  (into [] results)))))
 
-;; UUID -> ring.util.response<SQLQuery, 404Error>
+;; UUID -> Response[:body String]
+;; UUID -> Response[:body null :status 404]
+;; Returns a response with the contents of the specified comment
 (defn get-comment [id]
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
@@ -21,7 +24,10 @@
                                                      :else (response (first results))))))
 
 
-;; UUID -> ring.util.response<SQLQuery, 404Error>
+;; {} -> Response[:body String]
+;; {} -> Response[:body null :status 404]
+;; Creates a new comment with the provided content, then returns said comment
+;; See get-comment
 (defn create-new-comment [content]
   (let [id (db/uuid)]
     (sql/with-connection (db/db-connection)
@@ -30,7 +36,10 @@
     (get-comment id)))
 
 
-;; UUID -> ring.util.response<SQLQuery, 404Error>
+;; UUID, {} -> Response[:body String]
+;; UUID, {} -> Response[:body null :status 404]
+;; Updates the specified comment with the provided content, then returns said comment
+;; See get-comment
 (defn update-comment [id content]
   (sql/with-connection (db/db-connection)
                        (let [comment (assoc content "commentsId" id)]
@@ -38,7 +47,8 @@
   (get-comment id))
 
 
-;; UUID -> ring.util.response<SQLQuery, 204Error>
+;; UUID -> Response[:status 204]
+;; Deletes the specified comment, then returns a 204 http code
 (defn delete-comment [id]
   (sql/with-connection (db/db-connection)
                        (sql/delete-rows :comments ["commentsId=?" id]))
