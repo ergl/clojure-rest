@@ -4,6 +4,7 @@
   (:require [compojure.handler :as handler]
             [ring.middleware.json :as middleware]
             [compojure.route :as route]
+            [clojure.walk :refer [stringify-keys]]
             [clojure-rest.http :as http]
             [clojure-rest.db :as db]
             [clojure-rest.users :as users]
@@ -15,7 +16,9 @@
 ;; Prints the content of the Response to stdout
 (defn wrap-log-requests [handler]
   (fn [req]
-    (println req)
+    (->> (stringify-keys req)
+         (interpose "\n")
+         (println))
     (handler req)))
 
 ;; () -> Response
