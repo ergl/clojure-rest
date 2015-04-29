@@ -16,6 +16,7 @@
                  [ring/ring-jetty-adapter "1.3.2"]]
   :plugins [[lein-ring "0.9.3"]]
   :ring {:handler clojure-rest.handler/app
+         :port 5000
          :auto-reload? true
          :auto-refresh? false}
   :profiles
