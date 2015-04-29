@@ -34,35 +34,54 @@
                 (http/method-not-allowed [:options]))
 
            (context "/events" [] (defroutes event-routes
-                                   (GET "/" [] (events/get-all-events))
-                                   (POST "/" {body :body} (events/create-new-event body))
-                                   (OPTIONS "/" [] (http/options [:options :get :put :post :delete]))
-                                   (context "/:id" [id] (defroutes event-routes
-                                                          (GET "/" [] (events/get-event id))
-                                                          (PUT "/" {body :body} (events/update-event id body))
-                                                          (DELETE "/" [] (events/delete-event id))))
-                                   (ANY "/" [] (http/method-not-allowed [:options :get :put :post :delete]))))
+                                   (GET "/" [] (http/not-implemented))
+                                   (POST "/" [] (http/not-implemented))
+                                   (OPTIONS "/" [] (http/options [:options :get :post]))
+                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
+                                   (context ":id" [id] (defroutes event-routes
+                                                         (GET "/" [] (http/not-implemented))
+                                                         (PUT "/" [] (http/not-implemented))
+                                                         (DELETE "/" [] (http/not-implemented))
+                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
+                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
-           (context "/users" [] (defroutes user-routes
-                                  (GET "/" [] (users/get-all-users))
-                                  (POST "/" {body :body} (users/create-new-user body))
-                                  (OPTIONS "/" [] (http/options [:options :get :put :post :delete]))
-                                  (context "/:id" [id] (defroutes user-routes
-                                                         (GET "/" [] (users/get-user id))
-                                                         (PUT "/" {body :body} (users/update-user id body))
-                                                         (DELETE "/" [] (users/delete-user id))))
-                                  (ANY "/" [] (http/method-not-allowed [:options :get :put :post :delete]))))
+           (context "/users" [] (defroutes event-routes
+                                   (GET "/" [] (http/not-implemented))
+                                   (POST "/" [] (http/not-implemented))
+                                   (OPTIONS "/" [] (http/options [:options :get :post]))
+                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
+                                   (context ":id" [id] (defroutes event-routes
+                                                         (GET "/" [] (http/not-implemented))
+                                                         (PUT "/" [] (http/not-implemented))
+                                                         (DELETE "/" [] (http/not-implemented))
+                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
+                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
-           (context "/comments" [] (defroutes comment-routes
-                                     (GET "/" [] (comments/get-all-comments))
-                                     (POST "/" {body :body} (comments/create-new-comment body))
-                                     (OPTIONS "/" [] (http/options [:options :get :put :post :delete]))
-                                     (context "/:id" [id] (defroutes comment-routes
-                                                            (GET "/" [] (comments/get-comment id))
-                                                            (PUT "/" {body :body} (comments/update-comment id body))
-                                                            (DELETE "/" [] (comments/delete-comment id))))
-                                     (ANY "/" [] (http/method-not-allowed [:options :get :put :post :delete]))))
+           (context "/comments" [] (defroutes event-routes
+                                   (GET "/" [] (http/not-implemented))
+                                   (POST "/" [] (http/not-implemented))
+                                   (OPTIONS "/" [] (http/options [:options :get :post]))
+                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
+                                   (context ":id" [id] (defroutes event-routes
+                                                         (GET "/" [] (http/not-implemented))
+                                                         (PUT "/" [] (http/not-implemented))
+                                                         (DELETE "/" [] (http/not-implemented))
+                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
+                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
+           (context "/coordinates" [] (defroutes event-routes
+                                   (GET "/" [] (http/not-implemented))
+                                   (POST "/" [] (http/not-implemented))
+                                   (OPTIONS "/" [] (http/options [:options :get :post]))
+                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
+                                   (context ":id" [id] (defroutes event-routes
+                                                         (GET "/" [] (http/not-implemented))
+                                                         (PUT "/" [] (http/not-implemented))
+                                                         (DELETE "/" [] (http/not-implemented))
+                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
+                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
+
+
            (route/not-found {:status 404}))
   (route/not-found {:status 404}))
 
