@@ -10,17 +10,17 @@
   (response
     (sql/with-connection (db/db-connection)
                          (sql/with-query-results results
-                                                 ["select * from users"]
+                                                 ["select username, name from users"]
                                                  (into [] results)))))
 
 
-;; UUID -> Response[:body String]
-;; UUID -> Response[:body null :status 404]
-;; Returns a response with the contents of the specified user
-(defn get-user [id]
+;; String -> Response[:body String]
+;; String -> Response[:body null :status 404]
+;; Returns a response with the contents of the specified username
+(defn get-user [username]
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
-                                               ["select * from users where usersId = ?" id]
+                                               ["select username, name from users where username = ?" username]
                                                (cond (empty? results) {:status 404}
                                                      :else (response (first results))))))
 

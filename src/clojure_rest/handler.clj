@@ -46,12 +46,12 @@
                                                          (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
            (context "/users" [] (defroutes event-routes
-                                  (GET "/" [] (http/not-implemented))
+                                  (GET "/" [] (users/get-all-users))
                                   (POST "/" [] (http/not-implemented))
                                   (OPTIONS "/" [] (http/options [:options :get :post]))
                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
-                                  (context ":id" [id] (defroutes event-routes
-                                                        (GET "/" [] (http/not-implemented))
+                                  (context "/:id" [id] (defroutes event-routes
+                                                        (GET "/" [] (users/get-user id))
                                                         (PUT "/" [] (http/not-implemented))
                                                         (DELETE "/" [] (http/not-implemented))
                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
@@ -101,4 +101,4 @@
 
 ;; Request -> Response
 ;; Entry point
-(def app (dev-handler))
+(def app (prod-handler))
