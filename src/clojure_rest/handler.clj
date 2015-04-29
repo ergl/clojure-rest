@@ -2,7 +2,7 @@
   (:use compojure.core)
   (:use ring.util.response)
   (:require [compojure.handler :as handler]
-            [ring.middleware.json :as middleware]
+            [ring.middleware.json :as json]
             [compojure.route :as route]
             [clojure.walk :refer [stringify-keys]]
             [clojure-rest.http :as http]
@@ -26,13 +26,13 @@
   (GET "/" [] (resource-response "index.html" {:root "public"}))
  	(route/resources "/")
   (context "/api" [] 
-
+           
            (OPTIONS "/" []
                     (http/options [:options] {:version "0.1.0-SNAPSHOT"}))
-
+           
            (ANY "/" []
                 (http/method-not-allowed [:options]))
-
+           
            (context "/events" [] (defroutes event-routes
                                    (GET "/" [] (http/not-implemented))
                                    (POST "/" [] (http/not-implemented))
@@ -46,49 +46,59 @@
                                                          (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
            (context "/users" [] (defroutes event-routes
-                                   (GET "/" [] (http/not-implemented))
-                                   (POST "/" [] (http/not-implemented))
-                                   (OPTIONS "/" [] (http/options [:options :get :post]))
-                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
-                                   (context ":id" [id] (defroutes event-routes
-                                                         (GET "/" [] (http/not-implemented))
-                                                         (PUT "/" [] (http/not-implemented))
-                                                         (DELETE "/" [] (http/not-implemented))
-                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
-                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
+                                  (GET "/" [] (http/not-implemented))
+                                  (POST "/" [] (http/not-implemented))
+                                  (OPTIONS "/" [] (http/options [:options :get :post]))
+                                  (ANY "/" [] (http/method-not-allowed [:options :get :post]))
+                                  (context ":id" [id] (defroutes event-routes
+                                                        (GET "/" [] (http/not-implemented))
+                                                        (PUT "/" [] (http/not-implemented))
+                                                        (DELETE "/" [] (http/not-implemented))
+                                                        (OPTIONS "/" [] (http/options [:options :get :put :delete]))
+                                                        (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
            (context "/comments" [] (defroutes event-routes
-                                   (GET "/" [] (http/not-implemented))
-                                   (POST "/" [] (http/not-implemented))
-                                   (OPTIONS "/" [] (http/options [:options :get :post]))
-                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
-                                   (context ":id" [id] (defroutes event-routes
-                                                         (GET "/" [] (http/not-implemented))
-                                                         (PUT "/" [] (http/not-implemented))
-                                                         (DELETE "/" [] (http/not-implemented))
-                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
-                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
+                                     (GET "/" [] (http/not-implemented))
+                                     (POST "/" [] (http/not-implemented))
+                                     (OPTIONS "/" [] (http/options [:options :get :post]))
+                                     (ANY "/" [] (http/method-not-allowed [:options :get :post]))
+                                     (context ":id" [id] (defroutes event-routes
+                                                           (GET "/" [] (http/not-implemented))
+                                                           (PUT "/" [] (http/not-implemented))
+                                                           (DELETE "/" [] (http/not-implemented))
+                                                           (OPTIONS "/" [] (http/options [:options :get :put :delete]))
+                                                           (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
            (context "/coordinates" [] (defroutes event-routes
-                                   (GET "/" [] (http/not-implemented))
-                                   (POST "/" [] (http/not-implemented))
-                                   (OPTIONS "/" [] (http/options [:options :get :post]))
-                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
-                                   (context ":id" [id] (defroutes event-routes
-                                                         (GET "/" [] (http/not-implemented))
-                                                         (PUT "/" [] (http/not-implemented))
-                                                         (DELETE "/" [] (http/not-implemented))
-                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
-                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
-
-
+                                        (GET "/" [] (http/not-implemented))
+                                        (POST "/" [] (http/not-implemented))
+                                        (OPTIONS "/" [] (http/options [:options :get :post]))
+                                        (ANY "/" [] (http/method-not-allowed [:options :get :post]))
+                                        (context ":id" [id] (defroutes event-routes
+                                                              (GET "/" [] (http/not-implemented))
+                                                              (PUT "/" [] (http/not-implemented))
+                                                              (DELETE "/" [] (http/not-implemented))
+                                                              (OPTIONS "/" [] (http/options [:options :get :put :delete]))
+                                                              (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
+           
+           
            (route/not-found {:status 404}))
   (route/not-found {:status 404}))
 
 
 ;; Request -> Response
-(def app
+(defn prod-handler []
   (-> (handler/api app-routes)
-      (wrap-log-requests)
-      (middleware/wrap-json-body)
-      (middleware/wrap-json-response)))
+      (json/wrap-json-body)
+      (json/wrap-json-response)))
+
+
+;; Request -> Response
+(defn dev-handler[]
+  (-> (prod-handler)
+      (wrap-log-requests)))
+
+
+;; Request -> Response
+;; Entry point
+(def app (dev-handler))
