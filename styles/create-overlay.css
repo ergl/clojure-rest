@@ -1,18 +1,12 @@
-/*#create-overlay {*/
-/*  display: none;*/
-/*}*/
-
-/*.logged-in*/
-/*#create-overlay {*/
-/*  display: inherit;*/
-/*}*/
-
-/*.show-create-sidebar*/
-/*#create-overlay {*/
-/*  display: none;*/
-/*}*/
+/* Create event button styles */
 
 #create-overlay {
+  display: none;
+}
+
+.logged-in
+#create-overlay {
+  display: inherit;
   float: right;
   width: 10rem;;
   height: 3rem;
