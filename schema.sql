@@ -18,6 +18,7 @@ create table users (
 	username varchar(50) not null,
 	-- TODO: Change after we truly know the hash length - Using SHA(256) for now
 	password varchar(128) not null
+	-- TODO: Blob de imagen
 );
 
 create table users_users (
@@ -35,11 +36,13 @@ create table events (
 	eventsId uuid primary key,
 	title varchar(50) not null,
 	description varchar not null,
+	-- TODO: Cuando borra, asignar al usuario [deleted]
 	author uuid references users(usersId),
 	attending int not null,
 	initialDate date not null,
 	finalDate date,
 	coordinatesId uuid references coordinates (coordinatesId)
+	-- TODO: Precio?
 );
 
 create table users_events (
@@ -49,14 +52,25 @@ create table users_events (
 
 create table comments (
 	commentsId uuid primary key,
-	eventId uuid references events(eventsId),
 	-- ID of parent comment - if it's the same as self, there are no parents
 	parentId uuid references comments(commentsId) on delete cascade,
 	content varchar not null,
+	-- TODO: Cuando borra, asignar al usuario [deleted]
 	author uuid references users(usersId),
 	positiveVotes int,
 	negativeVotes int
 );
+
+create table events_comments (
+	eventId uuid references events(eventsId),
+	commentsId uuid references comments(commentsId)
+	-- TODO: delete on cascade aquí?
+);
+
+-- create table users_comments (
+-- 	author uuid references users(usersId),
+-- 	commentsId uuid references comments(commentsId)
+-- );
 
 create table reports (
 	reportsId uuid primary key,
@@ -73,6 +87,11 @@ create table comments_reports (
 	reportsId uuid references reports(reportsId) on delete cascade,
 	commentsId uuid references comments(commentsId) on delete cascade
 );
+
+-- Constraints
+
+create index idxusername on users(username);
+create index idxemails on users(email);
 
 -- Dummy Inserts
 
