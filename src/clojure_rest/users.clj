@@ -38,7 +38,11 @@
                                              (content "name")
                                              (content "username")
                                              ; TODO - Hash email
-                                             (content "password")]))
+                                             (content "password")
+                                             ; TODO - Placeholder values
+                                             nil
+                                             false
+                                             false]))
     (get-user (content "username"))))
 
 
