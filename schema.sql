@@ -17,8 +17,10 @@ create table users (
 	name varchar,
 	username varchar(50) not null,
 	-- TODO: Change after we truly know the hash length - Using SHA(256) for now
-	password varchar(128) not null
-	-- TODO: Blob de imagen
+	password varchar(128) not null,
+	profileImage blob,
+	deleted boolean not null,
+	moderator boolean not null
 );
 
 create table users_users (
@@ -36,13 +38,12 @@ create table events (
 	eventsId uuid primary key,
 	title varchar(50) not null,
 	description varchar not null,
-	-- TODO: Cuando borra, asignar al usuario [deleted]
 	author uuid references users(usersId),
 	attending int not null,
 	initialDate date not null,
 	finalDate date,
 	coordinatesId uuid references coordinates (coordinatesId)
-	-- TODO: Precio?
+	-- TODO: Payments, fee?
 );
 
 create table users_events (
@@ -55,7 +56,6 @@ create table comments (
 	-- ID of parent comment - if it's the same as self, there are no parents
 	parentId uuid references comments(commentsId) on delete cascade,
 	content varchar not null,
-	-- TODO: Cuando borra, asignar al usuario [deleted]
 	author uuid references users(usersId),
 	positiveVotes int,
 	negativeVotes int
@@ -64,9 +64,10 @@ create table comments (
 create table events_comments (
 	eventId uuid references events(eventsId),
 	commentsId uuid references comments(commentsId)
-	-- TODO: delete on cascade aquí?
+	-- TODO: Deleting all comments once event is deleted?
 );
 
+-- TODO: Is this table really necessary?
 -- create table users_comments (
 -- 	author uuid references users(usersId),
 -- 	commentsId uuid references comments(commentsId)
@@ -100,7 +101,10 @@ insert into users values (
 	'a@example.org',
 	'John',
 	'johndoe',
-	'5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'
+	'5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
+	null,
+	false,
+	false
 );
 
 insert into users values (
@@ -108,7 +112,10 @@ insert into users values (
 	'b@example.com',
 	'Alex',
 	'friendlyalex',
-	'7e0e2d248518efe1cf4cefb953b53665e7a8b1f5c60beea19cc764fddf981d0e'
+	'7e0e2d248518efe1cf4cefb953b53665e7a8b1f5c60beea19cc764fddf981d0e',
+	null,
+	false,
+	false
 );
 
 insert into users_users values (
