@@ -1,6 +1,7 @@
 (ns clojure-rest.users
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
+            [clojure.walk :refer [keywordize-keys]]
             [clojure-rest.db :as db]))
 
 
@@ -29,6 +30,8 @@
 ;; {} -> Response[:body null :status 404]
 ;; Creates a new user with the provided content, then returns said user
 ;; See get-user
+; TODO: When updating to put in non-placeholder values, change this approach
+; with an assoc-based one
 (defn create-new-user [content]
   (let [id (db/uuid)]
     (sql/with-connection (db/db-connection)
@@ -46,15 +49,26 @@
     (get-user (content "username"))))
 
 
-;; UUID, {} -> Response[:body String]
-;; UUID, {} -> Response[:body null :status 404]
+;; String -> {}
+;; String -> ()
+;; Gets the stored hashmap of the given username
+(defn- get-user-table [username]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               ["select * from users where username = ?" username]
+                                               (cond (empty? results) nil
+                                                     :else (first results)))))
+
+;; String, {} -> Response[:body String]
+;; String, {} -> Response[:body null :status 404]
 ;; Updates the specified user with the provided content, then returns said user
 ;; See get-user
-(defn update-user [id content]
-  (sql/with-connection (db/db-connection)
-                       (let [user (assoc content "usersId" id)]
-                         (sql/update-values :users ["usersId=?" id] user)))
-  (get-user id))
+; TODO - Review
+(defn update-user [username content]
+  (let [user (merge (get-user-table username) (keywordize-keys content))]
+    (sql/with-connection (db/db-connection)
+                         (sql/update-values :users ["username = ?" username] user))
+    (get-user (:username user))))
 
 
 ;; UUID -> Response[:status 204]

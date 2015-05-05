@@ -8,7 +8,7 @@
 (deftest test-api
   ;; A GET to an available api method should return a 200 OK response
   (testing "valid url"
-    (let [response (app (mock/request :get "/api/events"))]
+    (let [response (app (mock/request :get "/api/users"))]
       (is (= (:status response) 200))
       (is (= (get-in response [:headers "Content-Type"]) "application/json; charset=utf-8"))))
   
@@ -20,7 +20,7 @@
 
 (deftest test-users
   ;; A GET to an available user should return its username and name (if it exists)  
-  (testing "retrieving an existring user"
+  (testing "retrieving an existing user"
     (let [response (app (mock/request :get "/api/users/johndoe"))]
       (is (= (:status response) 200))
       (is (= ((parse-string (:body response)) "username") "johndoe"))))
@@ -40,4 +40,19 @@
                             (mock/content-type "application/json")))]
       (is (= (:status response) 200))
       (is (= (get-in response [:headers "Content-Type"]) "application/json; charset=utf-8"))
-      (is (= ((parse-string (:body response)) "username") "bar")))))
+      (is (= ((parse-string (:body response)) "username") "bar"))))
+  
+  ;; A PUT to /api/users/username should update that user with whatever we send
+  (testing "Updating an user"
+    (let [response (app (-> (mock/request :put "/api/users/johndoe"
+                                          (generate-string {:name "NotJohn"}))
+                            (mock/content-type "application/json")))]
+      (is (= (:status response) 200))
+      (is (= ((parse-string (:body response)) "name") "NotJohn"))))
+  
+  ;; Trying to update a non-existing user should result in a 404 response
+  (testing "Updating a non-existing user"
+    (let [response (app (-> (mock/request :put "/api/users/notfound"
+                                          (generate-string {:username "whatever"}))
+                            (mock/content-type "application/json")))]
+      (is (= (:status response) 404)))))

@@ -52,7 +52,7 @@
                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
                                   (context "/:id" [id] (defroutes event-routes
                                                         (GET "/" [] (users/get-user id))
-                                                        (PUT "/" [] (http/not-implemented))
+                                                        (PUT "/" {body :body} (users/update-user id body))
                                                         (DELETE "/" [] (http/not-implemented))
                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
