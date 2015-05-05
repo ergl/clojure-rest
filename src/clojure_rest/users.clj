@@ -32,9 +32,14 @@
 (defn create-new-user [content]
   (let [id (db/uuid)]
     (sql/with-connection (db/db-connection)
-                         (let [user (assoc content "usersId" id)]
-                           (sql/insert-record :users user)))
-    (get-user id)))
+                         (sql/insert-values :users []
+                                            [id
+                                             (content "email")
+                                             (content "name")
+                                             (content "username")
+                                             ; TODO - Hash email
+                                             (content "password")]))
+    (get-user (content "username"))))
 
 
 ;; UUID, {} -> Response[:body String]
