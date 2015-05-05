@@ -159,8 +159,7 @@ insert into events values (
 
 insert into comments values (
 	'e857483c-4045-4c42-ba49-3ada5d269cc2',
-	'bd6d92e5-2abf-4289-83cf-e8926ca78e3f',
-	-- Self
+	-- Reply to self
 	'e857483c-4045-4c42-ba49-3ada5d269cc2',
 	'This is a sample comment',
 	-- Author is John
@@ -171,7 +170,6 @@ insert into comments values (
 
 insert into comments values (
 	'90149e01-6b3a-4d17-98e5-7b1a09747e33',
-	'bd6d92e5-2abf-4289-83cf-e8926ca78e3f',
 	-- Paren is comment by John
 	'e857483c-4045-4c42-ba49-3ada5d269cc2',
 	'This is bait comment',
@@ -179,4 +177,14 @@ insert into comments values (
 	'b338c989-9074-4ab4-b4a5-d45e9ae8d8da',
 	5,
 	-50
+);
+
+insert into events_comments values (
+	'8da83e0d-32dd-4b1a-968c-a79e13ee57bf',
+	'e857483c-4045-4c42-ba49-3ada5d269cc2'
+);
+
+insert into events_comments values (
+	'8da83e0d-32dd-4b1a-968c-a79e13ee57bf',
+	'90149e01-6b3a-4d17-98e5-7b1a09747e33'
 );
