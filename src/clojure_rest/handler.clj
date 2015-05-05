@@ -50,10 +50,10 @@
                                   (POST "/" {body :body} (users/create-new-user body))
                                   (OPTIONS "/" [] (http/options [:options :get :post]))
                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
-                                  (context "/:id" [id] (defroutes event-routes
-                                                        (GET "/" [] (users/get-user id))
-                                                        (PUT "/" {body :body} (users/update-user id body))
-                                                        (DELETE "/" [] (http/not-implemented))
+                                  (context "/:username" [username] (defroutes event-routes
+                                                        (GET "/" [] (users/get-user username))
+                                                        (PUT "/" {body :body} (users/update-user username body))
+                                                        (DELETE "/" [] (users/delete-user username))
                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            

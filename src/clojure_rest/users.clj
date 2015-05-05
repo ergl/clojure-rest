@@ -71,9 +71,11 @@
     (get-user (:username user))))
 
 
-;; UUID -> Response[:status 204]
-;; Deletes the specified user, then returns a 204 http code
-(defn delete-user [id]
+;; String -> Response[:status 204]
+;; String -> Response[:status 404]
+;; "Deletes" the specified user, then returns a 204 http code
+; TODO: Returns 404 if no username is found
+(defn delete-user [username]
   (sql/with-connection (db/db-connection)
-                       (sql/delete-rows :users ["usersId=?" id]))
+                       (sql/update-values :users ["username = ?" username] {:deleted true}))
   {:status 204})
