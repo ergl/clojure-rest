@@ -13,6 +13,8 @@
                  [org.clojure/java.jdbc "0.2.3"]
                  [com.h2database/h2 "1.4.187"]
                  [cheshire "5.4.0"]
+                 [buddy "0.5.2"]
+                 [buddy/buddy-hashers "0.4.2"]
                  [ring/ring-jetty-adapter "1.3.2"]]
   :plugins [[lein-ring "0.9.3"]]
   :ring {:handler clojure-rest.handler/app

@@ -16,8 +16,7 @@ create table users (
 	email varchar(250) not null,
 	name varchar,
 	username varchar(50) not null,
-	-- TODO: Change after we truly know the hash length - Using SHA(256) for now
-	password varchar(128) not null,
+	password varchar(162) not null,
 	profileImage blob,
 	deleted boolean not null,
 	moderator boolean not null

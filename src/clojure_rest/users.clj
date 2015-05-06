@@ -1,6 +1,7 @@
 (ns clojure-rest.users
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
+            [buddy.hashers :as hashers]
             [clojure.walk :refer [keywordize-keys]]
             [clojure-rest.db :as db]))
 
@@ -25,6 +26,11 @@
                                                (cond (empty? results) {:status 404}
                                                      :else (response (first results))))))
 
+;; String -> String
+;; Hashes the given password with bcrypt + sha512, 12 iterations
+(defn- hash-pass [pass]
+  (hashers/encrypt pass))
+
 
 ;; {} -> Response[:body String]
 ;; {} -> Response[:body null :status 404]
@@ -40,8 +46,7 @@
                                              (content "email")
                                              (content "name")
                                              (content "username")
-                                             ; TODO - Hash email
-                                             (content "password")
+                                             (hash-pass (content "password"))
                                              ; TODO - Placeholder values
                                              nil
                                              false
