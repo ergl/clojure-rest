@@ -32,6 +32,17 @@
   (hashers/encrypt pass))
 
 
+;; String, String -> Boolean
+;; Check if the supplied password matches with the hashed password of the given username
+(defn pass-matches? [username password]
+  (sql/with-connection (db/db-connection)
+                       (->> (sql/with-query-results results
+                                                    ["select password from users where username = ?" username]
+                                                    (into {} results))
+                            (:password)
+                            (hashers/check password))))
+
+
 ;; {} -> Response[:body String]
 ;; {} -> Response[:body null :status 404]
 ;; Creates a new user with the provided content, then returns said user

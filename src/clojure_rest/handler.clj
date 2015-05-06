@@ -7,6 +7,7 @@
             [clojure.walk :refer [stringify-keys]]
             [clojure-rest.http :as http]
             [clojure-rest.db :as db]
+            [clojure-rest.auth :as auth]
             [clojure-rest.users :as users]
             [clojure-rest.events :as events]
             [clojure-rest.comments :as comments]))
@@ -33,6 +34,15 @@
            (ANY "/" []
                 (http/method-not-allowed [:options]))
            
+           (context "/auth" [] (defroutes auth-routes
+                                 (POST "/" {body :body} (auth/auth-handler body))
+                                 (OPTIONS "/" [] (http/options [:options :post]))
+                                 (ANY "/" [] (http/method-not-allowed [:options :post]))
+                                 (context ":key" [key] (defroutes auth-routes
+                                                         (DELETE "/" [] (http/not-implemented))
+                                                         (OPTIONS "/" [] (http/options [:options :delete]))
+                                                         (ANY "/" [] (http/method-not-allowed [:options :delete]))))))
+           
            (context "/events" [] (defroutes event-routes
                                    (GET "/" [] (http/not-implemented))
                                    (POST "/" [] (http/not-implemented))
@@ -51,11 +61,11 @@
                                   (OPTIONS "/" [] (http/options [:options :get :post]))
                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
                                   (context "/:username" [username] (defroutes event-routes
-                                                        (GET "/" [] (users/get-user username))
-                                                        (PUT "/" {body :body} (users/update-user username body))
-                                                        (DELETE "/" [] (users/delete-user username))
-                                                        (OPTIONS "/" [] (http/options [:options :get :put :delete]))
-                                                        (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
+                                                                     (GET "/" [] (users/get-user username))
+                                                                     (PUT "/" {body :body} (users/update-user username body))
+                                                                     (DELETE "/" [] (users/delete-user username))
+                                                                     (OPTIONS "/" [] (http/options [:options :get :put :delete]))
+                                                                     (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
            (context "/comments" [] (defroutes event-routes
                                      (GET "/" [] (http/not-implemented))
