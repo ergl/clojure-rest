@@ -46,6 +46,17 @@
   background-color: #8899A7;
 }
 
+#login-close-container {
+  float: left;
+}
+
+#login-close-icon img {
+  margin-top: .5rem;
+  margin-left: .5rem;
+  width: 1.5rem;
+  height: auto;
+}
+
 #login-circle-container {
   position: relative;
   /* TODO: Fix image moving */
