@@ -1,17 +1,29 @@
 /* Create event button styles */
-
 #create-overlay {
   display: none;
 }
 
 .logged-in
 #create-overlay {
-  display: inherit;
+  display: block;
+  position: fixed;
+  width: 100%;
+  z-index: 15;
+}
+
+.show-create-sidebar
+#create-overlay,
+.show-user-sidebar
+#create-overlay,
+.show-event-sidebar
+#create-overlay {
+  display: none;
+}
+
+#create-button-container {
+  width: 10rem;
   float: right;
-  width: 10rem;;
-  height: 3rem;
-  margin-right: 1%;
-  margin-top: .5%;
+  padding-right: 3rem;
 }
 
 #create-button {

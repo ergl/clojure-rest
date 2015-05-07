@@ -34,8 +34,8 @@
         </div>
       </div>
 
-      <!-- Login popup overlay -->
-      <div id="login-overlay">
+    <!-- Login popup overlay -->
+    <div id="login-overlay">
         <!-- Popup main box -->
         <div id="dialog-box">
           <!-- Top popup box-->
@@ -83,390 +83,394 @@
           </div>
         </div>
       </div>
-      
-      <!-- Main content canvas -->
-      <div id="content-canvas">
-        <!-- Menu Sidebar -->
-        <div id="main-sidebar" onmouseover="toggleMenu()" onmouseout="toggleMenu()">
-          <!-- Header, contains the icon and the self link -->
-          <div class="menu-section" id="menu-header">
-            <div id="menu-logo-icon">
-              <a href="/"><img src="/img/assets/logo.png" /></a>
-            </div>
-          </div>
-          <!-- Search section -->
-          <div class="menu-section" id="menu-search">
-            <div id="menu-search-icon">
-              <img src="/img/assets/search.png" />
-            </div>
-            <div id="menu-search-widget">
-              <!-- Search widget -->
-              <div id="search-pane">
-                <div id="search-filters">
-                  <button id="search-event-button" type="button" name="Eventos" onclick="searchEvents()" value="">Eventos</button>
-                  <button id="search-user-button" type="button" name="Contactos" onclick="searchUsers()" value="">Usuarios</button>
-                </div>
-                <div id="search-bottom">
-                  <div id="search-box">
-                    <input id="search-input" type="text" onkeypress="searchKeyPress(event)" placeholder="Buscar...">
-                  </div>
-                  <div id="search-button">
-                    <a href='#' onclick="searchButtonPress()">
-                      <img src= "/img/assets/search.png"></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Links Container -->
-          <div class="menu-section" id="links-container">
-            <div class="menu-button" id="about-container">
-              <a href="about.html" target="_blank">ABOUT</a>
-            </div>
-            <div class="menu-button" id="contact-container">
-              <a href="contact.html" target="_blank">CONTACT</a>
-            </div>
-            <div class="menu-button" id="tos-container">
-              <a href="legal.html" target="_blank">Terms of Service</a>
-            </div>
-            <div class="menu-button" id="privacy-container">
-              <a href="legal.html" target="_blank">Privacy Policy</a>
-            </div>
-          </div>
-          <!-- Login Container -->
-          <div class="menu-section" id="login-container">
-            <div id="login-button-wrapper" onclick="toggleLoginOverlay()">
-              <span><a href="#">LOGIN</a></span>
-            </div>
-          </div>
-          <!-- Copyright info Container-->
-          <div class="menu-section" id="more-container">
-            <div id="copyright-info">
-              <p>Copyright © 2015 SaleOkase</p>
-            </div>
-          </div>
-          <div class="menu-section" id="dots-container">
-            <div id="more-icon">
-              <div id="dots-wrapper">
-                <img src="/img/assets/dots.png" />
-              </div>
-            </div>
-          </div>
+
+    <!-- Create overlay: create event button -->
+    <div id="create-overlay">
+      <div id="create-button-container">
+        <div id="create-button" onclick="togglePane(PaneEnum.create)">
+          <p id="create-button-text">CREATE</p>
         </div>
-
-        <!-- Create overlay: create event button -->
-        <div id="create-overlay">
-          <div id="create-button" onclick="togglePane(PaneEnum.create)">
-            <p id="create-button-text">CREATE</p>
-          </div>
-        </div>
-
-        <!-- Context sidebar: View Event Panel -->
-        <div class="context-sidebar" id="view-event-pane">
-          <div id="event-close">
-            <a href="#" onclick="togglePane(PaneEnum.event)" class="close-arrow"><img src="/img/assets/close-arrow.png" /></a>
-          </div>
-          <div id="event-header">
-            <div id="event-title">
-              <span>TITULO DEL EVENTO</span>
-            </div>
-            <div id="event-location">
-              <span>LOCALIZACION</span>
-            </div>
-            <div id="event-creator">
-              <span>CREATOR</span>
-            </div>
-          </div>
-          
-          <div id="event-submit">
-            <input type="submit" class="butonTik" value="" />
-          </div>
-          
-          <div id="event-more">
-            <input type="button" class="butonPlus" value="" onclick="toggleAddUser()"/>
-          </div>
-          <div id="componente-usuario">
-            <div id="search-user">
-              <img class="user-im" src="/img/assets/search.png" />
-              <input type="text" id="search" value="Busca amigo..."/> 
-            </div>
-            <div>
-              <img class="user-im" src="/img/assets/anon-user-icon.png" />
-              <span class="user">Usuario1
-              </span>
-              <input type="checkbox" name="userjoin" value="join" class="join-event">
-            </div>
-            <div>
-              <img class="user-im" src="/img/assets/anon-user-icon.png" />
-              <span class="user">Usuario1
-              </span>
-              <input type="checkbox" name="userjoin" value="join" class="join-event">
-            </div>
-            <div>
-              <img class="user-im" src="/img/assets/anon-user-icon.png" />
-              <span class="user">Usuario1
-              </span>
-              <input type="checkbox" name="userjoin" value="join" class="join-event">
-            </div>
-            
-          </div>
-          <div id="event-body">
-            Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla...Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla...Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla...Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla
-          </div>
-          <div id="comments-title" ><span>Comentarios</span>
-          </div>
-          <div id="event-comments">
-            
-            <div class="event-comment">
-              <a href="#" class="comment-user" onclick="togglePane(PaneEnum.user)">
-                User Foo
-              </a>
-              <div class="comment-body">
-                <p>
-                  Ayy lmao
-                </p>
-              </div>
-            </div>
-            <div class="event-comment">
-              <a href="#" class="comment-user" onclick="togglePane(PaneEnum.user)">
-                User Bar
-              </a>
-              <div class="comment-body">
-                <p>
-                  This event sucks
-                </p>
-              </div>
-            </div>
-            <div class="event-comment">
-              <a href="#" class="comment-user" onclick="togglePane(PaneEnum.user)">
-                User Baz
-              </a>
-              <div class="comment-body">
-                <p>
-                  Had a good chuckle with this!
-                </p>
-              </div>
-            </div>
-            <div id="add-comment">
-              <textarea id="body-comment" spellcheck="false" placeholder="Introduce tu comentario..." onkeypress="cleanupCommentOnEnter(event)"></textarea>
-              <input type="submit" id="submit-comment" onclick="cleanupComment()"/>
-            </div>
-          </div>
-        </div>
-
-        <!-- Context sidebar: User Panel -->
-        <div class="context-sidebar" id="user-pane">
-          <div id="botones-info-user">
-            <div id="botones">
-              <div id="cerrar">
-                <a href="#" onclick="togglePane(PaneEnum.user)" class="close-arrow"><img src="/img/assets/close-arrow.png" /></a>
-              </div>
-              <!-- TODO: Add new icon with js -->
-              <div id="nuevo">
-                <a href="#" onclick="cambiarTic()" id="add-contact">
-                  <img src="/img/assets/add-contact.png" />
-                </a>
-              </div>
-            </div>
-            <div id="info-usuario">
-              <div id= "semicirculo-arriba">
-                <img src="/img/assets/usuario.jpg">
-                <h5>Nombre</h5>
-              </div>
-              <div id= "semicirculo-abajo">
-              </div>
-            </div>
-          </div> 
-          <div id="listas">
-            <div id="event-list">
-              <div id="title-event-list">
-                <h4>Lista de eventos</h4>
-              </div>
-              <div id="lista">
-                <ul>
-                  <li>
-                    <div id= "evento">
-                      <div id="evento-link">
-                        <a href="#" onclick="cambiarTic()">Evento A </a>
-                      </div>
-                      <div id="checkbox">
-                        <input type="checkbox" value="None" />
-                        <label></label>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div id= "evento">
-                      <div id="evento-link">
-                        <a href="#" onclick="cambiarTic()">Evento B </a>
-                      </div>
-                      <div id="checkbox">
-                        <input type="checkbox" value="None" />
-                        <label></label>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div id= "evento">
-                      <div id="evento-link">
-                        <a href="#" onclick="cambiarTic()">Evento C </a>
-                      </div>
-                      <div id="checkbox">
-                        <input type="checkbox" value="None" />
-                        <label></label>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div id= "evento">
-                      <div id="evento-link">
-                        <a href="#" onclick="cambiarTic()">Evento D </a>
-                      </div>
-                      <div id="checkbox">
-                        <input type="checkbox" value="None" />
-                        <label></label>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div id="contact-list">
-              <div id="title-contact-list">
-                <h4>Lista de contactos</h4>
-              </div>
-              <div id="lista">
-                <ul>
-                  <li>
-                    <div id= "contacto">
-                      <div id= "contacto-imagen">
-                        <img src="/img/assets/usuario3.jpg">
-                      </div>
-                      <div id="contacto-link">
-                        <a href="#" onclick="cambiarTic()">Contacto A </a>
-                      </div>
-                      <div id="contacto-checkbox">
-                        <input type="checkbox" value="None" />
-                        <label></label>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div id= "contacto">
-                      <div id= "contacto-imagen">
-                        <img src="/img/assets/usuario2.jpg">
-                      </div>
-                      <div id="contacto-link">
-                        <a href="#" onclick="cambiarTic()">Contacto B </a>
-                      </div>
-                      <div id="contacto-checkbox">
-                        <input type="checkbox" value="None" />
-                        <label></label>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div id= "contacto">
-                      <div id= "contacto-imagen">
-                        <img src="/img/assets/usuario4.jpeg">
-                      </div>
-                      <div id="contacto-link">
-                        <a href="#" onclick="cambiarTic()">Contacto C </a>
-                      </div>
-                      <div id="contacto-checkbox">
-                        <input type="checkbox" value="None" />
-                        <label></label>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div id="feed-list">
-              <div id="title-feed-list">
-                <h4>Feed</h4>
-              </div>
-              <div id="lista">
-                <ul>
-                  <li>
-                    <div id="feed">
-                      <div id="feed-text">
-                        <p> El evento A ha sido cancelado.</p>
-                      </div>
-                      <div id="feed-link">
-                        <a href="#" onclick="cambiarTic()"> > </a>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div id="feed">
-                      <div id="feed-text">
-                        <p> El evento C ha sido modificado.</p>
-                      </div>
-                      <div id="feed-link">
-                        <a href="#" onclick="cambiarTic()"> > </a>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div id="feed">
-                      <div id="feed-text">
-                        <p> El usuario A ha comentado en el evento X.</p>
-                      </div>
-                      <div id="feed-link">
-                        <a href="#" onclick="cambiarTic()"> > </a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Context sidebar: Create Event Panel -->
-        <div class="context-sidebar" id="create-event-pane">
-          <a href="#" onclick="togglePane(PaneEnum.create)" class="close-arrow"><img src="/img/assets/close-arrow.png" /></a>
-          <form id="create-event-form">
-            <div id="create-event-title-wrapper">
-              <input id="create-event-title" placeholder="Enter your title here..." type="text" spellcheck="false">
-            </div>
-            <div id="create-event-location-wrapper">
-              <input id="create-event-location" placeholder="Enter the location here..." type="text" spellcheck="false">
-            </div>
-            <div id="create-event-description-wrapper">
-              <textarea id="create-event-description" placeholder="Talk a bit about your event..."></textarea>
-            </div>
-
-            <div id="create-event-action-buttons">
-              <input type="submit" value="Done" id="submit-event">
-              <button id="submit-event-add-file-button" onclick="uploadFileCreateEvent()">+</button>
-              <input type="file" id="submit-event-add-file">
-            </div>
-
-            <div id="create-event-context-buttons">
-              <div id="added-contact-wrapper">
-                <!-- TODO: Complete this -->
-                foo
-              </div>
-              <div id="add-contact-component">
-                <!-- TODO: Complete this -->
-                bar
-              </div>
-              <div id="create-event-monetize">
-                <!-- TODO: Complete this -->
-                baz
-              </div>
-            </div>
-
-            <div id="submit-new-event-wrapper">
-              <button id="submit-new-event">Done</button>
-            </div>
-          </form>
-        </div>
-
-        <div id="map-canvas"></div>
       </div>
+    </div>
+      
+    <!-- Main content canvas -->
+    <div id="content-canvas">
+      <!-- Menu Sidebar -->
+      <div id="main-sidebar" onmouseover="toggleMenu()" onmouseout="toggleMenu()">
+        <!-- Header, contains the icon and the self link -->
+        <div class="menu-section" id="menu-header">
+          <div id="menu-logo-icon">
+            <a href="/"><img src="/img/assets/logo.png" /></a>
+          </div>
+        </div>
+        <!-- Search section -->
+        <div class="menu-section" id="menu-search">
+          <div id="menu-search-icon">
+            <img src="/img/assets/search.png" />
+          </div>
+          <div id="menu-search-widget">
+            <!-- Search widget -->
+            <div id="search-pane">
+              <div id="search-filters">
+                <button id="search-event-button" type="button" name="Eventos" onclick="searchEvents()" value="">Eventos</button>
+                <button id="search-user-button" type="button" name="Contactos" onclick="searchUsers()" value="">Usuarios</button>
+              </div>
+              <div id="search-bottom">
+                <div id="search-box">
+                  <input id="search-input" type="text" onkeypress="searchKeyPress(event)" placeholder="Buscar...">
+                </div>
+                <div id="search-button">
+                  <a href='#' onclick="searchButtonPress()">
+                    <img src= "/img/assets/search.png"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Links Container -->
+        <div class="menu-section" id="links-container">
+          <div class="menu-button" id="about-container">
+            <a href="about.html" target="_blank">ABOUT</a>
+          </div>
+          <div class="menu-button" id="contact-container">
+            <a href="contact.html" target="_blank">CONTACT</a>
+          </div>
+          <div class="menu-button" id="tos-container">
+            <a href="legal.html" target="_blank">Terms of Service</a>
+          </div>
+          <div class="menu-button" id="privacy-container">
+            <a href="legal.html" target="_blank">Privacy Policy</a>
+          </div>
+        </div>
+        <!-- Login Container -->
+        <div class="menu-section" id="login-container">
+          <div id="login-button-wrapper" onclick="toggleLoginOverlay()">
+            <span><a href="#">LOGIN</a></span>
+          </div>
+        </div>
+        <!-- Copyright info Container-->
+        <div class="menu-section" id="more-container">
+          <div id="copyright-info">
+            <p>Copyright © 2015 SaleOkase</p>
+          </div>
+        </div>
+        <div class="menu-section" id="dots-container">
+          <div id="more-icon">
+            <div id="dots-wrapper">
+              <img src="/img/assets/dots.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Context sidebar: View Event Panel -->
+      <div class="context-sidebar" id="view-event-pane">
+        <div id="event-close">
+          <a href="#" onclick="togglePane(PaneEnum.event)" class="close-arrow"><img src="/img/assets/close-arrow.png" /></a>
+        </div>
+        <div id="event-header">
+          <div id="event-title">
+            <span>TITULO DEL EVENTO</span>
+          </div>
+          <div id="event-location">
+            <span>LOCALIZACION</span>
+          </div>
+          <div id="event-creator">
+            <span>CREATOR</span>
+          </div>
+        </div>
+
+        <div id="event-submit">
+          <input type="submit" class="butonTik" value="" />
+        </div>
+
+        <div id="event-more">
+          <input type="button" class="butonPlus" value="" onclick="toggleAddUser()"/>
+        </div>
+        <div id="componente-usuario">
+          <div id="search-user">
+            <img class="user-im" src="/img/assets/search.png" />
+            <input type="text" id="search" value="Busca amigo..."/>
+          </div>
+          <div>
+            <img class="user-im" src="/img/assets/anon-user-icon.png" />
+            <span class="user">Usuario1
+            </span>
+            <input type="checkbox" name="userjoin" value="join" class="join-event">
+          </div>
+          <div>
+            <img class="user-im" src="/img/assets/anon-user-icon.png" />
+            <span class="user">Usuario1
+            </span>
+            <input type="checkbox" name="userjoin" value="join" class="join-event">
+          </div>
+          <div>
+            <img class="user-im" src="/img/assets/anon-user-icon.png" />
+            <span class="user">Usuario1
+            </span>
+            <input type="checkbox" name="userjoin" value="join" class="join-event">
+          </div>
+        </div>
+
+        <div id="event-body">
+          Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla...Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla...Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla...Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla
+        </div>
+
+        <div id="comments-title">
+          <span>Comentarios</span>
+        </div>
+
+        <div id="event-comments">
+          <div class="event-comment">
+            <a href="#" class="comment-user" onclick="togglePane(PaneEnum.user)">
+              User Foo
+            </a>
+            <div class="comment-body">
+              <p>
+                Ayy lmao
+              </p>
+            </div>
+          </div>
+          <div class="event-comment">
+            <a href="#" class="comment-user" onclick="togglePane(PaneEnum.user)">
+              User Bar
+            </a>
+            <div class="comment-body">
+              <p>
+                This event sucks
+              </p>
+            </div>
+          </div>
+          <div class="event-comment">
+            <a href="#" class="comment-user" onclick="togglePane(PaneEnum.user)">
+              User Baz
+            </a>
+            <div class="comment-body">
+              <p>
+                Had a good chuckle with this!
+              </p>
+            </div>
+          </div>
+          <div id="add-comment">
+            <textarea id="body-comment" spellcheck="false" placeholder="Introduce tu comentario..." onkeypress="cleanupCommentOnEnter(event)"></textarea>
+            <input type="submit" id="submit-comment" onclick="cleanupComment()"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Context sidebar: User Panel -->
+      <div class="context-sidebar" id="user-pane">
+        <div id="botones-info-user">
+          <div id="botones">
+            <div id="cerrar">
+              <a href="#" onclick="togglePane(PaneEnum.user)" class="close-arrow"><img src="/img/assets/close-arrow.png" /></a>
+            </div>
+            <!-- TODO: Add new icon with js -->
+            <div id="nuevo">
+              <a href="#" onclick="cambiarTic()" id="add-contact">
+                <img src="/img/assets/add-contact.png" />
+              </a>
+            </div>
+          </div>
+          <div id="info-usuario">
+            <div id= "semicirculo-arriba">
+              <img src="/img/assets/usuario.jpg">
+              <h5>Nombre</h5>
+            </div>
+            <div id= "semicirculo-abajo">
+            </div>
+          </div>
+        </div>
+        <div id="listas">
+          <div id="event-list">
+            <div id="title-event-list">
+              <h4>Lista de eventos</h4>
+            </div>
+            <div id="lista">
+              <ul>
+                <li>
+                  <div id= "evento">
+                    <div id="evento-link">
+                      <a href="#" onclick="cambiarTic()">Evento A </a>
+                    </div>
+                    <div id="checkbox">
+                      <input type="checkbox" value="None" />
+                      <label></label>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div id= "evento">
+                    <div id="evento-link">
+                      <a href="#" onclick="cambiarTic()">Evento B </a>
+                    </div>
+                    <div id="checkbox">
+                      <input type="checkbox" value="None" />
+                      <label></label>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div id= "evento">
+                    <div id="evento-link">
+                      <a href="#" onclick="cambiarTic()">Evento C </a>
+                    </div>
+                    <div id="checkbox">
+                      <input type="checkbox" value="None" />
+                      <label></label>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div id= "evento">
+                    <div id="evento-link">
+                      <a href="#" onclick="cambiarTic()">Evento D </a>
+                    </div>
+                    <div id="checkbox">
+                      <input type="checkbox" value="None" />
+                      <label></label>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div id="contact-list">
+            <div id="title-contact-list">
+              <h4>Lista de contactos</h4>
+            </div>
+            <div id="lista">
+              <ul>
+                <li>
+                  <div id= "contacto">
+                    <div id= "contacto-imagen">
+                      <img src="/img/assets/usuario3.jpg">
+                    </div>
+                    <div id="contacto-link">
+                      <a href="#" onclick="cambiarTic()">Contacto A </a>
+                    </div>
+                    <div id="contacto-checkbox">
+                      <input type="checkbox" value="None" />
+                      <label></label>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div id= "contacto">
+                    <div id= "contacto-imagen">
+                      <img src="/img/assets/usuario2.jpg">
+                    </div>
+                    <div id="contacto-link">
+                      <a href="#" onclick="cambiarTic()">Contacto B </a>
+                    </div>
+                    <div id="contacto-checkbox">
+                      <input type="checkbox" value="None" />
+                      <label></label>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div id= "contacto">
+                    <div id= "contacto-imagen">
+                      <img src="/img/assets/usuario4.jpeg">
+                    </div>
+                    <div id="contacto-link">
+                      <a href="#" onclick="cambiarTic()">Contacto C </a>
+                    </div>
+                    <div id="contacto-checkbox">
+                      <input type="checkbox" value="None" />
+                      <label></label>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div id="feed-list">
+            <div id="title-feed-list">
+              <h4>Feed</h4>
+            </div>
+            <div id="lista">
+              <ul>
+                <li>
+                  <div id="feed">
+                    <div id="feed-text">
+                      <p> El evento A ha sido cancelado.</p>
+                    </div>
+                    <div id="feed-link">
+                      <a href="#" onclick="cambiarTic()"> > </a>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div id="feed">
+                    <div id="feed-text">
+                      <p> El evento C ha sido modificado.</p>
+                    </div>
+                    <div id="feed-link">
+                      <a href="#" onclick="cambiarTic()"> > </a>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div id="feed">
+                    <div id="feed-text">
+                      <p> El usuario A ha comentado en el evento X.</p>
+                    </div>
+                    <div id="feed-link">
+                      <a href="#" onclick="cambiarTic()"> > </a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Context sidebar: Create Event Panel -->
+      <div class="context-sidebar" id="create-event-pane">
+        <a href="#" onclick="togglePane(PaneEnum.create)" class="close-arrow"><img src="/img/assets/close-arrow.png" /></a>
+        <form id="create-event-form">
+          <div id="create-event-title-wrapper">
+            <input id="create-event-title" placeholder="Enter your title here..." type="text" spellcheck="false">
+          </div>
+          <div id="create-event-location-wrapper">
+            <input id="create-event-location" placeholder="Enter the location here..." type="text" spellcheck="false">
+          </div>
+          <div id="create-event-description-wrapper">
+            <textarea id="create-event-description" placeholder="Talk a bit about your event..."></textarea>
+          </div>
+          
+          <div id="create-event-action-buttons">
+            <input type="submit" value="Done" id="submit-event">
+            <button id="submit-event-add-file-button" onclick="uploadFileCreateEvent()">+</button>
+            <input type="file" id="submit-event-add-file">
+          </div>
+
+          <div id="create-event-context-buttons">
+            <div id="added-contact-wrapper">
+              <!-- TODO: Complete this -->
+              foo
+            </div>
+            <div id="add-contact-component">
+              <!-- TODO: Complete this -->
+              bar
+            </div>
+            <div id="create-event-monetize">
+              <!-- TODO: Complete this -->
+              baz
+            </div>
+          </div>
+
+          <div id="submit-new-event-wrapper">
+            <button id="submit-new-event">Done</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="map-canvas"></div>
+    </div>
   </body>
   <script src="/scripts/map.js"></script>
 </html>
