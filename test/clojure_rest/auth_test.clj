@@ -30,11 +30,12 @@
                                                               ((parse-string (:body user)) "username")
                                                               :password "notarealpassword"}))
                               (mock/content-type "application/json")))]
-        (is (= (:status response) 401))))
-    
-    (testing "denegating a non-existing user"
-      (let [response (app (-> (mock/request :post "/api/auth"
-                                            (generate-string {:username "foo"
-                                                              :password "notarealpassword"}))
-                              (mock/content-type "application/json")))]
-        (is (= (:status response) 401))))))
+        (is (= (:status response) 401)))))
+  
+  ;; Trying to auth a non-existing user should return a 401 response
+  (testing "deny non-existing user access"
+    (let [response (app (-> (mock/request :post "/api/auth"
+                                          (generate-string {:username "nonexistinguser"
+                                                            :password "notarealpassword"}))
+                            (mock/content-type "application/json")))]
+      (is (= (:status response) 401)))))

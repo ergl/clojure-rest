@@ -3,7 +3,8 @@
   (:require [clojure.java.jdbc :as sql]
             [buddy.hashers :as hashers]
             [clojure.walk :refer [keywordize-keys]]
-            [clojure-rest.db :as db]))
+            [clojure-rest.db :as db]
+            [clojure-rest.validate :as v]))
 
 
 ;; () -> Response[:body String]
@@ -32,15 +33,22 @@
   (hashers/encrypt pass))
 
 
+;; String -> Boolean
+;; Checks if the user exists in the database
+(defn- user-exists? [username]
+  (v/field-exists-in-table? "users" "username" username))
+
+
 ;; String, String -> Boolean
 ;; Check if the supplied password matches with the hashed password of the given username
 (defn pass-matches? [username password]
-  (sql/with-connection (db/db-connection)
-                       (->> (sql/with-query-results results
-                                                    ["select password from users where username = ?" username]
-                                                    (into {} results))
-                            (:password)
-                            (hashers/check password))))
+  (if (user-exists? username)
+    (sql/with-connection (db/db-connection)
+                         (->> (sql/with-query-results results
+                                                      ["select password from users where username = ?" username]
+                                                      (into {} results))
+                              (:password)
+                              (hashers/check password)))))
 
 
 ;; {} -> Response[:body String]
