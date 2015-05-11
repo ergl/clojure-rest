@@ -4,6 +4,7 @@
             [buddy.hashers :as hashers]
             [clojure.walk :refer [keywordize-keys]]
             [clojure-rest.db :as db]
+            [clojure-rest.sanitize :as s]
             [clojure-rest.validate :as v]))
 
 
@@ -39,6 +40,12 @@
   (v/field-exists-in-table? "users" "username" username))
 
 
+;; String -> Boolean
+;; Check if the email exists in the database
+(defn- email-exists? [email]
+  (v/field-exists-in-table? "users" "email" email))
+
+
 ;; String, String -> Boolean
 ;; Check if the supplied password matches with the hashed password of the given username
 (defn pass-matches? [username password]
@@ -50,31 +57,35 @@
                               (:password)
                               (hashers/check password)))))
 
+;; {} -> {}
+;; Fills in the default values for a new user
+;; From signup form we only get email, username and password
+(defn- complete-default-user [content]
+  (assoc content :profileImage nil :deleted false :moderator false))
 
-;; {} -> Response[:body String]
-;; {} -> Response[:body null :status 404]
+
+;; {} -> {}
 ;; Creates a new user with the provided content, then returns said user
 ;; See get-user
-; TODO: When updating to put in non-placeholder values, change this approach
-; with an assoc-based one
-(defn create-new-user [content]
+(defn- user-insert! [content]
   (let [id (db/uuid)]
     (sql/with-connection (db/db-connection)
-                         (sql/insert-values :users []
-                                            [id
-                                             (content "email")
-                                             (content "name")
-                                             (content "username")
-                                             (hash-pass (content "password"))
-                                             ; TODO - Placeholder values
-                                             nil
-                                             false
-                                             false]))
-    (get-user (content "username"))))
+                         (let [user (assoc content :usersId id :password (hash-pass (content :password)))]
+                           (sql/insert-record :users user)))
+    (get-user (content :username))))
 
 
-;; String -> {}
-;; String -> ()
+;; {} -> Response[:body String? :status HTTPCode?]
+;; Creates a new user with the provided content
+;; Filters the provided content first for any errors
+(defn create-new-user [content]
+  (->> content
+       s/signup-flow
+       complete-default-user
+       user-insert!))
+
+
+;; String -> {}?
 ;; Gets the stored hashmap of the given username
 (defn- get-user-table [username]
   (sql/with-connection (db/db-connection)
