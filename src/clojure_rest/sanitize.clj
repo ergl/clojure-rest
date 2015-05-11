@@ -49,10 +49,9 @@
     [params nil]))
 
 
-
 ;; [{}?, Error?] -> Either<{}|Error>
 ;; Extracts the value from the optional map
-;; If there is a value present, extract the error
+;; If there is no value present, extract the error
 (defn- wrap-error [[val err]]
   (if (nil? err) val err))
 
@@ -65,7 +64,7 @@
        clean-password))
 
 
-;; {} -> [{}, String]
+;; {} -> [{}?, Error?]
 ;; Chains a map through the different signup validations
 (defn clean-signup [params]
   (>>= params
@@ -74,11 +73,11 @@
        clean-password))
 
 ;; {} -> Either<{}|Error>
-;; Chains a map through the login validation and reduce the result
+;; Chains a map through the login validation and extract the result
 (defn login-flow [params]
   (wrap-error (clean-login params)))
 
 ;; {} -> Either<{}|Error>
-;; Chains a map through the login validation and reduce the result
+;; Chains a map through the login validation and extract the result
 (defn signup-flow [params]
   (wrap-error (clean-signup params)))
