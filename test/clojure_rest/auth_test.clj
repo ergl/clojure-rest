@@ -30,4 +30,11 @@
                                                               ((parse-string (:body user)) "username")
                                                               :password "notarealpassword"}))
                               (mock/content-type "application/json")))]
+        (is (= (:status response) 401))))
+    
+    (testing "denegating a non-existing user"
+      (let [response (app (-> (mock/request :post "/api/auth"
+                                            (generate-string {:username "foo"
+                                                              :password "notarealpassword"}))
+                              (mock/content-type "application/json")))]
         (is (= (:status response) 401))))))
