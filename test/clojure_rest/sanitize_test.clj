@@ -1,29 +1,24 @@
 (ns clojure-rest.sanitize-test
   (:require [clojure.test :refer :all]
-            [clojure-rest.sanitize :as s]))
+            [clojure-rest.sanitize :refer [wrap-error
+                                           clean-email
+                                           clean-username
+                                           clean-password]]))
 
 (deftest test-sanitize
   
-  (testing "cleaning a valid signup map should return the same map"
-    (let [user {:email "foo@foo.com" :username "username" :password "password"}]
-      (is (= (s/signup-flow user) user))))
+  (testing "cleaning a valid user should return itself"
+    (let [user {:email "foo@foo.com" :username "boob" :password "secret"}]
+      (is (= ((wrap-error (clean-email user)) :email) (user :email)))
+      (is (= ((wrap-error (clean-username user)) :username) (user :username)))
+      (is (= ((wrap-error (clean-password user)) :password) (user :password)))))
   
-  (testing "cleaning a valid login map should return the same map"
-    (let [user {:username "ayy" :password "foo"}]
-      (is (= (s/login-flow user) user))))
+  (testing "strips whitespace from map fields"
+    (let [user {:email "      foo@foo.com  " :username "  ayyy" :password "    secret    "}]
+      (is (= ((wrap-error (clean-email user)) :email) (clojure.string/trim (user :email))))
+      (is (= ((wrap-error (clean-username user)) :username) (clojure.string/trim (user :username))))
+      (is (= ((wrap-error (clean-password user)) :password) (clojure.string/trim (user :password))))))
   
-  (testing "extra spaces are trimmed from the map values"
-    (let [user {:email "       fo@fo.com     " :username "ayy    " :password "foo  "}]
-      (is (= ((s/signup-flow user) :email) (clojure.string/trim (user :email))))
-      (is (= ((s/login-flow user) :username) (clojure.string/trim (user :username))))
-      (is (= ((s/login-flow user) :password) (clojure.string/trim (user :password))))))
-  
-  (testing "string map is keywordized on sanitization"
-    (let [user {"email" "foo@foo.com" "username" "john" "password" "mypassword"}]
-      (is (= (s/signup-flow user) (clojure.walk/keywordize-keys user)))))
-  
-  (testing "malformed map should return a 400 Bad Request error code"
-    (let [signup-user {:email "" :username "whatever" :password "1"}
-          login-user {:username "" :password ""}]
-      (is (= (s/login-flow login-user) 400))
-      (is (= (s/signup-flow signup-user) 400)))))
+  (testing "rejects an invalid email"
+    (let [user {:email "invalidemail" :username "foo" :password "bar"}]
+      (is (= (wrap-error (clean-email user)) 400)))))

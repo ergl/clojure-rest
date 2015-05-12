@@ -60,7 +60,7 @@
 ;; [{}?, Error?] -> Either<{}|Error>
 ;; Extracts the value from the optional map
 ;; If there is no value present, extract the error
-(defn- wrap-error [[val err]]
+(defn wrap-error [[val err]]
   (if (nil? err) val err))
 
 
