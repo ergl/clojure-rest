@@ -1,7 +1,7 @@
-(ns clojure-rest.coordinates
+(ns clojure-rest.data.coordinates
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.db :as db]))
+            [clojure-rest.data.db :as db]))
 
 
 ;; () -> Response[:body String]

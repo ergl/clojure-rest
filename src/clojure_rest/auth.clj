@@ -1,6 +1,6 @@
 (ns clojure-rest.auth
   (:require [ring.util.response :refer :all]
-            [clojure-rest.users :as users]))
+            [clojure-rest.data.users :as users]))
 
 
 ;; String, String -> Response[:body nil :status Natural]

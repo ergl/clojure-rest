@@ -1,4 +1,4 @@
-(ns clojure-rest.sanitize
+(ns clojure-rest.util.sanitize
   (:require [clojure.string :refer [trim]]
             [clojure.walk :refer [keywordize-keys]]))
 

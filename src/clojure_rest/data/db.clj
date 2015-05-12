@@ -1,4 +1,4 @@
-(ns clojure-rest.db
+(ns clojure-rest.data.db
   (:import com.mchange.v2.c3p0.ComboPooledDataSource))
 
 

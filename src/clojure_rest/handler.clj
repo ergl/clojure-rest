@@ -5,12 +5,12 @@
             [ring.middleware.json :as json]
             [compojure.route :as route]
             [clojure.walk :refer [stringify-keys]]
-            [clojure-rest.http :as http]
-            [clojure-rest.db :as db]
+            [clojure-rest.util.http :as http]
+            [clojure-rest.data.db :as db]
             [clojure-rest.auth :as auth]
-            [clojure-rest.users :as users]
-            [clojure-rest.events :as events]
-            [clojure-rest.comments :as comments]))
+            [clojure-rest.data.users :as users]
+            [clojure-rest.data.events :as events]
+            [clojure-rest.data.comments :as comments]))
 
 
 ;; Response -> Response

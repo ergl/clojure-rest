@@ -1,6 +1,6 @@
 (ns clojure-rest.validate-test
   (:require [clojure.test :refer :all]
-            [clojure-rest.validate :as v]))
+            [clojure-rest.util.validate :as v]))
 
 (deftest test-validate
   

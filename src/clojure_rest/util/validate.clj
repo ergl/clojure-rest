@@ -1,6 +1,6 @@
-(ns clojure-rest.validate
+(ns clojure-rest.util.validate
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.db :as db]))
+            [clojure-rest.data.db :as db]))
 
 ;; String String String -> Boolean
 ;; Checks if the value exists in the given row of the given table

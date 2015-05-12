@@ -1,4 +1,4 @@
-(ns clojure-rest.http
+(ns clojure-rest.util.http
   (:require [ring.util.response :refer :all]
             [clojure.string :refer [upper-case]]
             [clojure.string :refer [join]]))
@@ -30,17 +30,17 @@
 
 ;; () -> Response[:body nil :status 501]
 (defn not-implemented []
-	(empty-response-with-code 501))
+  (empty-response-with-code 501))
 
 
 ;; () -> Response[:body nil :status 401]
 (defn unauthorized []
-	(empty-response-with-code 401))
+  (empty-response-with-code 401))
 
 
 ;; () -> Response[:body nil :status 403]
 (defn forbidden []
-	(empty-response-with-code 403))
+  (empty-response-with-code 403))
 
 ;; [{}?, Error?] -> Either<Response[:body nil :status err]|Response[:body val]>
 (defn wrap-response [[val err]]

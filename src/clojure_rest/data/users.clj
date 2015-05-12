@@ -1,11 +1,11 @@
-(ns clojure-rest.users
+(ns clojure-rest.data.users
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
             [buddy.hashers :as hashers]
             [clojure.walk :refer [keywordize-keys]]
-            [clojure-rest.db :as db]
-            [clojure-rest.sanitize :as s]
-            [clojure-rest.validate :as v]))
+            [clojure-rest.data.db :as db]
+            [clojure-rest.util.sanitize :as s]
+            [clojure-rest.util.validate :as v]))
 
 
 ;; () -> Response[:body String]
