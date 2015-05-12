@@ -41,3 +41,9 @@
 ;; () -> Response[:body nil :status 403]
 (defn forbidden []
 	(empty-response-with-code 403))
+
+;; [{}?, Error?] -> Either<Response[:body nil :status err]|Response[:body val]>
+(defn wrap-response [[val err]]
+  (if (nil? err)
+    (response val)
+    (empty-response-with-code err)))
