@@ -11,7 +11,7 @@
 ;; (f [{}?, Error?]) -> Either<(f val)|[nil Error]>
 ;; Either execute (f val) or bind the error
 ;; If the error is present in the signature
-(defn- bind-error [f [val err]]
+(defn bind-error [f [val err]]
   (if (nil? err)
     (f val)
     [nil err]))
@@ -35,7 +35,7 @@
 
 ;; {} -> [{}?, Error?]
 ;; Checks if (params :username) is non-empty
-(defn- clean-username [params]
+(defn clean-username [params]
   (if (empty? (params :username))
     [nil 400]
     [(trim-in params :username) nil]))
@@ -43,7 +43,7 @@
 
 ;; {} -> [{}?, Error?]
 ;; Checks if (params :email) is a valid email address
-(defn- clean-email [params]
+(defn clean-email [params]
   (if (and (params :email) (re-find #".*@.*\..*" (params :email)))
     [(trim-in params :email) nil]
     [nil 400]))
@@ -51,7 +51,7 @@
 
 ;; {} -> [{}?, Error?]
 ;; Checks if (params :password) is non-empty
-(defn- clean-password [params]
+(defn clean-password [params]
   (if (empty? (params :password))
     [nil 400]
     [(trim-in params :password) nil]))
@@ -64,34 +64,7 @@
   (if (nil? err) val err))
 
 
-;; {} -> [{}?, Error?]
-;; Chains a map through the different login validations
-(defn clean-login [params]
-  (>>= params
-       clean-username
-       clean-password))
-
-
-;; {} -> [{}?, Error?]
-;; Chains a map through the different signup validations
-(defn clean-signup [params]
-  (>>= params
-       clean-email
-       clean-username
-       clean-password))
-
-;; {} -> Either<{}|Error>
-;; Chains a map through the login validation and extract the result
-(defn login-flow [params]
-  (->> params
-       keywordize-keys
-       clean-login
-       wrap-error))
-
-;; {} -> Either<{}|Error>
-;; Chains a map through the login validation and extract the result
-(defn signup-flow [params]
-  (->> params
-       keywordize-keys
-       clean-signup
-       wrap-error))
+;; {} -> [{}, nil]
+;; Adaptor from map to error tuple
+(defn bind-to [params]
+  [params nil])
