@@ -64,25 +64,26 @@
   (assoc content :profileImage nil :deleted false :moderator false))
 
 
-;; {} -> {}
+;; {} -> Response[:body String]
+;; {} -> Response[:body null :status 404]
 ;; Creates a new user with the provided content, then returns said user
 ;; See get-user
-(defn- user-insert! [content]
+; TODO: When updating to put in non-placeholder values, change this approach
+; with an assoc-based one
+(defn create-new-user [content]
   (let [id (db/uuid)]
     (sql/with-connection (db/db-connection)
-                         (let [user (assoc content :usersId id :password (hash-pass (content :password)))]
-                           (sql/insert-record :users user)))
-    (get-user (content :username))))
-
-
-;; {} -> Response[:body String? :status HTTPCode?]
-;; Creates a new user with the provided content
-;; Filters the provided content first for any errors
-(defn create-new-user [content]
-  (->> content
-       s/signup-flow
-       complete-default-user
-       user-insert!))
+                         (sql/insert-values :users []
+                                            [id
+                                             (content "email")
+                                             (content "name")
+                                             (content "username")
+                                             (hash-pass (content "password"))
+                                             ; TODO - Placeholder values
+                                             nil
+                                             false
+                                             false]))
+    (get-user (content "username"))))
 
 
 ;; String -> {}?
