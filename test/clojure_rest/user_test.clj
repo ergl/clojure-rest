@@ -19,6 +19,16 @@
       (is (= (get-in response [:headers "Content-Type"]) "application/json; charset=utf-8"))
       (is (= ((parse-string (:body response)) "username") "bar"))))
   
+  ;; Attempting to create an user with an existing email or username should return a 400 response
+  (testing "creating an existing user"
+    (let [response (app (-> (mock/request :post "/api/users"
+                                          (generate-string {:email "foo@foo.com"
+                                                            :name "foo"
+                                                            :username "bar"
+                                                            :password "12345"}))
+                            (mock/content-type "application/json")))]
+      (is (= (:status response) 400))))
+  
   ;; A GET to an available user should return its username and name (if it exists)  
   (testing "retrieving an existing user"
     (let [response (app (mock/request :get "/api/users/bar"))]
