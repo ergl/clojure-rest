@@ -57,7 +57,7 @@
            
            (context "/users" [] (defroutes event-routes
                                   (GET "/" [] (users/get-all-users))
-                                  (POST "/" {body :body} (users/create-new-user body))
+                                  (POST "/" {body :body} (users/create-user-case body))
                                   (OPTIONS "/" [] (http/options [:options :get :post]))
                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
                                   (context "/:username" [username] (defroutes event-routes
