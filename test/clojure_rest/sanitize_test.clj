@@ -1,7 +1,7 @@
 (ns clojure-rest.sanitize-test
   (:require [clojure.test :refer :all]
-            [clojure-rest.util.sanitize :refer [wrap-error
-                                                clean-email
+            [clojure-rest.util.error :refer [wrap-error]]
+            [clojure-rest.util.sanitize :refer [clean-email
                                                 clean-username
                                                 clean-password]]))
 
