@@ -4,60 +4,16 @@
             [buddy.hashers :as bhash]
             [clojure.walk :refer [keywordize-keys]]
             [clojure-rest.data.db :as db]
-            [clojure-rest.util.sanitize :as s]
-            [clojure-rest.util.validate :as v]
             [clojure-rest.util.http :as h]
-            [clojure-rest.util.error :refer :all]))
+            [clojure-rest.util.user-sanitize :as us]
+            [clojure-rest.util.user-validate :as uv]
+            [clojure-rest.util.error :refer [bind-error]]))
 
 
 ;; String -> String
 ;; Hashes the given password with bcrypt + sha512, 12 iterations
 (defn- hash-pass [pass]
   (bhash/encrypt pass))
-
-
-;; String -> Boolean
-(defn- user-exists? [username]
-  (v/field-exists-in-table? "users" "username" username))
-
-
-;; String -> Boolean
-(defn- email-exists? [email]
-  (v/field-exists-in-table? "users" "email" email))
-
-
-;; {} -> [{}?, Error?]
-;; Check for {{} :username}
-(defn- check-username [params]
-  (v/check-field params :username user-exists?))
-
-;; {} -> [{}?, Error?]
-;; Check for {{} :email}
-(defn- check-email [params]
-  (v/check-field params :email email-exists?))
-
-
-;; {} -> {}
-;; Fills in the default values for a new user
-;; From signup form we only get email, username and password
-(defn- complete-default-user [content]
-  (assoc content :profileImage nil :deleted false :moderator false))
-
-
-;; {} -> [{}?, Error?]
-(defn- sanitize-signup [params]
-  (>>= params
-       s/clean-email
-       s/clean-username
-       s/clean-password))
-
-
-;; [{}?, Error?] -> [{}?, Error?]
-(defn- validate-signup [params]
-  (=>>= params
-        #(bind-to (complete-default-user %))
-        check-email
-        check-username))
 
 
 ;; String -> Either<{}|nil>
@@ -91,8 +47,8 @@
 (defn create-user-case [content]
   (->> content
        keywordize-keys
-       sanitize-signup
-       validate-signup
+       us/sanitize-signup
+       uv/validate-signup
        bind-user-insert
        h/wrap-response))
 
@@ -121,7 +77,7 @@
 ;; String, String -> Boolean
 ;; Check if the supplied password matches with the hashed password of the given username
 (defn pass-matches? [username password]
-  (if (user-exists? username)
+  (if (uv/user-exists? username)
     (sql/with-connection (db/db-connection)
                          (->> (sql/with-query-results results
                                                       ["select password from users where username = ?" username]
