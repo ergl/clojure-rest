@@ -61,7 +61,7 @@
                                   (OPTIONS "/" [] (http/options [:options :get :post]))
                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
                                   (context "/:username" [username] (defroutes event-routes
-                                                                     (GET "/" [] (users/get-user-case username))
+                                                                     (GET "/" [] (users/get-user username))
                                                                      (PUT "/" {body :body} (users/update-user username body))
                                                                      (DELETE "/" [] (users/delete-user username))
                                                                      (OPTIONS "/" [] (http/options [:options :get :put :delete]))

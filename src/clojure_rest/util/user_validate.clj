@@ -15,6 +15,11 @@
   (v/field-exists-in-table? "users" "email" email))
 
 
+;; String -> Either<{}|nil>
+(defn get-user-table [username]
+  (v/get-table-values "users" "username" username))
+
+
 ;; {} -> [{}?, Error?]
 ;; Check for {{} :username}
 (defn- check-username [params]

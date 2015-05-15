@@ -19,3 +19,13 @@
   (if (pred (params field))
     [nil 400]
     (bind-to params)))
+
+
+;; String String String -> Either<{}|nil>
+;; Gets the stored hashmap of the table where pkey = value
+(defn get-table-values [table pkey value]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               [(str "select * from " table " where " pkey " = ?") value]
+                                               (cond (empty? results) nil
+                                                     :else (first results)))))
