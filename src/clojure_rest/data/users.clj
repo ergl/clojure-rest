@@ -17,6 +17,7 @@
 
 
 ;; String -> Either<{}|nil>
+;; Returns a response with the contents of the specified username
 (defn- user-brief-extract! [username]
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
@@ -43,6 +44,14 @@
                    [res nil])) params))
 
 
+;; [{}?, Error?] -> [{}?, Error?]
+(defn- bind-user-brief-extract [params]
+  (bind-error #(let [res (user-brief-extract! %)]
+                 (if (nil? res)
+                   [nil 404]
+                   [res nil])) params))
+
+
 ;; {} -> [{}?, Error?]
 (defn create-user-case [content]
   (->> content
@@ -50,6 +59,14 @@
        us/sanitize-signup
        uv/validate-signup
        bind-user-insert
+       h/wrap-response))
+
+
+(defn get-user-case [content]
+  (->> content
+       clojure.string/trim
+       (#(if (uv/user-exists? %) [% nil] [nil 404]))
+       bind-user-brief-extract
        h/wrap-response))
 
 
