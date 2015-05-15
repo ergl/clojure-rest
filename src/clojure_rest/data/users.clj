@@ -53,7 +53,7 @@
 
 
 ;; {} -> [{}?, Error?]
-(defn create-user-case [content]
+(defn create-new-user [content]
   (->> content
        keywordize-keys
        us/sanitize-signup
