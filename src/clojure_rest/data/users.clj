@@ -8,7 +8,9 @@
             [clojure-rest.util.http :as h]
             [clojure-rest.util.user-sanitize :as us]
             [clojure-rest.util.user-validate :as uv]
-            [clojure-rest.util.error :refer [bind-error]]))
+            [clojure-rest.util.error :refer [bind-error
+                                             apply-if-present
+                                             bind-to]]))
 
 
 ;; String -> String
@@ -126,6 +128,7 @@
            keywordize-keys
            us/sanitize-update
            uv/validate-update
+           (apply-if-present #(bind-to (assoc % :password (hash-pass (% :password)))) :password)
            (bind-user-update username)
            h/wrap-response))
     {:status 404}))

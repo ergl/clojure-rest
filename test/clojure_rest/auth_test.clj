@@ -23,6 +23,18 @@
                               (mock/content-type "application/json")))]
         (is (= (:status response) 200))))
     
+    ;; Authentication should persist after a password change
+    (testing "autheticating is still valid after a password change"
+      (let [usermodified (app (-> (mock/request :put "/api/users/bar"
+                                            (generate-string {:password "secretchanged"}))
+                              (mock/content-type "application/json")))
+            response (app (-> (mock/request :post "/api/auth"
+                                            (generate-string {:username
+                                                              ((parse-string (:body user)) "username")
+                                                              :password "secretchanged"}))
+                              (mock/content-type "application/json")))]
+        (is (= (:status response 200)))))
+    
     ;; A POST to /api/auth with a wrong user/pass combination should return a 401 response
     (testing "denegating an incorrect user"
       (let [response (app (-> (mock/request :post "/api/auth"

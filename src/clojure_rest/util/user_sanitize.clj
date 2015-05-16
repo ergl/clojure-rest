@@ -42,4 +42,5 @@
 (defn sanitize-update [params]
   (>?= params
        (clean-email :email)
-       (clean-username :username)))
+       (clean-username :username)
+       (clean-password :password)))

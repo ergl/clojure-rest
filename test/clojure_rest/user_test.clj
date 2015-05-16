@@ -55,6 +55,27 @@
                             (mock/content-type "application/json")))]
       (is (= (:status response) 403))))
   
+  ;; Attempting to change the username of an user to another one that already exists should return a 400 response
+  (testing "trying to change an username to another one that already exists"
+    (let [user (app (-> (mock/request :post "/api/users"
+                                      (generate-string {:email "foo@bar.com"
+                                                        :name "foo"
+                                                        :username "baz"
+                                                        :password "1234"}))
+                        (mock/content-type "application/json")))
+          response (app (-> (mock/request :put "/api/users/baz"
+                                          (generate-string {:username "bar"}))
+                            (mock/content-type "application/json")))]
+      (is (= (:status response) 400))))
+  
+  
+  ;; Attempting to change the email of an user to another one that already exists should return a 400 response
+  (testing "trying to change an user email to another one that already exists"
+    (let [response (app (-> (mock/request :put "/api/users/baz"
+                                          (generate-string {:email "foo@foo.com"}))
+                            (mock/content-type "application/json")))]
+      (is (= (:status response) 400))))
+  
   ;; Trying to update a non-existing user should result in a 404 response
   (testing "updating a non-existing user"
     (let [response (app (-> (mock/request :put "/api/users/notfound"
@@ -71,7 +92,8 @@
   
   ;; DELETing an existing user should return a 204 status code
   (testing "deleting an exisiting user"
-    (let [response (app (mock/request :delete "/api/users/bar"))]
+    (let [response (app (mock/request :delete "/api/users/bar"))
+          response1 (app (mock/request :delete "/api/users/baz"))]
       (is (= (:status response) 204))))
   
   ;; DELETEing a non-exisiting user should return a 404
