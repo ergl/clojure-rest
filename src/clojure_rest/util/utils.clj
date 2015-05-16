@@ -5,6 +5,11 @@
 (defn fmap [f m]
   (into {} (for [[k v] m] [k (f v)])))
 
+;; fn {} -> {}
+;; Applies fn to each value in {}, but takes the :key as a parameter too
+(defn fkmap [f m]
+  (into {} (for [[k v] m] [k (f k v)])))
+
 ;; Turns:
 ;; (|>> val fn1 fn2 ...)
 ;; Into:
