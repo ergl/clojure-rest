@@ -71,6 +71,21 @@
       [res nil])))
 
 
+;; String -> ()
+;; Deletes the given user from the table.
+;; Returns nothing
+(defn- user-delete! [username]
+  (sql/with-connection (db/db-connection)
+                       (sql/update-values :users ["username = ?" username] {:deleted true})))
+
+
+;; String -> Natural
+;; Binds the deletion of the given user to 204 no content (resource deleted)
+(defn- bind-user-delete [user]
+  (->> (|>> user user-delete!)
+       (#(when (= user %) 204))))
+
+
 ;; () -> Response[:body String]
 ;; Returns a response with the contents of all the users in the database
 (defn get-all-users []
@@ -115,6 +130,17 @@
     {:status 404}))
 
 
+;; String -> Response[:status Either<204|404>]
+;; Returns a response with either 204 no content (user deleted) or 404 (user not found)
+(defn delete-user [username]
+  (if (uv/user-exists? username)
+    (do
+      (->> username
+           bind-user-delete
+           h/empty-response-with-code))
+    {:status 404}))
+
+
 ;; String, String -> Boolean
 ;; Check if the supplied password matches with the hashed password of the given username
 (defn pass-matches? [username password]
@@ -125,13 +151,3 @@
                                                       (into {} results))
                               (:password)
                               (bhash/check password)))))
-
-
-;; String -> Response[:status 204]
-;; String -> Response[:status 404]
-;; "Deletes" the specified user, then returns a 204 http code
-; TODO: Returns 404 if no username is found
-(defn delete-user [username]
-  (sql/with-connection (db/db-connection)
-                       (sql/update-values :users ["username = ?" username] {:deleted true}))
-  {:status 204})
