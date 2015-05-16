@@ -1,4 +1,4 @@
-(ns clojure-rest.db
+(ns clojure-rest.data.db
   (:import com.mchange.v2.c3p0.ComboPooledDataSource))
 
 
@@ -13,7 +13,7 @@
   {:classname "org.h2.Driver"
    :subprotocol "h2"
    :subname "mem:documents"
-   :init-script "INIT=RUNSCRIPT FROM '~/projects/dev/clojure-rest/schema.sql'"
+   :init-script "INIT=RUNSCRIPT FROM './schema.sql'"
    :user ""
    :password ""})
 

@@ -1,7 +1,7 @@
-(ns clojure-rest.events
+(ns clojure-rest.data.events
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.db :as db]))
+            [clojure-rest.data.db :as db]))
 
 
 ;; () -> Response[:body String]
@@ -22,7 +22,7 @@
                        (sql/with-query-results results
                                                ["select * from events where eventsId = ?" id]
                                                (cond (empty? results) {:status 404}
-                                                 :else (response (first results))))))
+                                                     :else (response (first results))))))
 
 
 ;; {} -> Response[:body String]
