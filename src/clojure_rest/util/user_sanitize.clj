@@ -1,7 +1,9 @@
 (ns clojure-rest.util.user-sanitize
   (:require [clojure-rest.util.sanitize :as s]
             [clojure-rest.util.error :refer [>>=
-                                             bind-error]]))
+                                             bind-to
+                                             bind-error
+                                             apply-if-present]]))
 
 
 ;; {} -> [{}?, Error?]
@@ -34,3 +36,10 @@
        clean-email
        clean-username
        clean-password))
+
+
+;; {} -> [{}?, Error?]
+(defn sanitize-update [params]
+  (->> (bind-to params)
+       (apply-if-present clean-email :email)
+       (apply-if-present clean-username :username)))

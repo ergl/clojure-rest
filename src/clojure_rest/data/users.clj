@@ -62,13 +62,13 @@
     (user-brief-extract! (user :username))))
 
 
-;; String, {} -> [{}?, Error?]
+;; String, [{}?, Error?] -> [{}?, Error?]
 ;; Binds the user-update! call to an error tuple
-(defn- bind-user-update [username params]
-  (let [res (user-update! username params)]
-    (if (nil? res)
-      [nil 500]
-      [res nil])))
+(defn- bind-user-update [username [val err]]
+  (if (nil? err)
+    (let [res (user-update! username val)]
+      (if (nil? res) [nil 500] [res nil]))
+    [nil err]))
 
 
 ;; String -> ()
@@ -124,7 +124,8 @@
     (do
       (->> content
            keywordize-keys
-           (fmap #(clojure.string/trim %))
+           us/sanitize-update
+           uv/validate-update
            (bind-user-update username)
            h/wrap-response))
     {:status 404}))

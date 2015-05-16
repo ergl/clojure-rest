@@ -10,6 +10,7 @@
     (f val)
     [nil err]))
 
+
 ;; Turns:
 ;; (>>= (f val) g)
 ;; Into:
@@ -28,6 +29,17 @@
   (let [fns (for [f fns] `(bind-error ~f))]
     `(->> ~inif
           ~@fns)))
+
+
+;; f k [{}?, Err?] -> Either<(f {})|[nil Error]|[s nil]>
+;; Execute (f s) if k is present in s, return [s nil] otherwise
+;; If there is an error coming in, just propagate the error
+;; TODO: Figure out a macro
+(defn apply-if-present [f k [s err]]
+  (if (nil? err)
+    (if (s k) (f s) [s nil])
+    [nil err]))
+
 
 ;; {} -> [{}, nil]
 ;; Adaptor from map to error tuple

@@ -2,7 +2,8 @@
   (:require [clojure-rest.util.validate :as v]
             [clojure-rest.util.error :refer [=>>=
                                              bind-error
-                                             bind-to]]))
+                                             bind-to
+                                             apply-if-present]]))
 
 
 ;; String -> Boolean
@@ -33,6 +34,18 @@
   (v/check-field params :email email-exists?))
 
 
+;; {} -> [{}?, Error?]
+;; Check if user is trying to sneak a deletion
+(defn- check-deletion [params]
+  (if (params :deleted) [nil 401] [params nil]))
+
+
+;; {} -> [{}?, Error?]
+;; Check if user is trying to sudo
+(defn- check-admin-attempt [params]
+  (if (params :moderator) [nil 403] [params nil]))
+
+
 ;; {} -> {}
 ;; Fills in the default values for a new user
 ;; From signup form we only get email, username and password
@@ -46,3 +59,11 @@
         #(bind-to (complete-default-user %))
         check-email
         check-username))
+
+;; [{}?, Error?] -> [{}?, Error?]
+(defn validate-update [params]
+  (->> params
+       (apply-if-present check-email :email)
+       (apply-if-present check-username :username)
+       (apply-if-present check-deletion :deleted)
+       (apply-if-present check-admin-attempt :moderator)))

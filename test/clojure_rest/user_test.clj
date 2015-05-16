@@ -29,7 +29,6 @@
                             (mock/content-type "application/json")))]
       (is (= (:status response) 400))))
   
-  
   ;; A GET to an available user should return its username and name (if it exists)  
   (testing "retrieving an existing user"
     (let [response (app (mock/request :get "/api/users/bar"))]
@@ -49,13 +48,12 @@
       (is (= (:status response) 200))
       (is (= ((parse-string (:body response)) "name") "notbar"))))
   
-  
+  ;; Attempting to flip the moderator bit through an user update is forbidden
   (testing "user privilege escalation"
     (let [response (app (-> (mock/request :put "/api/users/bar"
                                           (generate-string {:moderator "true"}))
                             (mock/content-type "application/json")))]
-      (is (= (:status response) 401))))
-  
+      (is (= (:status response) 403))))
   
   ;; Trying to update a non-existing user should result in a 404 response
   (testing "updating a non-existing user"
@@ -64,20 +62,19 @@
                             (mock/content-type "application/json")))]
       (is (= (:status response) 404))))
   
+  ;; Attempting to delete an user through the update procedure should return in a 403 response
+  (testing "deleting an user through update"
+    (let [response (app (-> (mock/request :put "/api/users/bar"
+                                          (generate-string {:deleted "true"}))
+                            (mock/content-type "application/json")))]
+      (is (= (:status response) 401))))
+  
   ;; DELETing an existing user should return a 204 status code
   (testing "deleting an exisiting user"
     (let [response (app (mock/request :delete "/api/users/bar"))]
       (is (= (:status response) 204))))
   
-  
   ;; DELETEing a non-exisiting user should return a 404
   (testing "deleting a non-existing user"
     (let [response (app (mock/request :delete "/api/users/bar"))]
-      (is (= (:status response) 404))))
-  
-  
-  (testing "deleting an user through update"
-    (let [response (app (-> (mock/request :put "/api/users/bar"
-                                          (generate-string {:deleted "true"}))
-                            (mock/content-type "application/json")))]
-      (is (= (:status response) 401)))))
+      (is (= (:status response) 404)))))
