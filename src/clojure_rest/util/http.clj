@@ -5,7 +5,7 @@
 
 
 ;; Natural -> Response[:body nil :status Natural]
-(defn- empty-response-with-code [code]
+(defn empty-response-with-code [code]
   (-> (response nil)
       (status code)))
 

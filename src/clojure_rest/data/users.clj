@@ -1,11 +1,89 @@
 (ns clojure-rest.data.users
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
-            [buddy.hashers :as hashers]
+            [buddy.hashers :as bhash]
+            [clojure-rest.util.utils :refer :all]
             [clojure.walk :refer [keywordize-keys]]
             [clojure-rest.data.db :as db]
-            [clojure-rest.util.sanitize :as s]
-            [clojure-rest.util.validate :as v]))
+            [clojure-rest.util.http :as h]
+            [clojure-rest.util.user-sanitize :as us]
+            [clojure-rest.util.user-validate :as uv]
+            [clojure-rest.util.error :refer [bind-error]]))
+
+
+;; String -> String
+;; Hashes the given password with bcrypt + sha512, 12 iterations
+(defn- hash-pass [pass]
+  (bhash/encrypt pass))
+
+
+;; String -> Either<{}|nil>
+;; Returns a response with the contents of the specified username
+(defn- user-brief-extract! [username]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               ["select username, name from users where username = ?" username]
+                                               (cond (empty? results) nil
+                                                     :else (first results)))))
+
+
+;; [{}?, Error?] -> [{}?, Error?]
+(defn- bind-user-brief-extract [params]
+  (bind-error #(let [res (user-brief-extract! %)]
+                 (if (nil? res)
+                   [nil 404]
+                   [res nil])) params))
+
+
+;; {} -> Either<{}|nil>
+;; Creates a new user with the provided content, then returns said user
+(defn- user-insert! [content]
+  (let [id (db/uuid)]
+    (sql/with-connection (db/db-connection)
+                         (let [user (assoc content :usersId id :password (hash-pass (content :password)))]
+                           (sql/insert-record :users user)))
+    (user-brief-extract! (content :username))))
+
+
+;; [{}?, Error?] -> [{}?, Error?]
+(defn- bind-user-insert [params]
+  (bind-error #(let [res (user-insert! %)]
+                 (if (nil? res)
+                   [nil 500]
+                   [res nil])) params))
+
+
+;; String, {} -> Either<{}|nil>
+;; Updates the specified user with the provided content, then returns said user
+(defn- user-update! [username content]
+  (let [user (merge (uv/get-user-table username) content)]
+    (sql/with-connection (db/db-connection)
+                         (sql/update-values :users ["username = ?" username] user))
+    (user-brief-extract! (user :username))))
+
+
+;; String, [{}?, Error?] -> [{}?, Error?]
+;; Binds the user-update! call to an error tuple
+(defn- bind-user-update [username [val err]]
+  (if (nil? err)
+    (let [res (user-update! username val)]
+      (if (nil? res) [nil 500] [res nil]))
+    [nil err]))
+
+
+;; String -> ()
+;; Deletes the given user from the table.
+;; Returns nothing
+(defn- user-delete! [username]
+  (sql/with-connection (db/db-connection)
+                       (sql/update-values :users ["username = ?" username] {:deleted true})))
+
+
+;; String -> Natural
+;; Binds the deletion of the given user to 204 no content (resource deleted)
+(defn- bind-user-delete [user]
+  (->> (|>> user user-delete!)
+       (#(when (= user %) 204))))
 
 
 ;; () -> Response[:body String]
@@ -18,100 +96,59 @@
                                                  (into [] results)))))
 
 
-;; String -> Response[:body String]
-;; String -> Response[:body null :status 404]
-;; Returns a response with the contents of the specified username
+;; {} -> Response[:body val? :status Either<200|400|500>]
+;; Returns a response with either the contents of the created user, a 400 bad request, or a 500 server error
+(defn create-new-user [content]
+  (->> content
+       keywordize-keys
+       us/sanitize-signup
+       uv/validate-signup
+       bind-user-insert
+       h/wrap-response))
+
+
+;; String -> Response[:body val? :status Either<200|404>]
+;; Returns a response with either the contents of the given user or a 404 not found (if error)
 (defn get-user [username]
-  (sql/with-connection (db/db-connection)
-                       (sql/with-query-results results
-                                               ["select username, name from users where username = ?" username]
-                                               (cond (empty? results) {:status 404}
-                                                     :else (response (first results))))))
-
-;; String -> String
-;; Hashes the given password with bcrypt + sha512, 12 iterations
-(defn- hash-pass [pass]
-  (hashers/encrypt pass))
+  (->> username
+       clojure.string/trim
+       (#(if (uv/user-exists? %) [% nil] [nil 404]))
+       bind-user-brief-extract
+       h/wrap-response))
 
 
-;; String -> Boolean
-;; Checks if the user exists in the database
-(defn- user-exists? [username]
-  (v/field-exists-in-table? "users" "username" username))
+;; String, {} -> Response[:body val? :status Either<200|404|500>]
+;; Returns a response with either the contents of the updated user, a 404 not found, or a 500 server error
+(defn update-user [username content]
+  (if (uv/user-exists? username)
+    (do
+      (->> content
+           keywordize-keys
+           us/sanitize-update
+           uv/validate-update
+           (bind-user-update username)
+           h/wrap-response))
+    {:status 404}))
 
 
-;; String -> Boolean
-;; Check if the email exists in the database
-(defn- email-exists? [email]
-  (v/field-exists-in-table? "users" "email" email))
+;; String -> Response[:status Either<204|404>]
+;; Returns a response with either 204 no content (user deleted) or 404 (user not found)
+(defn delete-user [username]
+  (if (uv/user-exists? username)
+    (do
+      (->> username
+           bind-user-delete
+           h/empty-response-with-code))
+    {:status 404}))
 
 
 ;; String, String -> Boolean
 ;; Check if the supplied password matches with the hashed password of the given username
 (defn pass-matches? [username password]
-  (if (user-exists? username)
+  (if (uv/user-exists? username)
     (sql/with-connection (db/db-connection)
                          (->> (sql/with-query-results results
                                                       ["select password from users where username = ?" username]
                                                       (into {} results))
                               (:password)
-                              (hashers/check password)))))
-
-;; {} -> {}
-;; Fills in the default values for a new user
-;; From signup form we only get email, username and password
-(defn- complete-default-user [content]
-  (assoc content :profileImage nil :deleted false :moderator false))
-
-
-;; {} -> Response[:body String]
-;; {} -> Response[:body null :status 404]
-;; Creates a new user with the provided content, then returns said user
-;; See get-user
-; TODO: When updating to put in non-placeholder values, change this approach
-; with an assoc-based one
-(defn create-new-user [content]
-  (let [id (db/uuid)]
-    (sql/with-connection (db/db-connection)
-                         (sql/insert-values :users []
-                                            [id
-                                             (content "email")
-                                             (content "name")
-                                             (content "username")
-                                             (hash-pass (content "password"))
-                                             ; TODO - Placeholder values
-                                             nil
-                                             false
-                                             false]))
-    (get-user (content "username"))))
-
-
-;; String -> {}?
-;; Gets the stored hashmap of the given username
-(defn- get-user-table [username]
-  (sql/with-connection (db/db-connection)
-                       (sql/with-query-results results
-                                               ["select * from users where username = ?" username]
-                                               (cond (empty? results) nil
-                                                     :else (first results)))))
-
-;; String, {} -> Response[:body String]
-;; String, {} -> Response[:body null :status 404]
-;; Updates the specified user with the provided content, then returns said user
-;; See get-user
-; TODO - Review
-(defn update-user [username content]
-  (let [user (merge (get-user-table username) (keywordize-keys content))]
-    (sql/with-connection (db/db-connection)
-                         (sql/update-values :users ["username = ?" username] user))
-    (get-user (:username user))))
-
-
-;; String -> Response[:status 204]
-;; String -> Response[:status 404]
-;; "Deletes" the specified user, then returns a 204 http code
-; TODO: Returns 404 if no username is found
-(defn delete-user [username]
-  (sql/with-connection (db/db-connection)
-                       (sql/update-values :users ["username = ?" username] {:deleted true}))
-  {:status 204})
+                              (bhash/check password)))))
