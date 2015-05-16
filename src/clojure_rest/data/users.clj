@@ -84,7 +84,7 @@
 ;; String -> Natural
 ;; Binds the deletion of the given user to 204 no content (resource deleted)
 (defn- bind-user-delete [user]
-  (->> (|>> user user-delete!)
+  (->> (-!>> user user-delete!)
        (#(when (= user %) 204))))
 
 
