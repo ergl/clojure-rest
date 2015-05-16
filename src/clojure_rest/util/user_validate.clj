@@ -1,6 +1,7 @@
 (ns clojure-rest.util.user-validate
   (:require [clojure-rest.util.validate :as v]
             [clojure-rest.util.error :refer [=>>=
+                                             =>?=
                                              bind-error
                                              bind-to
                                              apply-if-present]]))
@@ -62,8 +63,8 @@
 
 ;; [{}?, Error?] -> [{}?, Error?]
 (defn validate-update [params]
-  (->> params
-       (apply-if-present check-email :email)
-       (apply-if-present check-username :username)
-       (apply-if-present check-deletion :deleted)
-       (apply-if-present check-admin-attempt :moderator)))
+  (=>?= params
+       (check-email :email)
+       (check-username :username)
+       (check-deletion :deleted)
+       (check-admin-attempt :moderator)))
