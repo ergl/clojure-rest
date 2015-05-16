@@ -13,6 +13,23 @@
                                                       (into {} results))))))
 
 
+;; String String String String -> {}
+;; Get the value in supplied row where pkey = pkval in table
+(defn- get-value-from-table-where [table pkey pkval row]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               [(str "select " row " from " table " where " pkey " = ?") pkval]
+                                               (into {} results))))
+
+
+;; String String String String String -> Boolean
+;; Checks if the given row contains the given value on table where pkey = pkval
+(defn field-has-value-in-table? [table pkey pkval row value]
+  (= (str value)
+     (str (->> (get-value-from-table-where table pkey pkval row)
+               ((keyword row))))))
+
+
 ;; {} key fn -> Boolean
 ;; Check (fn {{} :key})
 (defn check-field [params field pred]

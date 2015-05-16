@@ -7,7 +7,8 @@
 
 ;; String -> Boolean
 (defn user-exists? [username]
-  (v/field-exists-in-table? "users" "username" username))
+  (and (v/field-exists-in-table? "users" "username" username)
+       (v/field-has-value-in-table? "users" "username" username "deleted" false)))
 
 
 ;; String -> Boolean
