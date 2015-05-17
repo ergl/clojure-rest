@@ -13,7 +13,7 @@
   {:classname "org.h2.Driver"
    :subprotocol "h2"
    :subname "mem:documents"
-   :init-script "INIT=RUNSCRIPT FROM './schema.sql'"
+   :init-script "INIT=RUNSCRIPT FROM './schema.sql'\\; RUNSCRIPT FROM './dummy-inserts.sql'"
    :user ""
    :password ""})
 

@@ -1,8 +1,43 @@
 (ns clojure-rest.data.events
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.data.db :as db]))
+            [clojure-rest.data.db :as db]
+            [clojure-rest.util.http :as h]
+            [clojure-rest.util.event-validate :as ev]
+            [clojure-rest.util.error :refer [bind-error]]))
 
+
+;; String -> Either<{}|nil>
+;; Returns a either nil or the brief contents of the supplied event id
+(defn- event-brief-extract! [id]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               ["select events.eventsId, title, count(usersId), latitude, longitude
+                                                from events
+                                                inner join events_attendees on (events.eventsId = events_attendees.eventsId)
+                                                inner join coordinates on (events.coordinatesId = coordinates.coordinatesId)
+                                                where events.eventsId = ?" id]
+                                               (cond (empty? results) nil
+                                                     :else (first results)))))
+
+
+;; [String?, Error?] -> [{}?, Error?]
+;; Binds the result of event-brief-extract! to an error tuple
+(defn- bind-event-brief-extract [params]
+  (bind-error #(let [res (event-brief-extract! %)]
+                 (if (nil? res)
+                   [nil 404]
+                   [res nil])) params))
+
+
+;; String -> Response[:body? :status Either<200|404>]
+;; Returns a response with either the contents of the given event or a 404 not found (if error)
+(defn get-event-case [id]
+  (->> id
+       clojure.string/trim
+       (#(if (ev/event-exists? %) [% nil] [nil 404]))
+       bind-event-brief-extract
+       h/wrap-response))
 
 ;; () -> Response[:body String]
 ;; Returns a response with the contents of all the events in the database

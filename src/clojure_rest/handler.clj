@@ -48,8 +48,8 @@
                                    (POST "/" [] (http/not-implemented))
                                    (OPTIONS "/" [] (http/options [:options :get :post]))
                                    (ANY "/" [] (http/method-not-allowed [:options :get :post]))
-                                   (context ":id" [id] (defroutes event-routes
-                                                         (GET "/" [] (http/not-implemented))
+                                   (context "/:id" [id] (defroutes event-routes
+                                                         (GET "/" [] (events/get-event-case id))
                                                          (PUT "/" [] (http/not-implemented))
                                                          (DELETE "/" [] (http/not-implemented))
                                                          (OPTIONS "/" [] (http/options [:options :get :put :delete]))
