@@ -88,14 +88,15 @@
        (#(when (= user %) 204))))
 
 
-;; () -> Response[:body String]
+;; () -> Response[:body []?]
 ;; Returns a response with the contents of all the users in the database
 (defn get-all-users []
   (response
     (sql/with-connection (db/db-connection)
                          (sql/with-query-results results
-                                                 ["select username, name from users"]
-                                                 (into [] results)))))
+                                                 ["select username, name from users where deleted = false"]
+                                                 (when-not (empty? results)
+                                                   (into [] results))))))
 
 
 ;; {} -> Response[:body val? :status Either<200|400|500>]
