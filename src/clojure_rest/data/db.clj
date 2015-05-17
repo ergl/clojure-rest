@@ -7,13 +7,13 @@
 (defn uuid []
   (str (java.util.UUID/randomUUID)))
 
+
 ; Change this if you want to go for another database engine
 ; Currently using h2
 (def db-config
   {:classname "org.h2.Driver"
    :subprotocol "h2"
-   :subname "mem:documents"
-   :init-script "INIT=RUNSCRIPT FROM './schema.sql'"
+   :subname "./skase"
    :user ""
    :password ""})
 
@@ -22,7 +22,7 @@
 (defn pool [config]
   (let [cpds (doto (ComboPooledDataSource.)
                (.setDriverClass (:classname config))
-               (.setJdbcUrl (str "jdbc:" (:subprotocol config) ":" (:subname config) ";" (:init-script config)))
+               (.setJdbcUrl (str "jdbc:" (:subprotocol config) ":" (:subname config)))
                (.setUser (:user config))
                (.setPassword (:password config))
                (.setMaxPoolSize 1)
