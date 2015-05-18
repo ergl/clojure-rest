@@ -88,6 +88,24 @@
        (#(when (= user %) 204))))
 
 
+;; String -> [{}]?
+;; Returns a list of 5 users that match the supplied username
+(defn- match-users [username]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               ["select username, profileImage from users where username like '%' || ? || '%' limit 5" username]
+                                               (when-not (empty? results)
+                                                 (into {} results)))))
+
+
+;; String -> [[{}?], Error?]
+(defn- bind-match-users [username]
+  (let [result (match-users username)]
+    (if (nil? result)
+      [nil 404]
+      [result nil])))
+
+
 ;; () -> Response[:body []?]
 ;; Returns a response with the contents of all the users in the database
 (defn get-all-users []
@@ -144,6 +162,15 @@
            bind-user-delete
            h/empty-response-with-code))
     {:status 404}))
+
+
+;; String -> Response[:body [{}?] :status Either<200|404>]
+;; Returns a response with either the matches of the supplied username, or 404 not found
+(defn search-users [username]
+  (->> username
+       clojure.string/trim
+       bind-match-users
+       h/wrap-response))
 
 
 ;; String, String -> Boolean

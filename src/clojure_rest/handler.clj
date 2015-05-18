@@ -65,7 +65,11 @@
                                                                      (PUT "/" {body :body} (users/update-user username body))
                                                                      (DELETE "/" [] (users/delete-user username))
                                                                      (OPTIONS "/" [] (http/options [:options :get :put :delete]))
-                                                                     (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
+                                                                     (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))
+                                  (context "/search/:query" [query] (defroutes event-routes
+                                                                      (GET "/" [] (users/search-users query))
+                                                                      (OPTIONS "/" [] (http/options [:options :get]))
+                                                                      (ANY "/" [] (http/method-not-allowed [:options :get]))))))
            
            (context "/comments" [] (defroutes event-routes
                                      (GET "/" [] (http/not-implemented))
