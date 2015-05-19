@@ -1,5 +1,7 @@
 ### Project-specific
 *.json
+profiles.clj
+.lein-env
 
 ### SublimeText ###
 ## cache files for sublime text

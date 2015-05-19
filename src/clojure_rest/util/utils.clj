@@ -20,3 +20,9 @@
   `(do
      (->> ~params ~@fns)
      ~params))
+
+
+;; () -> String
+;; Returns the current time in yyyy-MM-dd-HH:mm:ss
+(defn time-now []
+  (.format (java.text.SimpleDateFormat. "yyyy-MM-dd-HH:mm:ss") (java.util.Date.)))

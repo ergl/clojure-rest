@@ -26,7 +26,7 @@
 (defroutes app-routes
   (GET "/" [] (resource-response "index.html" {:root "public"}))
  	(route/resources "/")
-  (context "/api" [] 
+  (context "/api" []
            
            (OPTIONS "/" []
                     (http/options [:options] {:version "0.1.0-SNAPSHOT"}))

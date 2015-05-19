@@ -106,3 +106,4 @@ create table comments_reports (
 -- Constraints
 create index idxusername on users(username);
 create index idxemails on users(email);
+create index idxtokes on sessions(token, createdAt desc);
