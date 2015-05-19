@@ -25,7 +25,7 @@
     
     ;; Authentication should persist after a password change
     (testing "autheticating is still valid after a password change"
-      (let [usermodified (app (-> (mock/request :put "/api/users/bar"
+      (let [usermodified (app (-> (mock/request :put "/api/users/newbar"
                                                 (generate-string {:password "secretchanged"}))
                                   (mock/content-type "application/json")))
             response (app (-> (mock/request :post "/api/auth"
@@ -33,7 +33,7 @@
                                                               ((parse-string (:body user)) "username")
                                                               :password "secretchanged"}))
                               (mock/content-type "application/json")))]
-        (is (= (:status response 200)))))
+        (is (= (:status response) 200))))
     
     ;; A POST to /api/auth with a badly-formed request should return 400 bad request
     (testing "sending a badly-formed auth request"
