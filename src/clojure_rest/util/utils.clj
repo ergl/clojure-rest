@@ -11,12 +11,12 @@
   (into {} (for [[k v] m] [k (f k v)])))
 
 ;; Turns:
-;; (|>> val fn1 fn2 ...)
+;; (-!>> val fn1 fn2 ...)
 ;; Into:
 ;; (do (->> val fn fn2 ...) val)
 ;; Pipes the given params into the given functions, then returns the original params
 ;; Useful when using dead-end functions, like writing to a file or updating a database
-(defmacro |>> [params & fns]
+(defmacro -!>> [params & fns]
   `(do
      (->> ~params ~@fns)
      ~params))

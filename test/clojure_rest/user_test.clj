@@ -83,6 +83,17 @@
                             (mock/content-type "application/json")))]
       (is (= (:status response) 404))))
   
+  ;; Searching for a valid /api/users/search/:query should return the contents
+  (testing "searching for an user"
+    (let [response (app (mock/request :get "/api/users/search/bar"))]
+      (is (= (:status response) 200))
+      (is (= ((parse-string (response :body)) "username") "bar"))))
+  
+  ;; Searching for a valid /api/users/search/:query should return 404 if no matches are found
+  (testing "searching for something that does not yield any result"
+    (let [response (app (mock/request :get "/api/users/search/noresults"))]
+      (is (= (:status response) 404))))
+  
   ;; Attempting to delete an user through the update procedure should return in a 403 response
   (testing "deleting an user through update"
     (let [response (app (-> (mock/request :put "/api/users/bar"

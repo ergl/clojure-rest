@@ -1,16 +1,28 @@
 (ns clojure-rest.auth
   (:require [ring.util.response :refer :all]
-            [clojure-rest.data.users :as users]))
+            [clojure-rest.data.users :as users]
+            [clojure-rest.util.user-sanitize :as us]
+            [clojure-rest.util.http :as h]))
 
 
-;; String, String -> Response[:body nil :status Natural]
-;; Checks if the given user / pass combination is correct, returns 200 if correct, 401 otherwise
-(defn- validate-user-pass [user pass]
-  (-> (response nil)
-      (status (if (users/pass-matches? user pass) 200 401))))
+;; String, String -> [{}?, Error?]
+;; Checks if the given user / pass combination is correct, returns an error tuple
+(defn- validate-user-pass [username password]
+  (if (users/pass-matches? username password) 200 401))
+
+
+;; [{}?, Error?] -> Response [:body nil :status Either<200|401|Error>]
+(defn- bind-validate [[val err]]
+  (if (nil? err)
+    [nil (validate-user-pass (val :username) (val :password))]
+    [nil err]))
 
 
 ;; {} -> Response [:body nil :status Natural]
 ;; Destructures the given content into username and password for validation ingestion
 (defn auth-handler [content]
-  (validate-user-pass (content "username") (content "password")))
+  (->> content
+       clojure.walk/keywordize-keys
+       us/sanitize-auth
+       bind-validate
+       h/wrap-response))
