@@ -17,7 +17,7 @@
 ;; {} -> [{}?, Error?]
 ;; Checks if (params :username) is non-empty
 (defn- clean-username [params]
-  (if (empty? (params :username))
+  (if (and (params :username) (empty? (params :username)))
     [nil 400]
     [(s/trim-in params :username) nil]))
 
@@ -25,7 +25,7 @@
 ;; {} -> [{}?, Error?]
 ;; Checks if (params :password) is non-empty
 (defn- clean-password [params]
-  (if (empty? (params :password))
+  (if (and (params :password) (empty? (params :password)))
     [nil 400]
     [(s/trim-in params :password) nil]))
 
@@ -44,3 +44,11 @@
        (clean-email :email)
        (clean-username :username)
        (clean-password :password)))
+
+
+;; {} -> [{}?, Error?]
+;; Checks if the given map contains the username and password fields
+(defn sanitize-auth [content]
+  (->> content
+       (#(if (% :username) [% nil] [nil 400]))
+       ((fn [c] (bind-error #(if (% :password) [% nil] [nil 400]) c)))))
