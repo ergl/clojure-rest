@@ -7,6 +7,7 @@
             [clojure-rest.data.db :as db]
             [clojure.java.jdbc :as sql]
             [clojure-rest.util.http :as h]
+            [clojure-rest.util.error :refer [bind-error]]
             [clojure-rest.util.utils :refer [time-now
                                              format-time]]))
 
@@ -27,9 +28,9 @@
 
 ;; UUID -> String
 ;; Creates a token and inserts it into the session table, then returns that token
-(defn- make-token! [user-id]
+(defn- make-token! [username user-id]
   (let [now (time-now)
-        token (generate-session user-id now)]
+        token (generate-session username now)]
     (sql/with-connection (db/db-connection)
                          (sql/insert-values :sessions [] [token
                                                           user-id
@@ -37,17 +38,22 @@
     token))
 
 
-;; String, String -> [{}?, Error?]
+;; [{}?, Error?] -> [String?, Error?]
+;; Gets the user's uuid and generates an auth token
+(defn- bind-token-gen [params]
+  (bind-error (fn [value]
+                (let [user-id (users/get-user-id (value :username))]
+                  (if (nil? user-id)
+                    [nil 404]
+                    [{:token (make-token! (value :username) (user-id :usersid))} nil]))) params))
+
+
+;; [{}?, Error?] -> [{}?, Error?]
 ;; Checks if the given user / pass combination is correct, returns an error tuple
-(defn- validate-user-pass [username password]
-  (if (users/pass-matches? username password) 200 401))
-
-
-;; [{}?, Error?] -> Response [:body nil :status Either<200|401|Error>]
-(defn- bind-validate [[val err]]
-  (if (nil? err)
-    [nil (validate-user-pass (val :username) (val :password))]
-    [nil err]))
+(defn- bind-validate [params]
+  (bind-error #(if (users/pass-matches? (% :username) (% :password))
+                 [% nil]
+                 [nil 401]) params))
 
 
 ;; {} -> Response [:body nil :status Natural]
@@ -57,4 +63,5 @@
        clojure.walk/keywordize-keys
        us/sanitize-auth
        bind-validate
+       bind-token-gen
        h/wrap-response))

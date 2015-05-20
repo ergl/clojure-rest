@@ -19,6 +19,16 @@
   (bhash/encrypt pass))
 
 
+;; String -> Either<String|nil>
+;; Gets the UUID of the given user
+(defn get-user-id [username]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               ["select usersId from users where username = ?" username]
+                                               (when-not (empty? results)
+                                                 (first results)))))
+
+
 ;; String -> Either<{}|nil>
 ;; Returns a response with the contents of the specified username
 (defn- user-brief-extract! [username]

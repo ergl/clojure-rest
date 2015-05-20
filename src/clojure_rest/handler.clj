@@ -38,7 +38,7 @@
                                  (POST "/" {body :body} (auth/auth-handler body))
                                  (OPTIONS "/" [] (http/options [:options :post]))
                                  (ANY "/" [] (http/method-not-allowed [:options :post]))
-                                 (context ":key" [key] (defroutes auth-routes
+                                 (context "/:key" [key] (defroutes auth-routes
                                                          (DELETE "/" [] (http/not-implemented))
                                                          (OPTIONS "/" [] (http/options [:options :delete]))
                                                          (ANY "/" [] (http/method-not-allowed [:options :delete]))))))
