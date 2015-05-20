@@ -53,6 +53,7 @@
   
   ;; Trying to auth a non-existing user should return a 401 response
   (testing "deny non-existing user access"
+    (app (mock/request :delete "/api/users/newbar"))
     (let [response (app (-> (mock/request :post "/api/auth"
                                           (generate-string {:username "nonexistinguser"
                                                             :password "notarealpassword"}))

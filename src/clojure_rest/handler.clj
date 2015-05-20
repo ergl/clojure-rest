@@ -38,10 +38,10 @@
                                  (POST "/" {body :body} (auth/auth-handler body))
                                  (OPTIONS "/" [] (http/options [:options :post]))
                                  (ANY "/" [] (http/method-not-allowed [:options :post]))
-                                 (context "/:key" [key] (defroutes auth-routes
-                                                         (DELETE "/" [] (http/not-implemented))
-                                                         (OPTIONS "/" [] (http/options [:options :delete]))
-                                                         (ANY "/" [] (http/method-not-allowed [:options :delete]))))))
+                                 (context "/:token" [token] (defroutes auth-routes
+                                                            (DELETE "/" {body :body} (auth/delete-token token body))
+                                                            (OPTIONS "/" [] (http/options [:options :delete]))
+                                                            (ANY "/" [] (http/method-not-allowed [:options :delete]))))))
            
            (context "/events" [] (defroutes event-routes
                                    (GET "/" [] (http/not-implemented))

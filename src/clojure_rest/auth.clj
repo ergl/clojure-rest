@@ -1,5 +1,6 @@
 (ns clojure-rest.auth
   (:require [ring.util.response :refer :all]
+            [clojure-rest.util.validate :as v]
             [clojure-rest.data.users :as users]
             [clojure-rest.util.user-sanitize :as us]
             [pandect.core :refer [sha256-hmac]]
@@ -8,8 +9,7 @@
             [clojure.java.jdbc :as sql]
             [clojure-rest.util.http :as h]
             [clojure-rest.util.error :refer [bind-error]]
-            [clojure-rest.util.utils :refer [time-now
-                                             format-time]]))
+            [clojure-rest.util.utils :refer :all]))
 
 
 ;; Either<String|nil>
@@ -23,6 +23,12 @@
 ;; Generates a random token with username$timestamp$hmac(sha256, username$timestamp)
 (defn- generate-session [username date]
   (str username "$" date "$" (sha256-hmac (str username "$" date) SECRET-KEY)))
+
+
+;; String -> Boolean
+;; Check if token exists in database
+(defn- token-exists? [token]
+  (v/field-exists-in-table? "sessions" "token" token))
 
 
 ;; UUID -> String
@@ -45,6 +51,13 @@
                   (if (nil? user-id)
                     [nil 404]
                     [{:token (make-token! (value :username) (user-id :usersid))} nil]))) params))
+
+
+;; String -> ()
+;; Deletes the token from the database
+(defn- revoke-token! [token]
+  (sql/with-connection (db/db-connection)
+                       (sql/delete-rows :sessions ["token = ?" token])))
 
 
 ;; [{}?, Error?] -> [{}?, Error?]
@@ -109,3 +122,17 @@
        clojure.walk/keywordize-keys
        check-token
        (bind-error bind-token-validation)))
+
+
+;; String, {} -> Response[:status Either<204|403|404>]
+;; Deletes the given token if it exists and the params supply the same token as a parameter
+(defn delete-token [token params]
+  (if (token-exists? token)
+    (->> params
+         clojure.walk/keywordize-keys
+         check-token
+         (bind-error (fn [v] (if (= token (v :token)) [v nil] [nil 403])))
+         (bind-error (fn [v] (do (revoke-token! (v :token)) [(v :token) nil])))
+         (bind-error (fn [_] [nil 204]))
+         h/wrap-response)
+    {:status 404}))
