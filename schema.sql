@@ -30,9 +30,9 @@ create table users (
 );
 
 create table sessions (
-	token varchar(36) primary key,
+	token varchar(121) primary key,
 	usersId uuid references users(usersId),
-	createdAt timestamp not null default current_timestamp
+	createdAt timestamp not null
 );
 
 create table users_users (

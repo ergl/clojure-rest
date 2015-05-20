@@ -1,13 +1,14 @@
 (ns clojure-rest.auth
   (:require [ring.util.response :refer :all]
             [clojure-rest.data.users :as users]
-            [clojure-rest.util.utils :refer [time-now]]
             [clojure-rest.util.user-sanitize :as us]
             [pandect.core :refer [sha256-hmac]]
             [environ.core :refer [env]]
             [clojure-rest.data.db :as db]
             [clojure.java.jdbc :as sql]
-            [clojure-rest.util.http :as h]))
+            [clojure-rest.util.http :as h]
+            [clojure-rest.util.utils :refer [time-now
+                                             format-time]]))
 
 
 
@@ -20,17 +21,19 @@
 
 ;; () -> String
 ;; Generates a random token with username$timestamp$hmac(sha256, username$timestamp)
-(defn- generate-session [username]
-  (let [now (time-now)]
-    (str username "$" now "$" (sha256-hmac (str username "$" now) SECRET-KEY))))
+(defn- generate-session [username date]
+  (str username "$" date "$" (sha256-hmac (str username "$" date) SECRET-KEY)))
 
 
 ;; UUID -> String
 ;; Creates a token and inserts it into the session table, then returns that token
 (defn- make-token! [user-id]
-  (let [token (generate-session)]
+  (let [now (time-now)
+        token (generate-session user-id now)]
     (sql/with-connection (db/db-connection)
-                         (sql/insert-values :sessions [] [token user-id]))
+                         (sql/insert-values :sessions [] [token
+                                                          user-id
+                                                          (format-time now)]))
     token))
 
 
