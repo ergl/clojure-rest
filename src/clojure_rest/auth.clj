@@ -12,7 +12,6 @@
                                              format-time]]))
 
 
-
 ;; Either<String|nil>
 ;; Gets the secret key from the environment variable secret-key, returns nil if not found
 ;; (will throw exception at runtime)
@@ -56,6 +55,40 @@
                  [nil 401]) params))
 
 
+;; String -> Either<{}|nil>
+;; Returns the username associated with the given token if that token is less than 6 hours old
+;; Returns nil otherwise
+(defn- validate-token [token]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               ["select username
+                                                from sessions
+                                                inner join users on (sessions.usersid = users.usersid)
+                                                where token = ?
+                                                and createdAt > timestampadd(minute, -21600, current_timestamp)" token]
+                                               (when-not (empty? results)
+                                                 (first results)))))
+
+
+;; {} -> [{}?, Error?]
+;; Takes a map with a token key and returns one without it
+;; Adding the issuer key with the appropiate username
+;; Returns an error if (params :token) is not valid
+(defn- bind-token-validation [params]
+  (let [user-id (validate-token (params :token))]
+    (if (nil? user-id)
+      [nil 401]
+      [(-> params (dissoc :token) (assoc :issuer user-id)) nil])))
+
+
+;; {} -> [{}?, Error?]
+;; Checks for the :token field in the given map
+(defn- check-token [params]
+  (if (params :token)
+    [params nil]
+    [nil 401]))
+
+
 ;; {} -> Response [:body nil :status Natural]
 ;; Destructures the given content into username and password for validation ingestion
 (defn auth-handler [content]
@@ -65,3 +98,14 @@
        bind-validate
        bind-token-gen
        h/wrap-response))
+
+
+;; {} -> [{}?, Error?]
+;; Checks if there is a :token key in the supplied map
+;; If it does, and it is valid, it dissocs said key and assocs the issuer username
+;; If anything goes wrong, returns an error
+(defn auth-adapter [content]
+  (->> content
+       clojure.walk/keywordize-keys
+       check-token
+       (bind-error bind-token-validation)))
