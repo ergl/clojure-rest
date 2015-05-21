@@ -15,8 +15,11 @@
                  [cheshire "5.4.0"]
                  [buddy "0.5.2"]
                  [buddy/buddy-hashers "0.4.2"]
+                 [environ "1.0.0"]
+                 [pandect "0.5.2"]
                  [ring/ring-jetty-adapter "1.3.2"]]
-  :plugins [[lein-ring "0.9.3"]]
+  :plugins [[lein-ring "0.9.3"]
+            [lein-environ "1.0.0"]]
   :ring {:handler clojure-rest.handler/app
          :port 5000
          :auto-reload? true
