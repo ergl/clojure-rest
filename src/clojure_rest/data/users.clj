@@ -87,8 +87,10 @@
 ;; Deletes the given user from the table.
 ;; Returns nothing
 (defn- user-delete! [username]
-  (sql/with-connection (db/db-connection)
-                       (sql/update-values :users ["username = ?" username] {:deleted true})))
+  (let [user-id ((get-user-id username) :usersid)]
+    (sql/with-connection (db/db-connection)
+                         (sql/update-values :users ["username = ?" username] {:deleted true})
+                         (sql/delete-rows :sessions ["usersId = ?" user-id]))))
 
 
 ;; String -> Natural
