@@ -1,0 +1,88 @@
+body {
+  font-size:10pt;
+  font-family:Verdana;
+  background-color: #ffffff;
+}
+
+#cabecera {
+  padding: 5px;
+  height: 80px;
+  background-color: #407394;
+}
+
+#cuerpo {
+  margin-left: 20px;
+  margin-right: 30px;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+  float: left;
+}
+
+h1 {
+  text-align: center;
+}
+
+form ul {
+  list-style: none;
+  padding-top: 5px;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+input:focus {
+  border: 2px solid #000;
+  background: #f3f3f3;
+  padding: .2em;
+}
+
+
+p {
+  text-align: justify;
+}
+
+p.nota {
+  font-style: italic;
+}
+
+fieldset .r {
+  width: 100%;
+  border:1px groove;
+}
+
+fieldset {
+  border:none;
+}
+
+legend{
+  font-size:15pt;
+  font-family:Verdana;
+  text-decoration: underline;
+}
+
+#reporte-1,
+#reporte-2,
+#reporte-3,
+#reporte-4,
+#reporte-5 {
+  margin-top: 1%;
+  background-color: #CCCCCC;
+}
+
+.moderation-button {
+  cursor: pointer;
+  color: #ffffff;
+  border: 0;
+  font-size: 12pt;
+  width: 10%;
+}
+
+.aceptar {
+  background-color: green;
+}
+
+.rechazar {
+  background-color: red;
+}

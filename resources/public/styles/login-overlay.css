@@ -1,0 +1,188 @@
+/* TODO: Add comments */
+
+#login-overlay {
+  display: none;
+}
+
+.show-login-overlay
+#login-overlay {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.75);
+  z-index: 20;
+}
+
+#dialog-box {
+  position: relative;
+  margin-right: 25%;
+  margin-left: 25%;
+  margin-top: 5%;
+  width: 50%;
+  min-height: 780px;
+  height: 85%;
+}
+
+.show-signup-pane
+#dialog-box {
+  margin-top: 2%;
+}
+
+#login-top-panel {
+  height: 85%;
+  background-color: #fdfdfd;
+}
+
+.show-signup-pane
+#login-top-panel {
+  height: 95%;
+}
+
+#login-top-image {
+  height: calc(100% / 3);
+  background-color: #8899A7;
+}
+
+#login-circle-container {
+  position: relative;
+  /* TODO: Fix image moving */
+  top: 60%;
+}
+
+#login-circle-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid #FDFDFD;
+  overflow: hidden;
+  background-image: url("/img/assets/usuario.jpg");
+  background-position: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#login-credentials-panel {
+  padding-top: 13%;
+  text-align: center;
+}
+
+#signup-credentials-input {
+  display: none;
+}
+
+.show-signup-pane
+#login-credentials-input {
+  display: none;
+}
+
+.show-signup-pane
+#signup-credentials-input {
+  display: inherit;
+}
+
+#login-credentials-input input,
+#signup-credentials-input input {
+  text-align: center;
+  width: 60%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  border: none;
+  background-color: #fdfdfd;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  font-size: 15pt;
+}
+
+#login-credentials-input input:focus,
+#signup-credentials-input input:focus {
+  outline: 0;
+}
+
+#login-credentials-input input::-webkit-input-placeholder,
+#signup-credentials-input input::-webkit-input-placeholder {
+  font-size: 12pt;
+  font-weight: lighter;
+  color: #e0e0e0;
+}
+
+.login-credential-separator {
+  width: 75%;
+  margin: auto;
+  border-bottom: 2px solid #B0B0B0;
+}
+
+#login-submit,
+#signup-submit {
+  text-align: center;
+  margin-top: 5%;
+}
+
+#signup-submit {
+  display: none;
+}
+
+.show-signup-pane
+#login-submit {
+  display: none;
+}
+
+.show-signup-pane
+#signup-submit {
+  display: inherit;
+}
+
+.submit-button {
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #895B93;
+  outline: none;
+  border: none;
+  padding: 1rem 6rem;
+  box-shadow: 0px 5px 0px 0px #764F7E;
+  border-radius: 5px;
+}
+
+.submit-button:hover {
+  background-color: #764F7E;
+  box-shadow: 0px 5px 0px 0px #634369;
+}
+
+
+#login-bottom-panel {
+  margin-top: 5%;
+  height: 10%;
+  background-color: #fdfdfd;
+}
+
+#login-bottom-panel a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#switch {
+  position: relative;
+  top: 40%;
+  text-align: center;
+  font-weight: lighter;
+  color: #5589FF;
+}
+
+#login-link {
+  display: none;
+}
+
+.show-signup-pane
+#signup-link {
+  display: none;
+}
+
+.show-signup-pane
+#login-link {
+  display: inherit;
+}

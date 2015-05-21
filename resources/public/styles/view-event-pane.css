@@ -1,0 +1,211 @@
+#view-event-pane {
+  display: none;
+}
+
+.show-event-sidebar
+#view-event-pane {
+  display: inherit;
+  background-color: #FFFFFF;
+  border-left: 1px solid black;
+}
+
+#event-header{
+  border-bottom: 1px solid #CCC;
+  border: 1%;
+  background-color: #FFFFFF;
+  padding: 1%;
+  overflow: hidden;
+  font-size: 18px;
+}
+
+#event-title {
+  background-color: #FFFFFF;
+  padding: 2%;
+  overflow: hidden;
+  margin:auto;
+  text-align: center;  
+}
+
+#event-location {
+  background-color: #FFFFFF;
+  padding: 2%;
+  overflow: hidden;
+  width: 46%;
+  float:left;
+  text-align: center;
+}
+
+#event-creator {
+  background-color: #FFFFFF;
+  padding: 2%;
+  overflow: hidden;
+  width: 46%;
+  text-align: center;
+}
+
+#event-body {
+  border: 1px solid #CCC;
+  background-color: #FFFFFF;
+  padding: 2%;
+  overflow: scroll;
+  min-height: 25%;
+  max-height: 50%;
+}
+
+#comments-title {
+  border-top: 1px solid #CCC;
+  margin: auto;
+  background-color: #FFFFFF;
+  padding: 2%;
+  align-content: center;
+  text-align: center;
+  font-size: 25px;
+}
+
+#event-submit {
+  background-color: #FFFFFF;
+  padding: 1%;
+  overflow: hidden;
+  width:48%;
+  float:left;
+  
+}
+
+#event-more {
+  background-color: #FFFFFF;
+  padding: 1%;
+  overflow: hidden;
+  width:48%;
+}
+
+
+#event-comments {
+  border: 1px solid #CCC;
+  background-color: #FFFFFF;
+  padding: 1%;
+  overflow: scroll;
+  max-height: 25%;
+}
+
+#event-comments a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#event-comments a:hover {
+  text-decoration: underline;
+  color: inherit;
+}
+
+#componente-usuario {
+  border: 1px solid #CCC;
+  display: none; 
+  background-color: #FFFFFF;
+  padding: .5em;
+  overflow: hidden;  
+}
+
+#search-user {
+  background-color: #FFFFFF;
+  padding: .5em;
+  overflow: hidden;
+}
+
+#add-comment {
+  border: 1px solid #CCC;
+  background-color: #FFFFFF;
+  padding: 1%;
+  overflow: scroll;
+}
+
+
+#body-comment {
+  margin: auto;
+  border: 1px solid #CCC;
+  background-color: #FFFFFF;
+  padding: 1%;
+  overflow: scroll;
+  width: 98%;
+  min-height: 100px;
+  float:left; 
+  margin-bottom: 5px;
+}
+
+#event-close {
+  margin: auto;
+  background-color: #FFFFFF;
+  padding: 3%;  
+}
+
+#submit-comment {
+  background-color: #FFFFFF;
+  padding: 1%;
+  overflow: scroll;
+  float:right;
+}
+
+.event-comment {
+  border: 1px solid #CCC;
+  background-color: #FFFFFF;
+  padding: 1%;
+  overflow: scroll;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.comment-user {
+  background-color: #FFFFFF;
+  padding: 1%;
+  overflow: scroll;
+}
+
+.butonPlus{
+  background-image:url("/img/assets/more.png");
+  background-size:contain;
+  background-color: #F0F8FF;
+  background-repeat:no-repeat;
+  background-position:center;
+  width: 100%;
+  height: 40px;
+}
+
+.user-im{
+  width: 40px;
+  height: 40px;
+  margin-right: 50px;
+  text-align: center;
+}
+
+#search{
+  width: 60%;
+  height: 40px;
+  text-align: center;
+}
+
+.join-event{
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+}
+
+.user{
+  width: 10px;
+  height: 10px;
+  margin-right: 50px;
+  
+}
+
+.butonTik{
+  background-image:url("/img/assets/tick.png");
+  background-size:contain;
+  background-color: #F0F8FF;
+  background-repeat:no-repeat;
+  background-position:center;
+  width: 100%;
+  height: 40px;
+}
+
+.show-user-pane
+#event-pane {
+  display: none;
+}

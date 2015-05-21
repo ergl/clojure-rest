@@ -1,0 +1,218 @@
+/* General style rules for the whole sidebar */
+#main-sidebar {
+  background-color: #407394;
+  left: calc(-130pt / 1.4);
+}
+
+#main-sidebar a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Rules for each subsection of the menu */
+.menu-section {
+  padding: 0 0 1rem 0;
+}
+
+/* Header */
+/* Header section containing the logo */
+#menu-logo-icon {
+  margin: auto;
+  background-color: #ffffff;
+  height: calc(130pt / 3.5);
+  border-right: 1px solid #407394;
+}
+
+/* Logo icon image */
+#menu-logo-icon img {
+  float: right;
+  width: calc(130pt / 3.5);
+  height: auto;
+  
+  -webkit-transition: 500ms ease all;
+  -moz-transition: 500ms ease all;
+  -ms-transition: 500ms ease all;
+  -o-transition: 500ms ease all;
+  transition: 500ms ease all;
+  
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Search section containing the search logo */
+#menu-search-icon {
+  float: right;
+  height: calc(130pt / 3.5);
+}
+
+/* Search logo icon image */
+#menu-search-icon img {
+  margin: auto;
+  width: calc(130pt / 3.75);
+  height: auto;
+}
+
+/* Search section containing the search widget */
+#menu-search-widget {
+  display: none;
+  height: calc(130pt / 1.75);
+  text-align: center;
+}
+
+.show-main-sidebar
+.menu-section {
+  padding: 0;
+}
+
+.show-main-sidebar
+#links-container {
+  padding-top: 4rem;
+}
+
+#login-container,
+#copyright-info {
+  display: none;
+}
+
+#more-container {
+  /* ??? */
+}
+
+#more-icon {
+  float: right;
+  height: calc(130pt / 3.5);
+}
+
+#dots-wrapper {
+  width: 35pt;
+}
+
+#dots-wrapper img {
+  width: calc(130pt / 4);
+  height: auto;
+}
+
+  /* Following rules apply when the class        */
+ /* show-main-sidebar is applied to the canvas  */
+/* See script.js for more info                 */
+
+/* Content canvas animation to the left */
+.show-main-sidebar
+#content-canvas {
+  -webkit-transform: translateX(calc(130pt / 1.4));
+  -moz-transform: translateX(calc(130pt / 1.4));
+  -ms-transform: translateX(calc(130pt / 1.4));
+  -o-transform: translateX(calc(130pt / 1.4));
+  transform: translateX(calc(130pt / 1.4));
+  
+  -webkit-transform: translate3d(calc(130pt / 1.4), 0, 0);
+  -moz-transform: translate3d(calc(130pt / 1.4), 0, 0);
+  -ms-transform: translate3d(calc(130pt / 1.4), 0, 0);
+  -o-transform: translate3d(calc(130pt / 1.4), 0, 0);
+  transform: translate3d(calc(130pt / 1.4), 0, 0);
+}
+
+/* Image animation to the right when the menu is expanded */
+.show-main-sidebar
+#main-sidebar #menu-logo-icon img {
+  border-right: none;
+  
+  -webkit-transform: translateX(calc(-130pt / 1.4));
+  -moz-transform: translateX(calc(-130pt / 1.4));
+  -ms-transform: translateX(calc(-130pt / 1.4));
+  -o-transform: translateX(calc(-130pt / 1.4));
+  transform: translateX(calc(-130pt / 1.4));
+  
+  -webkit-transform: translate3d(calc(-130pt / 1.4), 0, 0);
+  -moz-transform: translate3d(calc(-130pt / 1.4), 0, 0);
+  -ms-transform: translate3d(calc(-130pt / 1.4), 0, 0);
+  -o-transform: translate3d(calc(-130pt / 1.4), 0, 0);
+  transform: translate3d(calc(-130pt / 1.4), 0, 0);
+}
+
+/* Hide the search icon when menu is expanded */
+.show-main-sidebar
+#menu-search-icon {
+  display: none;
+}
+
+/* Show the widget when the menu is expanded */
+.show-main-sidebar
+#menu-search-widget {
+  display: inherit;
+}
+
+/* Button styling when menu is expanded */
+.show-main-sidebar
+.menu-button {
+  font-weight: bold;
+  background-clip: #407394;
+  color: #ffffff;
+  padding: 1rem 0 1rem 0;
+  margin: auto;
+  border-top: 2px solid #5380A0;
+  border-bottom: 1px solid #5380A0;
+  text-align: center;
+  text-shadow: 0 1px rgba(0,0,0,0.3);
+  box-shadow: 0px 3px 0px 0px #407090;
+}
+
+.show-main-sidebar
+.menu-button:hover {
+  background-color: #38617D;
+}
+
+.show-main-sidebar
+#login-container {
+  display: inherit;
+  padding-top: 4rem;
+}
+
+.show-main-sidebar
+#login-button-wrapper {
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #895B93;
+  border-radius: 3px;
+  width: 85%;
+  height: 2.5rem;
+  margin: auto;
+  box-shadow: 0px 3px 0px 0px #764F7E;
+  border: none;
+}
+
+.show-main-sidebar
+#login-button-wrapper:hover {
+  background-color: #764F7E;
+  box-shadow: 0px 3px 0px 0px #634369;
+}
+
+.show-main-sidebar
+#login-container 
+#login-button-wrapper span {
+  position: relative;
+  top: 35%;
+}
+
+.show-main-sidebar
+#more-container {
+  padding-top: 50%;
+}
+
+.show-main-sidebar
+#more-icon {
+  display: none;
+}
+
+.show-main-sidebar
+#copyright-info {
+  display: inherit;
+  text-align: center;
+  font-size: 9pt;
+  color: #82A4B9;
+}

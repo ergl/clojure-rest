@@ -1,0 +1,304 @@
+/* TODO: Añadir comentarios */
+/* Hoja de estilos del panel de usario */
+
+#user-pane {
+  display: none;
+}
+
+.show-user-sidebar
+#user-pane {
+  display: inherit;
+}
+
+#add-contact img {
+  padding-top: .3rem;
+  padding-right: .3rem;
+  width: 2.3rem;
+  height: auto;
+}
+
+#botones {
+  width: 100%;
+  height: 20%;
+  float: left;
+}
+
+#cerrar {
+  float: left;
+}
+
+#nuevo {
+  float: right;
+}
+
+#info-usuario h5 {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+#semicirculo-arriba img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 5.5rem;
+  border-radius: 200px;
+}
+
+#info-usuario {
+  height: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 0px;
+  clear: left;
+}
+
+#botones-info-user {
+  background-color: #407394;
+  width: 100%;
+  border-style: solid;
+  border-color: black;
+  border: 2px;
+  height: 25%;
+  float: left;
+}
+
+#semicirculo-abajo {
+  height: 60%;
+  border-radius: 200px 200px 0px 0px;
+  -moz-border-radius: 200px 200px 0px 0px;
+  -webkit-border-radius: 200px 200px 0px 0px;
+  border: 0px none #000000;
+  background-color:  #deb32d;
+  padding-bottom: 0px;
+}
+
+#semicirculo-arriba {
+  height: 40%;
+}
+
+#listas li {
+  list-style-type: none;
+}
+
+#listas {
+  height: 75%;
+  width: 100%;
+  float:left;
+}
+
+#event-list {
+  width: 100%;
+  height: 30%;
+}
+
+#contact-list {
+  width: 100%;
+  height: 30%;
+}
+
+#feed-list {
+  width: 100%;
+  height: 30%;
+}
+
+#evento {
+  width: 100%;
+  height: 25%;
+}
+
+#feed {
+  width: 100%;
+  height: 25%;
+}
+
+#title-event-list {
+  width: 100%;
+  height: 16%;
+  border-style: solid;
+  border-color: #407394;
+  float:left;
+  padding-top: 3%;
+}
+
+#title-event-list h4{
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 100%;
+  width: 100%;
+}
+
+#title-contact-list {
+  width: 100%;
+  height: 16%;
+  border-style: solid;
+  border-color: #407394;
+  float:left;
+  padding-top: 3%;
+}
+
+#title-contact-list h4{
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 100%;
+  width: 100%;
+}
+
+#title-feed-list {
+  width: 100%;
+  height: 16%;
+  border-style: solid;
+  border-color: #407394;
+  float:left;
+  padding-top: 3%;
+}
+
+#title-feed-list h4{
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 100%;
+  width: 100%;
+}
+
+#event-list li {
+  padding-top: 3%;
+  width: 100%;
+  height: 25%;
+  float: left;
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+  border-bottom-color: #407394;
+}
+
+#lista ul{
+  width: 100%;
+  height: 90%;
+  float:left;
+  padding-left: 0%;
+  margin-top: 0%;
+  margin-bottom: 0%;
+}
+
+#lista {
+  width: 100%;
+  height: 84%;
+  float: left;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-left-color: #407394;
+  border-left-style: solid;
+  border-right-color: #407394;
+}
+
+#evento-link {
+  width: 70%;
+  height: 100%;
+  float: left;
+  padding-left: 3%;
+}
+
+#evento-link a:link{
+  text-decoration: none;
+  color: black;
+}
+
+#evento-link a:visited{
+  text-decoration: none;
+  color: black;
+}
+
+#checkbox {
+  width: 30%;
+  height: 100%;
+  float: right;
+}
+
+#contacto {
+  width: 100%;
+  height: 25%;
+  float: left;
+  padding-top: 2%;
+}
+
+#contacto-imagen {
+  width: 20%;
+  height: 100%;
+  float: left;
+}
+
+#contacto-imagen img {
+  margin-left: 2%;
+  width: 2rem;
+  display: block;
+  float: left;
+}
+
+#contacto-link {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+#contacto-link a:link {
+  text-decoration: none;
+}
+#contacto-link a:visited {
+  text-decoration: none;
+  color: black;
+}
+
+#contacto-checkbox {
+  width: 30%;
+  height: 100%;
+  float: left;
+}
+
+#contact-list li {
+  width: 100%;
+  height: 40%;
+  float: left;
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+  border-bottom-color: #407394;
+}
+
+#feed-link a:link {
+  text-decoration: none;
+  color: black;
+  font-size: 2rem;
+}
+
+#feed-link a:visited {
+  text-decoration: none;
+  color: black;
+  font-size: 2rem;
+}
+
+#feed-text {
+  width: 80%;
+  height: 100%;
+  float: left;
+  padding-left: 3%;
+}
+
+#feed-link {
+  width: 10%;
+  height: 100%;
+  float: right;
+}
+
+#feed-list li {
+  width: 100%;
+  height: 40%;
+  float: left;
+  padding-top: 3%;
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+  border-bottom-color: #407394;
+}
+
+#feed-text p {
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 100%;
+  width: 100%;
+}

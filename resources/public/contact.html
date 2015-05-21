@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>SaleOkase - Contacto</title>
+    <link id="estilo" rel="stylesheet" type="text/css" href="./styles/extra-pages-style.css">
+  </head>
+  <body>
+    <div id="cabecera">
+      <img src="./img/assets/logo.png" alt="Logo">
+      <h1>CONTACTO</h1>
+    </div>
+    <div id="cuerpo">
+      <form accept-charset="UTF-8" autocomplete="off" action="mailto:contact@example.org" method="GET">
+        <p>
+          <label for="nombre">Nombre*<br/></label>
+          <input type="text" name="nombre" required>
+        </p>
+        <p>
+          <label for="apellidos">Apellidos*<br/></label>
+          <input type="text" name="apellidos" required>
+        </p>
+        <p>
+          <label for="email">email*<br/></label>
+          <input type="email" name="email" spellcheck="false" placeholder="ejemplo@email.com" required>
+        </p>
+        <p><fieldset>
+          <legend>Asunto<br/></legend>
+          <label><input type=radio name='evaluacion' value='e' checked autocomplete="off" />Evaluación</label>
+          <label><input type=radio name='evaluacion' value='s' />Sugerencias</label>
+          <label><input type=radio name='evaluacion' value='c' />Críticas</label>
+        </fieldset></p>
+      <p>
+        <legend>Mensaje<br/></legend>
+        <textarea name="body" spellcheck="true" rows="10" cols="70" required></textarea>
+      </p>    
+      <p>
+        <br/>
+        <input type="submit" value="Enviar">
+      </p>
+      <p>					
+        <label><input type="checkbox" name="confirmacion" required>
+          Marque esta casilla para verificar que ha leído nuestros <a href='legal.html'>términos y condiciones de uso</a>.
+        </label>
+      </p>
+      </form>
+    <p class="nota">Es obligatorio rellenar los campos con asterisco *</p>
+    </div>
+  </body>
+</html>
