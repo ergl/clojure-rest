@@ -19,6 +19,16 @@
   (bhash/encrypt pass))
 
 
+;; String -> Either<String|nil>
+;; Gets the UUID of the given user
+(defn get-user-id [username]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               ["select usersId from users where username = ?" username]
+                                               (when-not (empty? results)
+                                                 (first results)))))
+
+
 ;; String -> Either<{}|nil>
 ;; Returns a response with the contents of the specified username
 (defn- user-brief-extract! [username]
@@ -77,8 +87,10 @@
 ;; Deletes the given user from the table.
 ;; Returns nothing
 (defn- user-delete! [username]
-  (sql/with-connection (db/db-connection)
-                       (sql/update-values :users ["username = ?" username] {:deleted true})))
+  (let [user-id ((get-user-id username) :usersid)]
+    (sql/with-connection (db/db-connection)
+                         (sql/update-values :users ["username = ?" username] {:deleted true})
+                         (sql/delete-rows :sessions ["usersId = ?" user-id]))))
 
 
 ;; String -> Natural

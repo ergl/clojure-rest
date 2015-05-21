@@ -20,3 +20,24 @@
   `(do
      (->> ~params ~@fns)
      ~params))
+
+
+;; () -> String
+;; Returns the current time in yyyy-MM-dd-HH:mm:ss
+(defn time-now []
+  (.format (java.text.SimpleDateFormat. "yyyy-MM-dd~HH:mm:ss") (java.util.Date.)))
+
+
+;; String -> String
+;; Replaces "~" in the supplied date with " "
+;; "1970-01-01~00:00:00" -> "1970-01-01 00:00:00"
+(defn format-time [date]
+  (let [date (clojure.string/split date #"~")]
+    (str (first date) " " (second date))))
+
+
+;; String -> String
+;; Replaces " " in the supplied date with "~"
+;; "1970-01-01 00:00:00" -> "1970-01-01~00:00:00"
+(defn join-time [date]
+  (clojure.string/replace date #" " "~"))
