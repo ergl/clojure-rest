@@ -1,7 +1,9 @@
 (ns clojure-rest.data.coordinates
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.data.db :as db]))
+            [clojure-rest.data.db :as db]
+            [clojure-rest.util.error :refer [err-not-found
+                                             status-deleted]]))
 
 
 ;; () -> Response[:body String]
@@ -21,7 +23,7 @@
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
                                                ["select * from coordinates where coordinatesId = ?" id]
-                                               (cond (empty? results) {:status 404}
+                                               (cond (empty? results) {:status err-not-found}
                                                      :else (response (first results))))))
 
 
@@ -53,4 +55,4 @@
 (defn delete-coordinate [id]
   (sql/with-connection (db/db-connection)
                        (sql/delete-rows :coordinates ["coordinatesId=?" id]))
-  {:status 204})
+  {:status status-deleted})

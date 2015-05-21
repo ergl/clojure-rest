@@ -1,7 +1,9 @@
 (ns clojure-rest.data.comments
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.data.db :as db]))
+            [clojure-rest.data.db :as db]
+            [clojure-rest.util.error :refer [err-not-found
+                                             status-deleted]]))
 
 
 ;; () -> Response[:body String]
@@ -20,7 +22,7 @@
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
                                                ["select * from comments where commentsId = ?" id]
-                                               (cond (empty? results) {:status 404}
+                                               (cond (empty? results) {:status err-not-found}
                                                      :else (response (first results))))))
 
 
@@ -52,4 +54,4 @@
 (defn delete-comment [id]
   (sql/with-connection (db/db-connection)
                        (sql/delete-rows :comments ["commentsId=?" id]))
-  {:status 204})
+  {:status status-deleted})

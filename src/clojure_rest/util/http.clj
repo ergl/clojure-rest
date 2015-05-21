@@ -1,7 +1,8 @@
 (ns clojure-rest.util.http
   (:require [ring.util.response :refer :all]
             [clojure.string :refer [upper-case]]
-            [clojure.string :refer [join]]))
+            [clojure.string :refer [join]]
+            [clojure-rest.util.error :refer :all]))
 
 
 ;; Natural -> Response[:body nil :status Natural]
@@ -25,22 +26,22 @@
 ;; [], String -> Response[:body String :options [] :status 405]
 (defn method-not-allowed [allowed]
   (-> (options allowed)
-      (status 405)))
+      (status err-not-allowed)))
 
 
 ;; () -> Response[:body nil :status 501]
 (defn not-implemented []
-  (empty-response-with-code 501))
+  (empty-response-with-code err-not-implemented))
 
 
 ;; () -> Response[:body nil :status 401]
 (defn unauthorized []
-  (empty-response-with-code 401))
+  (empty-response-with-code err-unauthorized))
 
 
 ;; () -> Response[:body nil :status 403]
 (defn forbidden []
-  (empty-response-with-code 403))
+  (empty-response-with-code err-forbidden))
 
 ;; [{}?, Error?] -> Either<Response[:body nil :status err]|Response[:body val]>
 (defn wrap-response [[val err]]

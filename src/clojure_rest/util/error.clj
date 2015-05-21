@@ -1,5 +1,14 @@
 (ns clojure-rest.util.error)
 
+(def status-deleted 204)
+(def err-bad-request 400)
+(def err-unauthorized 401)
+(def err-forbidden 403)
+(def err-not-found 404)
+(def err-not-allowed 405)
+(def err-server-error 500)
+(def err-not-implemented 501)
+
 ;; Error handling with a tuple [Value Error]
 
 ;; (f [{}?, Error?]) -> Either<(f val)|[nil Error]>

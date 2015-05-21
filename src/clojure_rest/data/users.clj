@@ -10,7 +10,10 @@
             [clojure-rest.util.user-validate :as uv]
             [clojure-rest.util.error :refer [bind-error
                                              apply-if-present
-                                             bind-to]]))
+                                             bind-to
+                                             err-not-found
+                                             status-deleted
+                                             err-server-error]]))
 
 
 ;; String -> String
@@ -43,7 +46,7 @@
 (defn- bind-user-brief-extract [params]
   (bind-error #(let [res (user-brief-extract! %)]
                  (if (nil? res)
-                   [nil 404]
+                   [nil err-not-found]
                    [res nil])) params))
 
 
@@ -61,7 +64,7 @@
 (defn- bind-user-insert [params]
   (bind-error #(let [res (user-insert! %)]
                  (if (nil? res)
-                   [nil 500]
+                   [nil err-server-error]
                    [res nil])) params))
 
 
@@ -79,7 +82,7 @@
 (defn- bind-user-update [username [val err]]
   (if (nil? err)
     (let [res (user-update! username val)]
-      (if (nil? res) [nil 500] [res nil]))
+      (if (nil? res) [nil err-server-error] [res nil]))
     [nil err]))
 
 
@@ -97,7 +100,7 @@
 ;; Binds the deletion of the given user to 204 no content (resource deleted)
 (defn- bind-user-delete [user]
   (->> (-!>> user user-delete!)
-       (#(when (= user %) 204))))
+       (#(when (= user %) status-deleted))))
 
 
 ;; String -> [{}]?
@@ -114,7 +117,7 @@
 (defn- bind-match-users [username]
   (let [result (match-users username)]
     (if (nil? result)
-      [nil 404]
+      [nil err-not-found]
       [result nil])))
 
 
@@ -145,7 +148,7 @@
 (defn get-user [username]
   (->> username
        clojure.string/trim
-       (#(if (uv/user-exists? %) [% nil] [nil 404]))
+       (#(if (uv/user-exists? %) [% nil] [nil err-not-found]))
        bind-user-brief-extract
        h/wrap-response))
 
@@ -162,7 +165,7 @@
            (apply-if-present #(bind-to (assoc % :password (hash-pass (% :password)))) :password)
            (bind-user-update username)
            h/wrap-response))
-    {:status 404}))
+    {:status err-not-found}))
 
 
 ;; String -> Response[:status Either<204|404>]
@@ -173,7 +176,7 @@
       (->> username
            bind-user-delete
            h/empty-response-with-code))
-    {:status 404}))
+    {:status err-not-found}))
 
 
 ;; String -> Response[:body [{}?] :status Either<200|404>]

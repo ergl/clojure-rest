@@ -10,7 +10,8 @@
             [clojure-rest.auth :as auth]
             [clojure-rest.data.users :as users]
             [clojure-rest.data.events :as events]
-            [clojure-rest.data.comments :as comments]))
+            [clojure-rest.data.comments :as comments]
+            [clojure-rest.util.error :refer [err-not-found]]))
 
 
 ;; Response -> Response
@@ -44,12 +45,12 @@
                                                               (ANY "/" [] (http/method-not-allowed [:options :delete]))))))
            
            (context "/events" [] (defroutes event-routes
-                                   (GET "/" [] (http/not-implemented))
+                                   (GET "/" [] (events/get-all-events))
                                    (POST "/" [] (http/not-implemented))
                                    (OPTIONS "/" [] (http/options [:options :get :post]))
                                    (ANY "/" [] (http/method-not-allowed [:options :get :post]))
                                    (context "/:id" [id] (defroutes event-routes
-                                                         (GET "/" [] (events/get-event-case id))
+                                                         (GET "/" [] (events/get-event id))
                                                          (PUT "/" [] (http/not-implemented))
                                                          (DELETE "/" [] (http/not-implemented))
                                                          (OPTIONS "/" [] (http/options [:options :get :put :delete]))
@@ -96,8 +97,8 @@
                                                               (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
            
-           (route/not-found {:status 404}))
-  (route/not-found {:status 404}))
+           (route/not-found {:status err-not-found}))
+  (route/not-found {:status err-not-found}))
 
 
 ;; Request -> Response

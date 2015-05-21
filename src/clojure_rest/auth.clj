@@ -8,7 +8,7 @@
             [clojure-rest.data.db :as db]
             [clojure.java.jdbc :as sql]
             [clojure-rest.util.http :as h]
-            [clojure-rest.util.error :refer [bind-error]]
+            [clojure-rest.util.error :refer :all]
             [clojure-rest.util.utils :refer :all]))
 
 
@@ -49,7 +49,7 @@
   (bind-error (fn [value]
                 (let [user-id (users/get-user-id (value :username))]
                   (if (nil? user-id)
-                    [nil 404]
+                    [nil err-not-found]
                     [{:token (make-token! (value :username) (user-id :usersid))} nil]))) params))
 
 
@@ -65,7 +65,7 @@
 (defn- bind-validate [params]
   (bind-error #(if (users/pass-matches? (% :username) (% :password))
                  [% nil]
-                 [nil 401]) params))
+                 [nil err-unauthorized]) params))
 
 
 ;; String -> Either<{}|nil>
@@ -90,7 +90,7 @@
 (defn- bind-token-validation [params]
   (let [user-id (validate-token (params :token))]
     (if (nil? user-id)
-      [nil 401]
+      [nil err-unauthorized]
       [(-> params (dissoc :token) (assoc :issuer user-id)) nil])))
 
 
@@ -99,7 +99,7 @@
 (defn- check-token [params]
   (if (params :token)
     [params nil]
-    [nil 401]))
+    [nil err-unauthorized]))
 
 
 ;; {} -> Response [:body nil :status Natural]
@@ -131,8 +131,8 @@
     (->> params
          clojure.walk/keywordize-keys
          check-token
-         (bind-error (fn [v] (if (= token (v :token)) [v nil] [nil 403])))
+         (bind-error (fn [v] (if (= token (v :token)) [v nil] [nil err-forbidden])))
          (bind-error (fn [v] (do (revoke-token! (v :token)) [(v :token) nil])))
-         (bind-error (fn [_] [nil 204]))
+         (bind-error (fn [_] [nil status-deleted]))
          h/wrap-response)
-    {:status 404}))
+    {:status err-not-found}))
