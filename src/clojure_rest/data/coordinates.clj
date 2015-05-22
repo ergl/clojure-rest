@@ -27,6 +27,37 @@
                                                      :else (response (first results))))))
 
 
+;; {:latitude :longitude} -> UUID
+;; Gets the coordinate id of the supplied coordinate map
+(defn- get-pair-id [content]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               ["select coordinatesid from coordinates where latitude = ? and longitude = ?"
+                                                (content :latitude) (content :longitude)]
+                                               (when-not (empty? results)
+                                                 ((first results) :coordinatesid)))))
+
+
+;; {} -> UUID
+;; Inserts the given coordinate map and return the generated uuid
+(defn- coordinate-insert! [content]
+  (let [id (db/uuid)]
+    (sql/with-connection (db/db-connection)
+                             (let [coo (assoc content :coordinatesid id)]
+                               (sql/insert-record :coordinates coo)))
+    id))
+
+
+;; {} -> UUID
+;; Get the UUID of the given pair map
+;; If no current UUID exists, insert into the database and return the new id
+(defn get-coordinate-id [content]
+  (let [result (get-pair-id content)]
+    (if (nil? result)
+      (coordinate-insert! content)
+      result)))
+
+
 ;; {} -> Response[:body String]
 ;; {} -> Response[:body null :status 404]
 ;; Creates a new coordinate pair with the provided content, then returns said coordinate pair
@@ -37,6 +68,9 @@
                          (let [coord (assoc content "coordinatesId" id)]
                            (sql/insert-record :coordinates coord)))
     (get-coordinate id)))
+
+
+
 
 
 ;; UUID, {} -> Response[:body String]

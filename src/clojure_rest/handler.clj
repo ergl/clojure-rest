@@ -46,7 +46,7 @@
            
            (context "/events" [] (defroutes event-routes
                                    (GET "/" [] (events/get-all-events))
-                                   (POST "/" [] (http/not-implemented))
+                                   (POST "/" {body :body} (events/create-new-event body))
                                    (OPTIONS "/" [] (http/options [:options :get :post]))
                                    (ANY "/" [] (http/method-not-allowed [:options :get :post]))
                                    (context "/:id" [id] (defroutes event-routes
