@@ -5,6 +5,7 @@
             [clojure.walk :refer [keywordize-keys]]
             [clojure-rest.util.http :as h]
             [clojure-rest.data.coordinates :as gps]
+            [clojure-rest.data.comments :as comments]
             [clojure-rest.util.event-sanitize :as es]
             [clojure-rest.util.event-validate :as ev]
             [clojure-rest.util.error :refer [bind-error
@@ -18,6 +19,15 @@
        "from events "
        "inner join events_attendees on (events.eventsId = events_attendees.eventsId) "
        "inner join coordinates on (events.coordinatesId = coordinates.coordinatesId)"))
+
+
+(def ^:private complete-query
+  (str "select events.eventsid, title, users.username as author, content, latitude, longitude "
+       "from events "
+       "inner join coordinates on (events.coordinatesid = coordinates.coordinatesid) "
+       "inner join events_author on (events_author.eventsid = events.eventsid) "
+       "inner join users on (events_author.usersid = users.usersid) "
+       "where events.eventsid = ?"))
 
 
 ;; String -> Either<{}|nil>
@@ -39,13 +49,32 @@
                    [res nil])) params))
 
 
+;; UUID -> Either<{}|nil>
+;; Gets all the content of the given event id, except comments (just comment count)
+(defn- event-complete-extract! [id]
+  (let [commentcount ((comments/get-comment-count id) :commentcount)]
+    (sql/with-connection (db/db-connection)
+                         (sql/with-query-results results
+                                                 [complete-query id]
+                                                 (when-not (empty? results)
+                                                   (assoc (first results) :commentcount commentcount))))))
+
+
+;; [UUID?, Error?] -> [{}?, Error?]
+(defn- bind-event-complete-extract [params]
+  (bind-error #(let [res (event-complete-extract! %)]
+                 (if (nil? res)
+                   [nil err-not-found]
+                   [res nil])) params))
+
+
 
 ;; {} -> Either<{}|nil>
 ;; Creates a new event with the provided content, then returns said event
 (defn- event-insert! [content]
   (let [id (db/uuid)
         c-id (gps/get-coordinate-id (hash-map :latitude (content :latitude)
-                                             :longitude (content :longitude)))
+                                              :longitude (content :longitude)))
         event-user (hash-map :usersid (content :author) :eventsid id)]
     (sql/with-connection (db/db-connection)
                          (let [event (-> content
@@ -93,7 +122,7 @@
   (->> id
        clojure.string/trim
        (#(if (ev/event-exists? %) [% nil] [nil err-not-found]))
-       bind-event-brief-extract
+       bind-event-complete-extract
        h/wrap-response))
 
 

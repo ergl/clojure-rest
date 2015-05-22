@@ -32,4 +32,16 @@
         (is (= ((parse-string (:body response)) "title") "This is an event title"))
         (is (= ((parse-string (:body response)) "attending") 1))))
     
+    ;; Retrieving a particular event should return the id, title
+    ;; author username, location, content and comment count
+    (testing "retrieving a complete event"
+      (let [event (app (mock/request :get "/api/events"))
+            event-id ((first (parse-string (event :body))) "eventsid")
+            response (app (mock/request :get (str "/api/events/" event-id)))]
+        (is (= (response :status) 200))
+        (is (= ((parse-string (response :body)) "eventsid") event-id))
+        (is (= ((parse-string (response :body)) "author") "a"))
+        (is (= ((parse-string (response :body)) "content") "This is an event description"))
+        (is (= ((parse-string (response :body)) "commentcount") 0))))
+    
     (app (mock/request :delete "/api/users/a"))))

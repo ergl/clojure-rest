@@ -6,6 +6,23 @@
                                              status-deleted]]))
 
 
+
+(def ^:private count-query
+  (str "select count(commentsid) as commentcount "
+       "from events_comments "
+       "where eventsid = ?"))
+
+
+;; UUID -> Natural
+(defn get-comment-count [event-id]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               [count-query event-id]
+                                               (if-not (empty? results)
+                                                 (into {} results)
+                                                 0))))
+
+
 ;; () -> Response[:body String]
 ;; Returns a response with the contents of all the comments in the database
 (defn get-all-comments []
