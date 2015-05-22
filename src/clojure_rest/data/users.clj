@@ -22,7 +22,7 @@
   (bhash/encrypt pass))
 
 
-;; String -> Either<String|nil>
+;; String -> Either<{}|nil>
 ;; Gets the UUID of the given user
 (defn get-user-id [username]
   (sql/with-connection (db/db-connection)

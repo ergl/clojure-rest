@@ -76,7 +76,7 @@ create table comments (
 );
 
 create table events_comments (
-	eventId uuid references events(eventsId),
+	eventsId uuid references events(eventsId),
 	commentsId uuid references comments(commentsId)
 	-- TODO: Deleting all comments once event is deleted?
 );
