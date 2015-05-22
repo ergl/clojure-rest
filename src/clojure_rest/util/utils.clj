@@ -41,3 +41,23 @@
 ;; "1970-01-01 00:00:00" -> "1970-01-01~00:00:00"
 (defn join-time [date]
   (clojure.string/replace date #" " "~"))
+
+
+;; String -> String
+;; Removes extra spaces inside a string
+;; "    foo      bar    " -> "foo bar"
+(defn trim-inside [word]
+  (->> word
+       (#(clojure.string/split % #" "))
+       (filter #(not (clojure.string/blank? %)))
+       (clojure.string/join " ")))
+
+
+;; String -> Integer
+(defn parse-int [s]
+  (Integer/parseInt (re-find #"\A-?\d+" s)))
+
+
+;; String -> Float
+(defn parse-float [s]
+  (Float/parseFloat s))
