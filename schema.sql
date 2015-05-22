@@ -49,7 +49,7 @@ create table coordinates (
 create table events (
 	eventsId uuid primary key,
 	title varchar(50) not null,
-	description varchar not null,
+	content varchar not null,
 	initialDate date not null,
 	finalDate date,
 	coordinatesId uuid references coordinates (coordinatesId)
