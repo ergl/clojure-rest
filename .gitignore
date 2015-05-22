@@ -1,6 +1,6 @@
 ### Project-specific
 *.json
-profiles.clj
+*.key
 .lein-env
 
 ### SublimeText ###
