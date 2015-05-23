@@ -5,11 +5,11 @@
             [ring.middleware.json :as json]
             [compojure.route :as route]
             [clojure.walk :refer [stringify-keys]]
+            [clojure-rest.routes :as r]
             [clojure-rest.util.http :as http]
             [clojure-rest.data.db :as db]
             [clojure-rest.auth :as auth]
             [clojure-rest.data.users :as users]
-            [clojure-rest.data.events :as events]
             [clojure-rest.data.comments :as comments]
             [clojure-rest.util.error :refer [err-not-found]]))
 
@@ -44,21 +44,7 @@
                                                               (OPTIONS "/" [] (http/options [:options :delete]))
                                                               (ANY "/" [] (http/method-not-allowed [:options :delete]))))))
            
-           (context "/events" [] (defroutes event-routes
-                                   (GET "/" [] (events/get-all-events))
-                                   (POST "/" {body :body} (events/create-new-event body))
-                                   (OPTIONS "/" [] (http/options [:options :get :post]))
-                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
-                                   (context "/:id" [id] (defroutes event-routes
-                                                         (GET "/" [] (events/get-event id))
-                                                         (PUT "/" [] (http/not-implemented))
-                                                         (DELETE "/" [] (http/not-implemented))
-                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
-                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))
-                                   (context "/search/:query" [query] (defroutes event-routes
-                                                                       (GET "/" [] (events/search-events query))
-                                                                       (OPTIONS "/" [] (http/options [:options :get]))
-                                                                       (ANY "/" [] (http/method-not-allowed [:options :get]))))))
+           (context "/events" [] r/event-routes)
            
            (context "/users" [] (defroutes event-routes
                                   (GET "/" [] (users/get-all-users))
