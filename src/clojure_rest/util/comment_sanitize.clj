@@ -1,0 +1,30 @@
+(ns clojure-rest.util.comment-sanitize
+  (:require [clojure-rest.util.sanitize :as s]
+            [clojure-rest.util.error :refer [>>=
+                                             bind-error]]))
+
+
+;; {} -> [{}?, Error?]
+;; Checks if (params :username) is non-empty
+(defn- clean-author [params]
+  (s/clean-field-with s/escape-html params :author))
+
+
+;; {} -> [{}?, Error?]
+;; Checks that the :content key is present and with an associated value
+(defn- clean-content [params]
+  (s/clean-field-with s/escape-html params :content))
+
+
+;; {} -> [{}?, Error?]
+;; Checks that the :eventsid key is present and with an associated value
+(defn- clean-event-id [params]
+  (s/clean-field params :eventsid))
+
+
+;; {} -> [{}?, Error?]
+(defn sanitize-comment [params]
+  (>>= params
+       clean-author
+       clean-event-id
+       clean-content))
