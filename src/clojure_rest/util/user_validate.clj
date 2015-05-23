@@ -4,7 +4,9 @@
                                              =>?=
                                              bind-error
                                              bind-to
-                                             apply-if-present]]))
+                                             apply-if-present
+                                             err-unauthorized
+                                             err-forbidden]]))
 
 
 ;; String -> Boolean
@@ -38,13 +40,13 @@
 ;; {} -> [{}?, Error?]
 ;; Check if user is trying to sneak a deletion
 (defn- check-deletion [params]
-  (if (params :deleted) [nil 401] [params nil]))
+  (if (params :deleted) [nil err-unauthorized] [params nil]))
 
 
 ;; {} -> [{}?, Error?]
 ;; Check if user is trying to sudo
 (defn- check-admin-attempt [params]
-  (if (params :moderator) [nil 403] [params nil]))
+  (if (params :moderator) [nil err-forbidden] [params nil]))
 
 
 ;; {} -> {}

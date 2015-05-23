@@ -3,7 +3,8 @@
             [clojure-rest.util.error :refer [>>=
                                              >?=
                                              bind-error
-                                             apply-if-present]]))
+                                             apply-if-present
+                                             err-bad-request]]))
 
 
 ;; {} -> [{}?, Error?]
@@ -11,23 +12,19 @@
 (defn- clean-email [params]
   (if (and (params :email) (re-find #".*@.*\..*" (params :email)))
     [(s/trim-in params :email) nil]
-    [nil 400]))
+    [nil err-bad-request]))
 
 
 ;; {} -> [{}?, Error?]
 ;; Checks if (params :username) is non-empty
 (defn- clean-username [params]
-  (if (and (params :username) (empty? (params :username)))
-    [nil 400]
-    [(s/trim-in params :username) nil]))
+  (s/clean-field params :username))
 
 
 ;; {} -> [{}?, Error?]
 ;; Checks if (params :password) is non-empty
 (defn- clean-password [params]
-  (if (and (params :password) (empty? (params :password)))
-    [nil 400]
-    [(s/trim-in params :password) nil]))
+  (s/clean-field params :password))
 
 
 ;; {} -> [{}?, Error?]
@@ -50,5 +47,5 @@
 ;; Checks if the given map contains the username and password fields
 (defn sanitize-auth [content]
   (->> content
-       (#(if (% :username) [% nil] [nil 400]))
-       ((fn [c] (bind-error #(if (% :password) [% nil] [nil 400]) c)))))
+       (#(if (% :username) [% nil] [nil err-bad-request]))
+       ((fn [c] (bind-error #(if (% :password) [% nil] [nil err-bad-request]) c)))))
