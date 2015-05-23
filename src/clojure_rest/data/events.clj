@@ -75,7 +75,6 @@
                    [res nil])) params))
 
 
-
 ;; {} -> Either<{}|nil>
 ;; Creates a new event with the provided content, then returns said event
 (defn- event-insert! [content]
@@ -101,6 +100,24 @@
                    [res nil])) params))
 
 
+;; UUID -> [{}?]
+(defn- event-extract-comments! [id]
+  (comments/get-all-event-comments id))
+
+
+;; [{}?, Error?] -> [[{}?], nil]
+; (defn- bind-event-extract-comments [params]
+;   (bind-error #(let [res (event-extract-comments! %)]
+;                  (if (nil? res)
+;                    [[] nil]
+;                    [res nil])) params))
+
+
+;; [{}?, Error?] -> [[{}?], nil]
+(defn- bind-event-extract-comments [params]
+  (bind-error (fn [id] [(event-extract-comments! id) nil]) params))
+
+
 ;; String -> [{}]?
 ;; Returns a list of 5 events that match the supplied query
 ;; Matches agains title or content
@@ -110,6 +127,7 @@
                                                [search-query query query]
                                                (when-not (empty? results)
                                                  (into {} results)))))
+
 
 ;; String -> [[{}]?, Error?]
 (defn- bind-match-event [query]
@@ -157,6 +175,16 @@
   (->> query
        clojure.string/trim
        bind-match-event
+       h/wrap-response))
+
+
+;; UUID -> Response[:body [{}?] :status Either<200|404>]
+;; Returns a vector of all the comments of the given event id
+;; Returns 404 if no event is found with that id
+(defn get-event-comments [event-id]
+  (->> event-id
+       (#(if (ev/event-exists? %) [% nil] [nil err-not-found]))
+       bind-event-extract-comments
        h/wrap-response))
 
 

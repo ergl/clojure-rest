@@ -12,13 +12,13 @@
 ;; {} -> [{}?, Error?]
 ;; Checks that the :title key is present and with an associated value
 (defn- clean-title [params]
-  (s/clean-field params :title))
+  (s/clean-field-with s/escape-html params :title))
 
 
 ;; {} -> [{}?, Error?]
 ;; Checks that the :content key is present and with an associated value
 (defn- clean-content [params]
-  (s/clean-field params :content))
+  (s/clean-field-with s/escape-html params :content))
 
 
 ;; :key {} -> [{}?, Error?]

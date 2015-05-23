@@ -71,7 +71,7 @@ create table comments (
 	-- ID of parent comment - if it's the same as self, there are no parents
 	parentId uuid references comments(commentsId) on delete cascade,
 	content varchar not null,
-	positiveVotes int not null default 0,
+	positiveVotes int not null default 1,
 	negativeVotes int not null default 0
 );
 

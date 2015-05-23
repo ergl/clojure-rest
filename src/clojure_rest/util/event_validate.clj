@@ -20,7 +20,7 @@
 ;; {} -> [{}?, Error?]
 ;; Check for {{} :author}
 (defn- check-author [params]
-  (v/check-field params :author #(not(uv/user-exists? %))))
+  (v/check-field params :author #(not (uv/user-exists? %))))
 
 
 ;; {} -> {}
