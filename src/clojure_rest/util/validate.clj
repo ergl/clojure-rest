@@ -1,7 +1,8 @@
 (ns clojure-rest.util.validate
   (:require [clojure.java.jdbc :as sql]
             [clojure-rest.data.db :as db]
-            [clojure-rest.util.error :refer [bind-to]]))
+            [clojure-rest.util.error :refer [bind-to
+                                             err-bad-request]]))
 
 ;; String String String -> Boolean
 ;; Checks if the value exists in the given row of the given table
@@ -34,7 +35,7 @@
 ;; Check (fn {{} :key})
 (defn check-field [params field pred]
   (if (pred (params field))
-    [nil 400]
+    [nil err-bad-request]
     (bind-to params)))
 
 

@@ -1,7 +1,9 @@
 (ns clojure-rest.data.coordinates
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.data.db :as db]))
+            [clojure-rest.data.db :as db]
+            [clojure-rest.util.error :refer [err-not-found
+                                             status-deleted]]))
 
 
 ;; () -> Response[:body String]
@@ -21,8 +23,39 @@
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
                                                ["select * from coordinates where coordinatesId = ?" id]
-                                               (cond (empty? results) {:status 404}
+                                               (cond (empty? results) {:status err-not-found}
                                                      :else (response (first results))))))
+
+
+;; {:latitude :longitude} -> UUID
+;; Gets the coordinate id of the supplied coordinate map
+(defn- get-pair-id [content]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               ["select coordinatesid from coordinates where latitude = ? and longitude = ?"
+                                                (content :latitude) (content :longitude)]
+                                               (when-not (empty? results)
+                                                 ((first results) :coordinatesid)))))
+
+
+;; {} -> UUID
+;; Inserts the given coordinate map and return the generated uuid
+(defn- coordinate-insert! [content]
+  (let [id (db/uuid)]
+    (sql/with-connection (db/db-connection)
+                             (let [coo (assoc content :coordinatesid id)]
+                               (sql/insert-record :coordinates coo)))
+    id))
+
+
+;; {} -> UUID
+;; Get the UUID of the given pair map
+;; If no current UUID exists, insert into the database and return the new id
+(defn get-coordinate-id [content]
+  (let [result (get-pair-id content)]
+    (if (nil? result)
+      (coordinate-insert! content)
+      result)))
 
 
 ;; {} -> Response[:body String]
@@ -35,6 +68,9 @@
                          (let [coord (assoc content "coordinatesId" id)]
                            (sql/insert-record :coordinates coord)))
     (get-coordinate id)))
+
+
+
 
 
 ;; UUID, {} -> Response[:body String]
@@ -53,4 +89,4 @@
 (defn delete-coordinate [id]
   (sql/with-connection (db/db-connection)
                        (sql/delete-rows :coordinates ["coordinatesId=?" id]))
-  {:status 204})
+  {:status status-deleted})

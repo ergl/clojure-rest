@@ -5,12 +5,13 @@
             [ring.middleware.json :as json]
             [compojure.route :as route]
             [clojure.walk :refer [stringify-keys]]
+            [clojure-rest.routes :as r]
             [clojure-rest.util.http :as http]
             [clojure-rest.data.db :as db]
             [clojure-rest.auth :as auth]
             [clojure-rest.data.users :as users]
-            [clojure-rest.data.events :as events]
-            [clojure-rest.data.comments :as comments]))
+            [clojure-rest.data.comments :as comments]
+            [clojure-rest.util.error :refer [err-not-found]]))
 
 
 ;; Response -> Response
@@ -43,17 +44,7 @@
                                                               (OPTIONS "/" [] (http/options [:options :delete]))
                                                               (ANY "/" [] (http/method-not-allowed [:options :delete]))))))
            
-           (context "/events" [] (defroutes event-routes
-                                   (GET "/" [] (http/not-implemented))
-                                   (POST "/" [] (http/not-implemented))
-                                   (OPTIONS "/" [] (http/options [:options :get :post]))
-                                   (ANY "/" [] (http/method-not-allowed [:options :get :post]))
-                                   (context ":id" [id] (defroutes event-routes
-                                                         (GET "/" [] (http/not-implemented))
-                                                         (PUT "/" [] (http/not-implemented))
-                                                         (DELETE "/" [] (http/not-implemented))
-                                                         (OPTIONS "/" [] (http/options [:options :get :put :delete]))
-                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
+           (context "/events" [] r/event-routes)
            
            (context "/users" [] (defroutes event-routes
                                   (GET "/" [] (users/get-all-users))
@@ -96,8 +87,8 @@
                                                               (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
            
            
-           (route/not-found {:status 404}))
-  (route/not-found {:status 404}))
+           (route/not-found {:status err-not-found}))
+  (route/not-found {:status err-not-found}))
 
 
 ;; Request -> Response

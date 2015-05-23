@@ -49,7 +49,7 @@ create table coordinates (
 create table events (
 	eventsId uuid primary key,
 	title varchar(50) not null,
-	description varchar not null,
+	content varchar not null,
 	initialDate date not null,
 	finalDate date,
 	coordinatesId uuid references coordinates (coordinatesId)
@@ -71,12 +71,12 @@ create table comments (
 	-- ID of parent comment - if it's the same as self, there are no parents
 	parentId uuid references comments(commentsId) on delete cascade,
 	content varchar not null,
-	positiveVotes int not null default 0,
+	positiveVotes int not null default 1,
 	negativeVotes int not null default 0
 );
 
 create table events_comments (
-	eventId uuid references events(eventsId),
+	eventsId uuid references events(eventsId),
 	commentsId uuid references comments(commentsId)
 	-- TODO: Deleting all comments once event is deleted?
 );
