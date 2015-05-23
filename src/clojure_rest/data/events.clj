@@ -30,6 +30,13 @@
        "where events.eventsid = ?"))
 
 
+(def ^:private search-query
+  (str brief-query
+       " where (events.title like '%' || ? || '%') or "
+       "(events.content like '%' || ? || '%') "
+       "group by events.eventsid limit 5"))
+
+
 ;; String -> Either<{}|nil>
 ;; Returns a either nil or the brief contents of the supplied event id
 (defn- event-brief-extract! [id]
@@ -94,6 +101,24 @@
                    [res nil])) params))
 
 
+;; String -> [{}]?
+;; Returns a list of 5 events that match the supplied query
+;; Matches agains title or content
+(defn- match-events [query]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               [search-query query query]
+                                               (when-not (empty? results)
+                                                 (into {} results)))))
+
+;; String -> [[{}]?, Error?]
+(defn- bind-match-event [query]
+  (let [result (match-events query)]
+    (if (nil? result)
+      [nil err-not-found]
+      [result nil])))
+
+
 ;; () -> Response[:body [{}]?]
 ;; Returns a map vector of at most 15 events in the database, nil if database is empty
 (defn get-all-events []
@@ -123,6 +148,15 @@
        clojure.string/trim
        (#(if (ev/event-exists? %) [% nil] [nil err-not-found]))
        bind-event-complete-extract
+       h/wrap-response))
+
+
+;; String -> Response[:body [{}?] :status Either<200|404>]
+;; Returns a response with either the matches of the supplied event query, or 404 not found
+(defn search-events [query]
+  (->> query
+       clojure.string/trim
+       bind-match-event
        h/wrap-response))
 
 

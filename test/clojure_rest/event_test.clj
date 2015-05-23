@@ -44,4 +44,9 @@
         (is (= ((parse-string (response :body)) "content") "This is an event description"))
         (is (= ((parse-string (response :body)) "commentcount") 0))))
     
+    (testing "searching an event"
+      (let [response (app (mock/request :get "/api/events/search/description"))]
+        (is (= (:status response) 200))
+        (is (= ((parse-string (response :body)) "title") "This is an event title"))))
+    
     (app (mock/request :delete "/api/users/a"))))

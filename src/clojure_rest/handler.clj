@@ -54,7 +54,11 @@
                                                          (PUT "/" [] (http/not-implemented))
                                                          (DELETE "/" [] (http/not-implemented))
                                                          (OPTIONS "/" [] (http/options [:options :get :put :delete]))
-                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))))
+                                                         (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))
+                                   (context "/search/:query" [query] (defroutes event-routes
+                                                                       (GET "/" [] (events/search-events query))
+                                                                       (OPTIONS "/" [] (http/options [:options :get]))
+                                                                       (ANY "/" [] (http/method-not-allowed [:options :get]))))))
            
            (context "/users" [] (defroutes event-routes
                                   (GET "/" [] (users/get-all-users))
