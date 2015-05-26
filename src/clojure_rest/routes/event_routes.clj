@@ -1,7 +1,5 @@
-(ns clojure-rest.routes.routes
-  (:use compojure.core)
-  (:use ring.util.response)
-  (:require [compojure.route :as route]
+(ns clojure-rest.routes.event-routes
+  (:require [compojure.core :refer :all]
             [clojure-rest.util.http :as http]
             [clojure-rest.data.events :as events]
             [clojure-rest.data.comments :as comments]))
