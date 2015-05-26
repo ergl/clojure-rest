@@ -3,6 +3,7 @@
 *.key
 .lein-env
 skase.*
+*.conf
 
 
 ### SublimeText ###

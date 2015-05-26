@@ -1,5 +1,6 @@
 (ns clojure-rest.data.db
-  (:import com.mchange.v2.c3p0.ComboPooledDataSource))
+  (:import com.mchange.v2.c3p0.ComboPooledDataSource)
+  (:require [environ.core :refer [env]]))
 
 
 ;; () -> java.util.UUID
@@ -13,16 +14,17 @@
 (def db-config
   {:classname "org.h2.Driver"
    :subprotocol "h2"
-   :subname "./skase"
-   :user ""
-   :password ""})
+   :subname (env :h2-type)
+   :init-script (env :h2-script)
+   :user (env :h2-user)
+   :password (env :h2-password)})
 
 ;; DatabaseConfig -> ComboPooledDataSource
 ;; Sets up the connection pool for the given database configuration
 (defn pool [config]
   (let [cpds (doto (ComboPooledDataSource.)
                (.setDriverClass (:classname config))
-               (.setJdbcUrl (str "jdbc:" (:subprotocol config) ":" (:subname config)))
+               (.setJdbcUrl (str "jdbc:" (:subprotocol config) ":" (:subname config) ";" (:init-script config)))
                (.setUser (:user config))
                (.setPassword (:password config))
                (.setMaxPoolSize 1)
