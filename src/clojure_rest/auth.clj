@@ -5,7 +5,7 @@
             [clojure-rest.util.user-sanitize :as us]
             [pandect.core :refer [sha256-hmac]]
             [environ.core :refer [env]]
-            [clojure-rest.data.db :as db]
+            [clojure-rest.db :as db]
             [clojure.java.jdbc :as sql]
             [clojure-rest.util.http :as h]
             [clojure-rest.util.error :refer :all]

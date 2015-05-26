@@ -1,6 +1,6 @@
 (ns clojure-rest.util.validate
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.data.db :as db]
+            [clojure-rest.db :as db]
             [clojure-rest.util.error :refer [bind-to
                                              err-bad-request]]))
 

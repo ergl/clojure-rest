@@ -1,5 +1,6 @@
-(ns clojure-rest.data.db
-  (:import com.mchange.v2.c3p0.ComboPooledDataSource))
+(ns clojure-rest.db
+  (:import com.mchange.v2.c3p0.ComboPooledDataSource)
+  (:require [environ.core :refer [env]]))
 
 
 ;; () -> java.util.UUID
@@ -7,15 +8,16 @@
 (defn uuid []
   (str (java.util.UUID/randomUUID)))
 
+
 ; Change this if you want to go for another database engine
 ; Currently using h2
 (def db-config
   {:classname "org.h2.Driver"
    :subprotocol "h2"
-   :subname "mem:documents"
-   :init-script "INIT=RUNSCRIPT FROM './schema.sql'"
-   :user ""
-   :password ""})
+   :subname (env :h2-type)
+   :init-script (env :h2-script)
+   :user (env :h2-user)
+   :password (env :h2-password)})
 
 ;; DatabaseConfig -> ComboPooledDataSource
 ;; Sets up the connection pool for the given database configuration
