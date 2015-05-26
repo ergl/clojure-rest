@@ -34,13 +34,14 @@
 ;; UUID -> String
 ;; Creates a token and inserts it into the session table, then returns that token
 (defn- make-token! [username user-id]
-  (let [now (time-now)
-        token (generate-session username now)]
-    (sql/with-connection (db/db-connection)
-                         (sql/insert-values :sessions [] [token
-                                                          user-id
-                                                          (format-time now)]))
-    token))
+  (try-backoff []
+               (let [now (time-now)
+                     token (generate-session username now)]
+                 (sql/with-connection (db/db-connection)
+                                      (sql/insert-values :sessions [] [token
+                                                                       user-id
+                                                                       (format-time now)]))
+                 token)))
 
 
 ;; [{}?, Error?] -> [String?, Error?]
