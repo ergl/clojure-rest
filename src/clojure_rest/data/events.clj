@@ -7,7 +7,7 @@
             [clojure-rest.data.coordinates :as gps]
             [clojure-rest.data.comments :as comments]
             [clojure-rest.util.event-sanitize :as es]
-            [clojure-rest.util.event-validate :as ev]
+            [clojure-rest.validation.event-validate :as ev]
             [clojure-rest.util.error :refer [bind-error
                                              err-not-found
                                              status-deleted

@@ -1,5 +1,5 @@
-(ns clojure-rest.util.user-validate
-  (:require [clojure-rest.util.validate :as v]
+(ns clojure-rest.validation.user-validate
+  (:require [clojure-rest.validation.validate :as v]
             [clojure-rest.util.error :refer [=>>=
                                              =>?=
                                              bind-error

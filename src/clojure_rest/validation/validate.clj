@@ -1,4 +1,4 @@
-(ns clojure-rest.util.validate
+(ns clojure-rest.validation.validate
   (:require [clojure.java.jdbc :as sql]
             [clojure-rest.db :as db]
             [clojure-rest.util.error :refer [bind-to

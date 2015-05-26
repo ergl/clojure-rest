@@ -1,6 +1,6 @@
 (ns clojure-rest.auth
   (:require [ring.util.response :refer :all]
-            [clojure-rest.util.validate :as v]
+            [clojure-rest.validation.validate :as v]
             [clojure-rest.data.users :as users]
             [clojure-rest.util.user-sanitize :as us]
             [pandect.core :refer [sha256-hmac]]

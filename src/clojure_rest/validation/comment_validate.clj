@@ -1,8 +1,8 @@
-(ns clojure-rest.util.comment-validate
-  (:require [clojure-rest.util.validate :as v]
+(ns clojure-rest.validation.comment-validate
+  (:require [clojure-rest.validation.validate :as v]
             [clojure-rest.data.users :as users]
-            [clojure-rest.util.user-validate :as uv]
-            [clojure-rest.util.event-validate :as ev]
+            [clojure-rest.validation.user-validate :as uv]
+            [clojure-rest.validation.event-validate :as ev]
             [clojure-rest.util.error :refer [bind-to
                                              bind-error
                                              err-bad-request
