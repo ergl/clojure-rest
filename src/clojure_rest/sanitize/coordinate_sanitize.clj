@@ -1,4 +1,4 @@
-(ns clojure-rest.util.coordinate-sanitize
+(ns clojure-rest.sanitize.coordinate-sanitize
   (:require [clojure-rest.util.utils :refer [trim-inside
                                              parse-float]]
             [clojure-rest.util.error :refer :all]))

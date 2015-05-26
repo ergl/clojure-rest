@@ -1,5 +1,5 @@
-(ns clojure-rest.util.comment-sanitize
-  (:require [clojure-rest.util.sanitize :as s]
+(ns clojure-rest.sanitize.comment-sanitize
+  (:require [clojure-rest.sanitize.sanitize :as s]
             [clojure-rest.util.error :refer [>>=
                                              bind-error]]))
 

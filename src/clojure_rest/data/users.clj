@@ -6,8 +6,8 @@
             [clojure.walk :refer [keywordize-keys]]
             [clojure-rest.db :as db]
             [clojure-rest.util.http :as h]
-            [clojure-rest.util.user-sanitize :as us]
-            [clojure-rest.util.user-validate :as uv]
+            [clojure-rest.sanitize.user-sanitize :as us]
+            [clojure-rest.validation.user-validate :as uv]
             [clojure-rest.util.error :refer [bind-error
                                              apply-if-present
                                              bind-to

@@ -1,5 +1,5 @@
-(ns clojure-rest.util.user-sanitize
-  (:require [clojure-rest.util.sanitize :as s]
+(ns clojure-rest.sanitize.user-sanitize
+  (:require [clojure-rest.sanitize.sanitize :as s]
             [clojure-rest.util.error :refer [>>=
                                              >?=
                                              bind-error
