@@ -1,7 +1,7 @@
 (ns clojure-rest.data.events
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.data.db :as db]
+            [clojure-rest.db :as db]
             [clojure.walk :refer [keywordize-keys]]
             [clojure-rest.util.http :as h]
             [clojure-rest.data.coordinates :as gps]

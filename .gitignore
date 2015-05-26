@@ -2,6 +2,9 @@
 *.json
 *.key
 .lein-env
+skase.*
+*.conf
+
 
 ### SublimeText ###
 ## cache files for sublime text
