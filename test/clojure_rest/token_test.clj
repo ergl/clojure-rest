@@ -21,8 +21,6 @@
         
         token-value ((parse-string (token :body)) "token")
         
-        elapsed (Thread/sleep 2000)
-        
         alt-token (app (-> (mock/request :post "/api/auth"
                                          (generate-string {:username "xyzz"
                                                            :password "sosecret"}))

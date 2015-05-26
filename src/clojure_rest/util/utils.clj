@@ -61,3 +61,32 @@
 ;; String -> Float
 (defn parse-float [s]
   (Float/parseFloat s))
+
+;; ---------------------------------------------------------------------
+;; Exponential backoff solution
+;; Credits go to Eric Normand @ LispCast
+;; http://www.lispcast.com/exponential-backoff
+
+;; Natural, Natural, Natural, (A -> B) -> B
+;; Tries to evaluate f, if it fails, retry after time miliseconds
+;; If it fails again, retry after (* rate time), up until it reaches max
+(defn exponential-backoff [time rate max f]
+  (if (>= time max) (f)
+    (try
+      (f)
+      (catch Throwable t
+        (Thread/sleep time)
+        (exponential-backoff (* time rate) rate max f)))))
+
+
+;; Turns
+;; (try-backoff [x y z] f)
+;; Into
+;; (exponential-backoff x y z f)
+;; If an empty vector is supplied, defaults to
+;; (exponential-backoff 1000 2 10000 f)
+(defmacro try-backoff [[time rate max] & body]
+  `(exponential-backoff (or ~time  1000)
+                        (or ~rate 2)
+                        (or ~max 10000)
+                        (fn [] ~@body)))
