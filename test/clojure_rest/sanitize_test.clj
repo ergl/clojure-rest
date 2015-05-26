@@ -1,7 +1,7 @@
 (ns clojure-rest.sanitize-test
   (:require [clojure.test :refer :all]
             [clojure-rest.util.error :refer [wrap-error]]
-            [clojure-rest.util.user-sanitize :as us]))
+            [clojure-rest.sanitize.user-sanitize :as us]))
 
 (deftest test-sanitize
   
