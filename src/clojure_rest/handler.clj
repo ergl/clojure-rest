@@ -5,7 +5,7 @@
             [ring.middleware.json :as json]
             [compojure.route :as route]
             [clojure.walk :refer [stringify-keys]]
-            [clojure-rest.routes :as r]
+            [clojure-rest.routes.routes :as r]
             [clojure-rest.util.http :as http]
             [clojure-rest.auth :as auth]
             [clojure-rest.data.users :as users]

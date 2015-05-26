@@ -1,4 +1,4 @@
-(ns clojure-rest.routes
+(ns clojure-rest.routes.routes
   (:use compojure.core)
   (:use ring.util.response)
   (:require [compojure.route :as route]
