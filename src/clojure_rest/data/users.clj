@@ -4,7 +4,7 @@
             [buddy.hashers :as bhash]
             [clojure-rest.util.utils :refer :all]
             [clojure.walk :refer [keywordize-keys]]
-            [clojure-rest.data.db :as db]
+            [clojure-rest.db :as db]
             [clojure-rest.util.http :as h]
             [clojure-rest.util.user-sanitize :as us]
             [clojure-rest.util.user-validate :as uv]

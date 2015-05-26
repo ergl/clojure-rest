@@ -7,7 +7,6 @@
             [clojure.walk :refer [stringify-keys]]
             [clojure-rest.routes :as r]
             [clojure-rest.util.http :as http]
-            [clojure-rest.data.db :as db]
             [clojure-rest.auth :as auth]
             [clojure-rest.data.users :as users]
             [clojure-rest.data.comments :as comments]

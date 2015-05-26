@@ -1,7 +1,7 @@
 (ns clojure-rest.data.comments
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
-            [clojure-rest.data.db :as db]
+            [clojure-rest.db :as db]
             [clojure-rest.util.comment-sanitize :as cs]
             [clojure-rest.util.comment-validate :as cv]
             [clojure.walk :refer [keywordize-keys]]
