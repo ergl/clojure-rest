@@ -2,7 +2,7 @@
   (:use ring.util.response)
   (:require [clojure.java.jdbc :as sql]
             [clojure-rest.db :as db]
-            [clojure-rest.util.comment-sanitize :as cs]
+            [clojure-rest.sanitize.comment-sanitize :as cs]
             [clojure-rest.validation.comment-validate :as cv]
             [clojure.walk :refer [keywordize-keys]]
             [clojure-rest.util.http :as h]

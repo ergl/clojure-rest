@@ -2,7 +2,7 @@
   (:require [ring.util.response :refer :all]
             [clojure-rest.validation.validate :as v]
             [clojure-rest.data.users :as users]
-            [clojure-rest.util.user-sanitize :as us]
+            [clojure-rest.sanitize.user-sanitize :as us]
             [pandect.core :refer [sha256-hmac]]
             [environ.core :refer [env]]
             [clojure-rest.db :as db]

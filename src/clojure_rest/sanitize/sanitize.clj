@@ -1,4 +1,4 @@
-(ns clojure-rest.util.sanitize
+(ns clojure-rest.sanitize.sanitize
   (:require [clojure.string :refer [trim]]
             [clojure-rest.util.error :refer :all]))
 

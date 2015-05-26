@@ -1,6 +1,6 @@
-(ns clojure-rest.util.event-sanitize
-  (:require [clojure-rest.util.sanitize :as s]
-            [clojure-rest.util.coordinate-sanitize :as cs]
+(ns clojure-rest.sanitize.event-sanitize
+  (:require [clojure-rest.sanitize.sanitize :as s]
+            [clojure-rest.sanitize.coordinate-sanitize :as cs]
             [clojure-rest.util.error :refer :all]))
 
 

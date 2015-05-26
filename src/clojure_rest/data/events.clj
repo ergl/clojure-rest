@@ -6,7 +6,7 @@
             [clojure-rest.util.http :as h]
             [clojure-rest.data.coordinates :as gps]
             [clojure-rest.data.comments :as comments]
-            [clojure-rest.util.event-sanitize :as es]
+            [clojure-rest.sanitize.event-sanitize :as es]
             [clojure-rest.validation.event-validate :as ev]
             [clojure-rest.util.error :refer [bind-error
                                              err-not-found
