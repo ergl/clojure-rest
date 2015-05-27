@@ -103,6 +103,23 @@
        (#(when (= user %) status-deleted))))
 
 
+;; String, String -> ()
+;; Establishes a contact relationship between the two usernames
+;; TODO: Add notification table to be able to confirm a friend request
+(defn- user-add! [friend-name own-name]
+  (let [own-id ((get-user-id own-name) :usersid)
+        friend-id ((get-user-id friend-name) :usersid)]
+    (sql/with-connection (db/db-connection)
+                         (sql/insert-record :users_users {:usersid own-id :friendid friend-id})
+                         (sql/insert-record :users_users {:usersid friend-id :friendid own-id}))))
+
+
+;; String, {} -> String
+(defn- bind-user-add [friend-name own-name]
+  (user-add! friend-name (own-name :username))
+  own-name)
+
+
 ;; String -> [{}]?
 ;; Returns a list of 5 users that match the supplied username
 (defn- match-users [username]
@@ -177,6 +194,20 @@
            bind-user-delete
            h/empty-response-with-code))
     {:status err-not-found}))
+
+
+;; String -> Response[:status Either<200|400|404>]
+;; Adds the supplied contact username to the list username's contact list
+(defn add-contact [username content]
+  (if (uv/user-exists? username)
+    (do
+      (->> content
+           keywordize-keys
+           us/sanitize-add
+           uv/validate-add
+           (bind-error #(bind-to (bind-user-add username %)))
+           h/wrap-response))
+    {:status 404}))
 
 
 ;; String -> Response[:body [{}?] :status Either<200|404>]

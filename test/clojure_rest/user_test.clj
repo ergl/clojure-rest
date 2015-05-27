@@ -94,6 +94,19 @@
     (let [response (app (mock/request :get "/api/users/search/noresults"))]
       (is (= (:status response) 404))))
   
+  (testing "adding an user as a contact"
+    (let [response (app (-> (mock/request :post "/api/users/bar/contacts"
+                                          (generate-string {:username "baz"}))
+                            (mock/content-type "application/json")))]
+      (is (= (:status response) 200))
+      (is (= ((parse-string (:body response)) "username") "baz"))))
+  
+  (testing "adding a non-existing user as a contact"
+    (let [response (app (-> (mock/request :post "/api/users/notfound/contacts"
+                                          (generate-string {:username "baz"}))
+                            (mock/content-type "application/json")))]
+      (is (= (:status response) 404))))
+  
   ;; Attempting to delete an user through the update procedure should return in a 403 response
   (testing "deleting an user through update"
     (let [response (app (-> (mock/request :put "/api/users/bar"
