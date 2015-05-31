@@ -26,7 +26,7 @@
                                                               :title "This is an event title"
                                                               :content "This is an event description"
                                                               :coordinates "40, -3"
-                                                              :initialdate "2015-05-30"}))
+                                                              :initialdate "9999-12-31"}))
                               (mock/content-type "application/json")))]
         (is (= (response :status) 200))
         (is (= ((parse-string (:body response)) "title") "This is an event title"))
