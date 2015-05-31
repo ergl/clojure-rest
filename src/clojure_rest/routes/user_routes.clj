@@ -4,13 +4,23 @@
             [clojure-rest.data.users :as users]))
 
 
+(defn- user-add-routes [username]
+  (routes
+    (GET "/" [] (users/get-user-contacts username))
+    (POST "/" {body :body} (users/add-contact username body))
+    (DELETE "/" [] (http/not-implemented))
+    (OPTIONS "/" [] (http/options [:options :post :get]))
+    (ANY "/" [] (http/method-not-allowed [:options :post :get]))))
+
+
 (defn- user-id-routes [username]
   (routes
     (GET "/" [] (users/get-user username))
     (PUT "/" {body :body} (users/update-user username body))
     (DELETE "/" [] (users/delete-user username))
     (OPTIONS "/" [] (http/options [:options :get :put :delete]))
-    (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))))
+    (ANY "/" [] (http/method-not-allowed [:options :get :put :delete]))
+    (context "/contacts" [] (user-add-routes username))))
 
 
 (defn- user-search-routes [query]

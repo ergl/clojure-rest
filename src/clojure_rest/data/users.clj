@@ -16,6 +16,27 @@
                                              err-server-error]]))
 
 
+(def ^:private brief-query
+  (str "select username, name from users where username = ?"))
+
+
+(def ^:private match-query
+  (str "select username, profileimage from users "
+       "where username like '%' || ? || '%' limit 5"))
+
+
+(def ^:private deleted-query
+  (str "select username, name from users where deleted = false"))
+
+
+(def ^:private contact-query
+  (str "select F.username, F.profileimage "
+       "from users U "
+       "left outer join (users_users UU inner join users F on (UU.friendid = F.usersid)) "
+       "on (U.usersid = UU.usersid) "
+       "where U.username = ?"))
+
+
 ;; String -> String
 ;; Hashes the given password with bcrypt + sha512, 12 iterations
 (defn- hash-pass [pass]
@@ -37,7 +58,7 @@
 (defn- user-brief-extract! [username]
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
-                                               ["select username, name from users where username = ?" username]
+                                               [brief-query username]
                                                (cond (empty? results) nil
                                                      :else (first results)))))
 
@@ -103,12 +124,37 @@
        (#(when (= user %) status-deleted))))
 
 
+;; String, String -> ()
+;; Establishes a contact relationship between the two usernames
+;; TODO: Add notification table to be able to confirm a friend request
+(defn- user-add! [friend-name own-name]
+  (let [own-id ((get-user-id own-name) :usersid)
+        friend-id ((get-user-id friend-name) :usersid)]
+    (sql/with-connection (db/db-connection)
+                         (sql/insert-record :users_users {:usersid own-id :friendid friend-id})
+                         (sql/insert-record :users_users {:usersid friend-id :friendid own-id}))))
+
+
+;; String, {} -> String
+(defn- bind-user-add [friend-name own-name]
+  (user-add! friend-name (own-name :username))
+  own-name)
+
+
+;; String -> Either<[{}]|[]>
+(defn- user-contacts-extract! [username]
+  (sql/with-connection (db/db-connection)
+                       (sql/with-query-results results
+                                               [contact-query username]
+                                               (->> (vec results)
+                                                    (#(if (= ((first %) :username) nil) [] %))))))
+
 ;; String -> [{}]?
 ;; Returns a list of 5 users that match the supplied username
 (defn- match-users [username]
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
-                                               ["select username, profileImage from users where username like '%' || ? || '%' limit 5" username]
+                                               [match-query username]
                                                (when-not (empty? results)
                                                  (into {} results)))))
 
@@ -127,7 +173,7 @@
   (response
     (sql/with-connection (db/db-connection)
                          (sql/with-query-results results
-                                                 ["select username, name from users where deleted = false"]
+                                                 [deleted-query]
                                                  (when-not (empty? results)
                                                    (into [] results))))))
 
@@ -177,6 +223,28 @@
            bind-user-delete
            h/empty-response-with-code))
     {:status err-not-found}))
+
+
+;; String -> Response[:status Either<200|400|404>]
+;; Adds the supplied contact username to the list username's contact list
+(defn add-contact [username content]
+  (if (uv/user-exists? username)
+    (do
+      (->> content
+           keywordize-keys
+           us/sanitize-add
+           uv/validate-add
+           (bind-error #(bind-to (bind-user-add username %)))
+           h/wrap-response))
+    {:status 404}))
+
+
+;; String -> Response[:body [{}?] :status Either<200|404>]
+;; Gets all the user contacts in a vector, returns 404 if the given username does not exist
+(defn get-user-contacts [username]
+  (if (uv/user-exists? username)
+    (response (user-contacts-extract! username))
+    {:status 404}))
 
 
 ;; String -> Response[:body [{}?] :status Either<200|404>]
