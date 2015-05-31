@@ -33,16 +33,11 @@ var map =  (function() {
 						map: mapObject
 					});
 
-					var config = {
-						title: event.title,
-						attending: event.attending
-					};
-
-					eventList.push(event);
-
 					google.maps.event.addListener(eventMarker, 'click', function() {
-						makeContent(config).open(mapObject, eventMarker);
+						makeContent(event).open(mapObject, eventMarker);
 					});
+
+                    eventList.push(event);
 				}
 			}
 		});
