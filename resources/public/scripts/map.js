@@ -1,64 +1,70 @@
-// () -> ()
-function initialize() {
-  var mapOptions = {
-    center: { lat: 40.417, lng: -3.702}, // Puerta del Sol, Madrid
-    zoom: 10,
-    disableDefaultUI: true
-  };
-  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-  
-  setupMarkers(map);
+var map =  (function() {
+	"use strict";
 
-  // gets user coordinates on right click
-  google.maps.event.addListener(map, 'rightclick', function(event) {
-    togglePane(PaneEnum.create);
-    var latitude = event.latLng.lat();
-    var longitude = event.latLng.lng();
-    console.log(latitude + ', ' + longitude);
-  });
-}
+	var eventList = [];
+	var markerContent = "<div class='info-window'><h2><a href='#' id='info-link' onclick='togglePane(PaneEnum.event)'>{{title}}</a></h2><p>{{attending}} user(s) are going.</p></div>";
 
-// google.maps.Map -> ()
-// Create the events and draw them to the given map
-function setupMarkers(mapObject) {
-  var eventMarker1 = new google.maps.Marker({
-    position: new google.maps.LatLng(40.35, -3.65),
-    map: mapObject,
-  });
+	// google.maps.Marker, google.maps.Map, google.maps.InfoWindow, String -> ()
+	function makeInfoWindow(marker, map, infoWindow, content) {
+		google.maps.event.addListener(marker, 'mouseover', function() {
+			infoWindow.setContent(content);
+			infoWindow.open(map, marker);
+		});
+	}
 
-  var eventMarker2 = new google.maps.Marker({
-    position: new google.maps.LatLng(40.4, -3.7),
-    map: mapObject,
-  });
+	// google.maps.Map -> ()
+	function setupMarkers(mapObject) {
+		$.ajax({
+			type: "GET",
+			url: "api/events",
+			datatype: "json",
+			success: function(response) {
+				var infoWindow = new google.maps.InfoWindow();
+				for (var i = 0; i < response.length; i++) {
+					var event = {
+						id: response[i].eventsid,
+						title: response[i].title,
+						attending: response[i].attending,
+						latitude: response[i].latitude,
+						longitude: response[i].longitude
+					};
 
-  var eventMarker3 = new google.maps.Marker({
-    position: new google.maps.LatLng(40.39, -3.67),
-    map: mapObject,
-  });
+					var eventMarker = new google.maps.Marker({
+						position: new google.maps.LatLng(event.latitude, event.longitude),
+						map: mapObject
+					});
 
-  google.maps.event.addListener(eventMarker1, 'click', function(event) {
-    makeContent().open(mapObject, eventMarker1);
-  });
+					makeInfoWindow(eventMarker, mapObject, infoWindow, Mustache.render(markerContent, event));
 
-  google.maps.event.addListener(eventMarker2, 'click', function(event) {
-    makeContent().open(mapObject, eventMarker2);
-  });
+					eventList.push(event);
+				}
+			}
+		});
+	}
 
-  google.maps.event.addListener(eventMarker3, 'click', function(event) {
-    makeContent().open(mapObject, eventMarker3);
-  });
-}
+	// () -> ()
+	function initialize() {
+		var mapoptions = {
+			center: { lat: 40.417, lng: -3.702}, // Puerta del Sol, Madrid
+			zoom: 10,
+			disableDefaultUI: true
+		};
 
-// () -> google.maps.InfoWindow
-// Make a personalized InfoWindow for the given event marker
-function makeContent() {
-  //  Placeholder content
-  // TODO: Get the event name and number of people going
-  // TODO: Figure out how to add the color circle
-  var infoContent = '<div class="info-window"><h2><a href="#" id="info-link" onclick="togglePane(PaneEnum.event)">Event Name</a></h2><p>A lot of users are going.</p></div>';
-  return new google.maps.InfoWindow({
-    content: infoContent
-  });
-}
+		var mapCanvas = new google.maps.Map(document.getElementById('map-canvas'), mapoptions);
 
-google.maps.event.addDomListener(window, 'load', initialize);
+		setupMarkers(mapCanvas);
+
+		google.maps.event.addListener(mapCanvas, 'rightclick', function(event) {
+			togglePane(PaneEnum.create);
+			var latitude = event.latLng.lat();
+			var longitude = event.latLng.lng();
+			console.log(latitude + ', '  + longitude);
+		});
+	}
+
+	return {
+		initialize: initialize()
+	};
+}());
+
+google.maps.event.addDomListener(window, 'load', map.initialize);

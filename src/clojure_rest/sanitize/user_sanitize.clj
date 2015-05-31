@@ -49,3 +49,9 @@
   (->> content
        (#(if (% :username) [% nil] [nil err-bad-request]))
        ((fn [c] (bind-error #(if (% :password) [% nil] [nil err-bad-request]) c)))))
+
+
+;; {} -> [{}?, Error?]
+(defn sanitize-add [content]
+  (>>= content
+       clean-username))

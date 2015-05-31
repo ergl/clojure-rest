@@ -26,10 +26,15 @@
 
 
 ;; {} -> [{}?, Error?]
-;; Check for {{} :username}
-(defn- check-username [params]
+;; Check for {{} :username}, return error if username exists
+(defn- check-username-exists [params]
   (v/check-field params :username user-exists?))
 
+
+;; {} -> [{}?, Error?]
+;; Check for {{} :username}, return error if username doesn't exist
+(defn- check-username-not-exists [params]
+  (v/check-field params :username #(not (user-exists? %))))
 
 ;; {} -> [{}?, Error?]
 ;; Check for {{} :email}
@@ -61,12 +66,20 @@
   (=>>= params
         #(bind-to (complete-default-user %))
         check-email
-        check-username))
+        check-username-exists))
+
 
 ;; [{}?, Error?] -> [{}?, Error?]
 (defn validate-update [params]
   (=>?= params
        (check-email :email)
-       (check-username :username)
+       (check-username-exists :username)
        (check-deletion :deleted)
        (check-admin-attempt :moderator)))
+
+
+;; [{}?, Error?] -> [{}?, Error?]
+;; Checks that the username exists
+(defn validate-add [params]
+  (=>>= params
+        check-username-not-exists))
