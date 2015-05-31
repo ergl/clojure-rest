@@ -6,7 +6,7 @@
 
 (defn- user-add-routes [username]
   (routes
-    (GET "/" [] (http/not-implemented))
+    (GET "/" [] (users/get-user-contacts username))
     (POST "/" {body :body} (users/add-contact username body))
     (DELETE "/" [] (http/not-implemented))
     (OPTIONS "/" [] (http/options [:options :post :get]))
