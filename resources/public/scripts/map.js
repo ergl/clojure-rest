@@ -37,7 +37,7 @@ var map =  (function() {
 						makeContent(event).open(mapObject, eventMarker);
 					});
 
-                    eventList.push(event);
+					eventList.push(event);
 				}
 			}
 		});
