@@ -2,13 +2,13 @@ var map =  (function() {
 	"use strict";
 
 	var eventList = [];
+	var markerContent = "<div class='info-window'><h2><a href='#' id='info-link' onclick='togglePane(PaneEnum.event)'>{{title}}</a></h2><p>{{attending}} user(s) are going.</p></div>";
 
-	// {} -> google.maps.InfoWindow
-	function makeContent(config) {
-		var view = "<div class='info-window'><h2><a href='#' id='info-link' onclick='togglePane(PaneEnum.event)'>{{title}}</a></h2><p>{{attending}} user(s) are going.</p></div>";
-		var infoContent = Mustache.render(view, config);
-		return new google.maps.InfoWindow({
-			content: infoContent
+	// google.maps.Marker, google.maps.Map, google.maps.InfoWindow, String -> ()
+	function makeInfoWindow(marker, map, infoWindow, content) {
+		google.maps.event.addListener(marker, 'mouseover', function() {
+			infoWindow.setContent(content);
+			infoWindow.open(map, marker);
 		});
 	}
 
@@ -18,7 +18,8 @@ var map =  (function() {
 			type: "GET",
 			url: "api/events",
 			datatype: "json",
-			success: function (response) {
+			success: function(response) {
+				var infoWindow = new google.maps.InfoWindow();
 				for (var i = 0; i < response.length; i++) {
 					var event = {
 						id: response[i].eventsid,
@@ -33,9 +34,7 @@ var map =  (function() {
 						map: mapObject
 					});
 
-					google.maps.event.addListener(eventMarker, 'click', function() {
-						makeContent(event).open(mapObject, eventMarker);
-					});
+					makeInfoWindow(eventMarker, mapObject, infoWindow, Mustache.render(markerContent, event));
 
 					eventList.push(event);
 				}
@@ -55,7 +54,7 @@ var map =  (function() {
 
 		setupMarkers(mapCanvas);
 
-		google.maps.event.addListener(mapCanvas, 'rightclick', function (event) {
+		google.maps.event.addListener(mapCanvas, 'rightclick', function(event) {
 			togglePane(PaneEnum.create);
 			var latitude = event.latLng.lat();
 			var longitude = event.latLng.lng();
