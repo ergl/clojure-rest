@@ -1,0 +1,45 @@
+/* Create event button styles */
+#create-overlay {
+  display: none;
+}
+
+.logged-in
+#create-overlay {
+  display: block;
+  position: fixed;
+  width: 100%;
+  z-index: 15;
+}
+
+.show-create-sidebar
+#create-overlay,
+.show-user-sidebar
+#create-overlay,
+.show-event-sidebar
+#create-overlay {
+  display: none;
+}
+
+#create-button-container {
+  width: 10rem;
+  float: right;
+  padding-right: 3rem;
+}
+
+#create-button {
+  height: 100%;
+  width: 100%;
+  background-color: #895B93;
+  cursor: pointer;
+  text-align: center;
+}
+
+#create-button:hover {
+  background-color: #764F7E;
+}
+
+#create-button-text {
+  font-weight: bold;
+  color: #ffffff;
+  padding-top: 1.1rem;
+}
