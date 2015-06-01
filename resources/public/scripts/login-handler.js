@@ -27,6 +27,7 @@ function loginSubmit() {
       window.open('mod-panel.html', '_blank');
     }
     toggleLoginOverlay();
+    toggleLoggedClass();
   } else {
     alert("Bad user/pass combination!");
   }
@@ -48,6 +49,7 @@ function signupSubmit() {
   var pass = document.getElementById('signup-pass-text').value;
   if (validateSignupCredentials(email, user, pass)) {
     toggleLoginOverlay();
+    toggleLoggedClass();
   } else {
     alert("Uh, oh. Something went bad!");
   }
@@ -58,4 +60,10 @@ function signupSubmit() {
 // TODO: Actually do something
 function validateSignupCredentials(email, user, pass) {
   return true;
+}
+
+// () -> ()
+// Toggles the logged-in class, meaning that we now present a logged-in interface
+function toggleLoggedClass() {
+  document.getElementById('container').classList.toggle('logged-in');
 }
