@@ -13,7 +13,7 @@ function setup() {
     var container = document.getElementById('container');
     if (e.keyCode == ESC_KEY_CODE) {
       if (container.classList.contains('show-login-overlay')) {
-        toggleLoginOverlay();
+        loginHandler.toggleLoginOverlay();
       } else if (container.classList.contains('show-event-sidebar')) {
         togglePane(PaneEnum.event);
       } else if (container.classList.contains('show-user-sidebar')) {
