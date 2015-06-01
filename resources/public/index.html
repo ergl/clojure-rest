@@ -43,7 +43,7 @@
             <!-- Color portion of popup top box -->
             <div id="login-top-image">
               <div id="login-close-container">
-                <a href="#" onclick="toggleLoginOverlay()" id="login-close-icon"><img src="/img/assets/close-icon.png" /></a>
+                <a href="#" id="login-close-icon"><img src="/img/assets/close-icon.png" /></a>
               </div>
               <div id="login-circle-container">
                 <div id="login-circle-image"></div>
@@ -67,18 +67,18 @@
                 </div>
               </div>
               <div id="login-submit">
-                <button class="submit-button" onclick="loginSubmit()">LOG IN</button>
+                <button class="submit-button" id="login-submit-button">LOG IN</button>
               </div>
               <div id="signup-submit">
-                <button class="submit-button" onclick="signupSubmit()">SIGN UP</button>
+                <button class="submit-button" id="signup-submit-button">SIGN UP</button>
               </div>
             </div>
           </div>
           <!-- Bottom popup box containing the switch panel link -->
           <div id="login-bottom-panel">
             <div id="switch">
-              <a href="#" id="signup-link" onclick="toggleCredentialsPane()">CREATE AN ACCOUNT</a>
-              <a href="#" id="login-link" onclick="toggleCredentialsPane()">ALREADY HAVE AN ACCOUNT?</a>
+              <a href="#" id="signup-link">CREATE AN ACCOUNT</a>
+              <a href="#" id="login-link">ALREADY HAVE AN ACCOUNT?</a>
             </div>
           </div>
         </div>
@@ -144,7 +144,7 @@
         </div>
         <!-- Login Container -->
         <div class="menu-section" id="login-container">
-          <div id="login-button-wrapper" onclick="toggleLoginOverlay()">
+          <div id="login-button-wrapper">
             <span><a href="#">LOGIN</a></span>
           </div>
         </div>
