@@ -1,21 +1,5 @@
-var loginHandler = (function() {
+var LoginHandler = (function() {
     "use strict";
-
-    // () -> ()
-    // Shows the login dialog, darkens the background
-    var toggleLoginOverlay = function() {
-        $("#container").toggleClass('show-login-overlay');
-        $("#login-user-text").focus();
-    };
-
-    // () -> ()
-    // Switches between the login and the signup pane inside the overlay box
-    var toggleCredentialsPane = function () {
-        $("#login-overlay").toggleClass('show-signup-pane');
-        document.getElementById(
-            (document.getElementById('login-overlay').classList.contains('show-signup-pane'))
-                ? 'signup-email-text' : 'login-user-text').focus();
-    };
 
     // () -> ()
     // Gets the values from the login form.
@@ -38,7 +22,7 @@ var loginHandler = (function() {
             datatype: "json",
             success: function(response) {
                 localStorage.setItem('accessToken', response.token);
-                toggleLoginOverlay();
+                Overlays.toggleLoginOverlay();
                 toggleLoggedClass();
             },
             statusCode: {
@@ -94,12 +78,6 @@ var loginHandler = (function() {
     };
 
     return {
-        toggleLoginOverlay: function() {
-            toggleLoginOverlay()
-        },
-        toggleCredentialsPane: function() {
-            toggleCredentialsPane()
-        },
         loginSubmit: function() {
             loginSubmit()
         },
@@ -109,28 +87,12 @@ var loginHandler = (function() {
     }
 }());
 
-$(function (){
-    $("#login-close-icon").click(function() {
-        loginHandler.toggleLoginOverlay();
-    });
-
-    $("#login-button-wrapper").click(function() {
-        loginHandler.toggleLoginOverlay();
-    });
-
-    $("#signup-link").click(function() {
-      loginHandler.toggleCredentialsPane();
-    });
-
-    $("#login-link").click(function() {
-        loginHandler.toggleCredentialsPane();
-    });
-
+$(function () {
     $("#login-submit-button").click(function() {
-        loginHandler.loginSubmit();
+        LoginHandler.loginSubmit();
     });
 
     $("#signup-submit-button").click(function() {
-        loginHandler.signupSubmit();
+        LoginHandler.signupSubmit();
     });
 });

@@ -17,13 +17,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript" src="/scripts/mustache.js"></script>
     <link rel="stylesheet" href="/styles/create-overlay.css">
-    <script type="text/javascript" src="/scripts/main.js"></script>
     <script type="text/javascript" src="/scripts/login-handler.js"></script>
     <script type="text/javascript" src="/scripts/search-handler.js"></script>
     <script type="text/javascript" src="/scripts/view-event.js"></script>
     <script type="text/javascript" src="/scripts/create-event.js"></script>
   </head>
-  <body onload="setup()" id="container">
+  <body id="container">
       <!-- Phone notice overlay -->
       <div id="phone-overlay">
         <div id="phone-dialog">
@@ -87,7 +86,7 @@
     <!-- Create overlay: create event button -->
     <div id="create-overlay">
       <div id="create-button-container">
-        <div id="create-button" onclick="togglePane(PaneEnum.create)">
+        <div id="create-button">
           <p id="create-button-text">CREATE</p>
         </div>
       </div>
@@ -96,7 +95,7 @@
     <!-- Main content canvas -->
     <div id="content-canvas">
       <!-- Menu Sidebar -->
-      <div id="main-sidebar" onmouseover="toggleMenu()" onmouseout="toggleMenu()">
+      <div id="main-sidebar">
         <!-- Header, contains the icon and the self link -->
         <div class="menu-section" id="menu-header">
           <div id="menu-logo-icon">
@@ -166,7 +165,7 @@
       <!-- Context sidebar: View Event Panel -->
       <div class="context-sidebar" id="view-event-pane">
         <div id="event-close">
-          <a href="#" onclick="togglePane(PaneEnum.event)" class="close-arrow"><img src="/img/assets/close-arrow.png" /></a>
+          <a href="#" class="close-arrow" id="event-close-arrow"><img src="/img/assets/close-arrow.png" /></a>
         </div>
         <div id="event-header">
           <div id="event-title">
@@ -222,7 +221,7 @@
 
         <div id="event-comments">
           <div class="event-comment">
-            <a href="#" class="comment-user" onclick="togglePane(PaneEnum.user)">
+            <a href="#" class="comment-user">
               User Foo
             </a>
             <div class="comment-body">
@@ -232,7 +231,7 @@
             </div>
           </div>
           <div class="event-comment">
-            <a href="#" class="comment-user" onclick="togglePane(PaneEnum.user)">
+            <a href="#" class="comment-user">
               User Bar
             </a>
             <div class="comment-body">
@@ -242,7 +241,7 @@
             </div>
           </div>
           <div class="event-comment">
-            <a href="#" class="comment-user" onclick="togglePane(PaneEnum.user)">
+            <a href="#" class="comment-user">
               User Baz
             </a>
             <div class="comment-body">
@@ -263,7 +262,7 @@
         <div id="botones-info-user">
           <div id="botones">
             <div id="cerrar">
-              <a href="#" onclick="togglePane(PaneEnum.user)" class="close-arrow"><img src="/img/assets/close-arrow.png" /></a>
+              <a href="#" class="close-arrow" id="user-close-arrow"><img src="/img/assets/close-arrow.png" /></a>
             </div>
             <!-- TODO: Add new icon with js -->
             <div id="nuevo">
@@ -430,7 +429,7 @@
 
       <!-- Context sidebar: Create Event Panel -->
       <div class="context-sidebar" id="create-event-pane">
-        <a href="#" onclick="togglePane(PaneEnum.create)" class="close-arrow"><img src="/img/assets/close-arrow.png" /></a>
+        <a href="#" class="close-arrow" id="create-close-arrow"><img src="/img/assets/close-arrow.png" /></a>
         <form id="create-event-form">
           <div id="create-event-title-wrapper">
             <input id="create-event-title" placeholder="Enter your title here..." type="text" spellcheck="false">
@@ -473,4 +472,5 @@
     </div>
   </body>
   <script src="/scripts/map.js"></script>
+  <script type="text/javascript" src="/scripts/main.js"></script>
 </html>
