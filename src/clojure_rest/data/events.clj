@@ -8,7 +8,8 @@
             [clojure-rest.data.comments :as comments]
             [clojure-rest.sanitize.event-sanitize :as es]
             [clojure-rest.validation.event-validate :as ev]
-            [clojure-rest.util.error :refer [bind-error
+            [clojure-rest.util.error :refer [bind-to
+                                             bind-error
                                              err-not-found
                                              status-deleted
                                              err-server-error]]))
@@ -34,7 +35,7 @@
   (str brief-query
        " where (events.title like '%' || ? || '%') or "
        "(events.content like '%' || ? || '%') "
-       "group by events.eventsid limit 5"))
+       "group by events.eventsid order by events.title limit 5"))
 
 
 ;; String -> Either<{}|nil>
@@ -118,23 +119,19 @@
   (bind-error (fn [id] [(event-extract-comments! id) nil]) params))
 
 
-;; String -> [{}]?
+;; String -> [{}?]
 ;; Returns a list of 5 events that match the supplied query
 ;; Matches agains title or content
 (defn- match-events [query]
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
                                                [search-query query query]
-                                               (when-not (empty? results)
-                                                 (into {} results)))))
+                                               (into [] results))))
 
 
-;; String -> [[{}]?, Error?]
+;; String -> [[{}?], nil]
 (defn- bind-match-event [query]
-  (let [result (match-events query)]
-    (if (nil? result)
-      [nil err-not-found]
-      [result nil])))
+  (bind-to (match-events query)))
 
 
 ;; () -> Response[:body [{}]?]
@@ -169,7 +166,7 @@
        h/wrap-response))
 
 
-;; String -> Response[:body [{}?] :status Either<200|404>]
+;; String -> Response[:body [{}?] :status 200]
 ;; Returns a response with either the matches of the supplied event query, or 404 not found
 (defn search-events [query]
   (->> query

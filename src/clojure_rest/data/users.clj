@@ -22,7 +22,7 @@
 
 (def ^:private match-query
   (str "select username, profileimage from users "
-       "where username like '%' || ? || '%' limit 5"))
+       "where username like '%' || ? || '%' order by username limit 5"))
 
 
 (def ^:private deleted-query
@@ -149,22 +149,18 @@
                                                (->> (vec results)
                                                     (#(if (= ((first %) :username) nil) [] %))))))
 
-;; String -> [{}]?
+;; String -> [{}?]
 ;; Returns a list of 5 users that match the supplied username
 (defn- match-users [username]
   (sql/with-connection (db/db-connection)
                        (sql/with-query-results results
                                                [match-query username]
-                                               (when-not (empty? results)
-                                                 (into {} results)))))
+                                               (into [] results))))
 
 
-;; String -> [[{}?], Error?]
+;; String -> [[{}?], nil]
 (defn- bind-match-users [username]
-  (let [result (match-users username)]
-    (if (nil? result)
-      [nil err-not-found]
-      [result nil])))
+  (bind-to (match-users username)))
 
 
 ;; () -> Response[:body []?]
@@ -247,7 +243,7 @@
     {:status 404}))
 
 
-;; String -> Response[:body [{}?] :status Either<200|404>]
+;; String -> Response[:body [{}?] :status 200]
 ;; Returns a response with either the matches of the supplied username, or 404 not found
 (defn search-users [username]
   (->> username
