@@ -38,26 +38,14 @@ var SearchHandler = (function() {
             url: "api/users/search/" + query,
             datatype: "json",
             success: function(response) {
-                var result;
-                if ($.isArray(response)) {
-                    for (var i = 0; i < response.length; i++) {
-                        result = {
-                            username: response[i].username,
-                            profileImage: response[i].profileImage
-                        };
-                    }
-                } else {
-                    result = {
-                        username: response.username,
-                        profileImage: response.profileImage
+                for (var i = 0; i < response.length; i++) {
+                    var result = {
+                        username: response[i].username,
+                        profileImage: response[i].profileImage
                     };
-                }
-                // TODO: Display username, pic and link to user on search pane
-                console.log(result);
-            },
-            statusCode: {
-                404: function() {
-                    alert("Search returned no values!");
+
+                    // TODO: Display username, pic and link to user on search pane
+                    console.log(result);
                 }
             }
         });
@@ -69,33 +57,17 @@ var SearchHandler = (function() {
             url: "api/events/search/" + query,
             datatype: "json",
             success: function(response) {
-                var result;
-                if ($.isArray(response)) {
-                    for (var i = 0; i < response.length; i++) {
-                        result = {
-                            id: response[i].eventsid,
-                            title: response[i].title,
-                            attending: response[i].attending,
-                            latitude: response[i].latitude,
-                            longitude: response[i].longitude
-                        };
-                    }
-                } else {
-                    result = {
-                        id: response.eventsid,
-                        title: response.title,
-                        attending: response.attending,
-                        latitude: response.latitude,
-                        longitude: response.longitude
-                    }
-                }
+                for (var i = 0; i < response.length; i++) {
+                    var result = {
+                        id: response[i].eventsid,
+                        title: response[i].title,
+                        attending: response[i].attending,
+                        latitude: response[i].latitude,
+                        longitude: response[i].longitude
+                    };
 
-                // TODO: Display title and link to event on search pane
-                console.log(result);
-            },
-            statusCode: {
-                404: function() {
-                    alert("Search returned no values!");
+                    // TODO: Display title and link to event on search pane
+                    console.log(result);
                 }
             }
         });
