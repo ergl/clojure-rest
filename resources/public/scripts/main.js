@@ -103,4 +103,8 @@ $(function() {
 	$("#login-link").click(function() {
 		Overlays.toggleLoginCredentialsPane();
 	});
+
+	$("#submit-event-add-file-button").click(function () {
+		$("#submit-event-add-file").click();
+	});
 });

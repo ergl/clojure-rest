@@ -111,15 +111,15 @@
             <!-- Search widget -->
             <div id="search-pane">
               <div id="search-filters">
-                <button id="search-event-button" type="button" name="Eventos" onclick="searchEvents()" value="">Eventos</button>
-                <button id="search-user-button" type="button" name="Contactos" onclick="searchUsers()" value="">Usuarios</button>
+                <button id="search-event-button" type="button" name="Eventos" value="">Eventos</button>
+                <button id="search-user-button" type="button" name="Contactos" value="">Usuarios</button>
               </div>
               <div id="search-bottom">
                 <div id="search-box">
-                  <input id="search-input" type="text" onkeypress="searchKeyPress(event)" placeholder="Buscar...">
+                  <input id="search-input" type="text" placeholder="Buscar...">
                 </div>
                 <div id="search-button">
-                  <a href='#' onclick="searchButtonPress()">
+                  <a href='#'>
                     <img src= "/img/assets/search.png"></a>
                 </div>
               </div>
@@ -443,7 +443,7 @@
           
           <div id="create-event-action-buttons">
             <input type="submit" value="Done" id="submit-event">
-            <button id="submit-event-add-file-button" onclick="uploadFileCreateEvent()">+</button>
+            <button id="submit-event-add-file-button">+</button>
             <input type="file" id="submit-event-add-file">
           </div>
 
