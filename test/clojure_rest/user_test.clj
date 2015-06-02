@@ -87,12 +87,13 @@
   (testing "searching for an user"
     (let [response (app (mock/request :get "/api/users/search/bar"))]
       (is (= (:status response) 200))
-      (is (= ((parse-string (response :body)) "username") "bar"))))
+      (is (= ((first (parse-string (:body response))) "username") "bar"))))
   
   ;; Searching for a valid /api/users/search/:query should return 404 if no matches are found
   (testing "searching for something that does not yield any result"
     (let [response (app (mock/request :get "/api/users/search/noresults"))]
-      (is (= (:status response) 404))))
+      (is (= (:status response) 200))
+      (is (empty? (parse-string (:body response))))))
   
   (testing "adding an user as a contact"
     (let [response (app (-> (mock/request :post "/api/users/bar/contacts"
@@ -111,7 +112,7 @@
     (let [response (app (mock/request :get "/api/users/bar/contacts"))]
       (is (= (:status response) 200))
       (is (= ((first (parse-string (:body response))) "username") "baz"))))
-  
+    
   (testing "getting the contact list of a non-existing user"
     (let [response (app (mock/request :get "/api/users/hue/contacts"))]
       (is (= (:status response) 404))))
