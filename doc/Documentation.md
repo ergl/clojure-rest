@@ -18,7 +18,9 @@ To start working on the project, you'll need to install [Leiningen](http://leini
 
 ### H2
 
-We use [H2](http://www.h2database.com) as our database. For now, no installation is needed, as we are running it in RAM. Please check in the future for installation instructions.
+We use [H2](http://www.h2database.com) as our database.
+
+Go ahead and download the `.jar` file and put it on the main project folder (at the root level).
 
 ## Installation
 
@@ -40,18 +42,52 @@ We should configure the *Google Maps API* token. In `resources/public/index.html
 
 This access token is only valid for requests coming from [saleokase.github.io](http://saleokase.github.io), so you'll need a valid one for local development. You can get one at the [google developers console](https://console.developers.google.com). If you'd rather not sign up for a developer account, please email me.
 
+
+#### Database settings
+
+Go ahead and do `java -jar h2-X.X.XXX.jar` from the console - this should open a browser window with the H2 Console.
+
+![](https://dl.dropboxusercontent.com/u/29178650/h2console.png)
+
+Choose a filename, username and password - then remember to put those in `profiles.clj`:
+
+```clojure
+{:dev {:env {...
+             :h2-user "your-db-username"
+             :h2-password "your-db-password"
+             :h2-type "your-db-filepath"
+             :h2-script ""}}
+ ;; The db settings under the :test settings don't need to be changed
+ :test {:env {...
+              :h2-user ""
+              :h2-password ""
+              :h2-type "mem:documents"
+              :h2-script "INIT=RUNSCRIPT FROM './schema.sql'"}}}
+```
+
+This tells the program to use our database file when running, but skip it and use an in-memory database for the tests - this way our test can't change real data.
+
+Once this is done, click on the *Connect* button to get to the main console.
+
+![](https://dl.dropboxusercontent.com/u/29178650/h2console-1.png)
+
+Copy the contents of the `schema.sql` file and put them on the text area of the console - then click the *Run* button. Once this is done you can disconnect from the console (by clicking the top left button). You can now stop the database process by pressing `ctrl+C` on the terminal where you ran `java -jar ....`.
+
+Please note that if you forget to stop the process, the program won't run, as the database only accepts a single connection at the same time.
+
 #### Server secret key
 
 To sign our own client access tokens, we use a secret key. It's important that this key remains secret, but bear in mind that the key we use in production **will** be different from the one we use during development. This means all access tokens that we issue during development will be invalid when we go live.
 
 First, you should pick a good, random, secret key. I use a 32-byte, random base64 string, but any good random sequence generator will do.
 
-Once you have one, put it in the `profiles.clj` file:
+Once you have one, add it to the `profiles.clj` file:
 
 ```clojure
-{:dev {:dependencies [[ring/ring-mock "0.2.0"]]
-       :env {:secret-key "your-secret-key"}}
- :test {:env {:secret-key "your-secret-key"}}}
+{:dev {:env {:secret-key "your-secret-key"
+             ...}}
+ :test {:env {:secret-key "your-secret-key"
+              ...}}}
 ```
 
 Please note that without providing a secret key, the server will crash.
@@ -88,6 +124,42 @@ to this
 
 Please note that changing this will make ring write to `stdout` any incoming requests, including the ones generated during testing. I find this annoying, so I almost never turn logging on while developing.
 
+#### Profiles
+
+After going through all these steps, yout `profiles.clj` file should look like this:
+
+```clojure
+{:dev {:env {:secret-key "your-secret-key"
+             :h2-user "your-db-username"
+             :h2-password "your-db-password"
+             :h2-type "your-db-filepath"
+             :h2-script ""}}
+ :test {:env {:secret-key "your-secret-key"
+              :h2-user ""
+              :h2-password ""
+              :h2-type "mem:documents"
+              :h2-script "INIT=RUNSCRIPT FROM './schema.sql'"}}}
+```
+
+Go ahead and add `:dependencies [[ring/ring-mock "0.2.0"]]` before the `:env` section of `:dev`:
+
+```clojure
+{:dev {:dependencies [[ring/ring-mock "0.2.0"]]
+       :env {:secret-key "your-secret-key"
+             :h2-user "your-db-username"
+             :h2-password "your-db-password"
+             :h2-type "your-db-filepath"
+             :h2-script ""}}
+ :test {:env {:secret-key "your-secret-key"
+              :h2-user ""
+              :h2-password ""
+              :h2-type "mem:documents"
+              :h2-script "INIT=RUNSCRIPT FROM './schema.sql'"}}}
+
+```
+
+Now you're all set.
+
 
 ## Developing
 
@@ -121,4 +193,4 @@ Ps - If you forgot to set you *Google Maps API* key, you **will** receive an err
 
 With your terminal opened in the project folder, run `lein ring server`. This command will automatically start the backend server and open your browser on `http://localhost:5000` (You can change this setting on the `project.clj` file).
 
-This command will hotload any changes you make to any clojure file without the need to reload the server. Occasionally, you will change something and the server won't be able to reload it. In those rare cases, restarting the server will do.
+This command will hotload any changes you make to any clojure file without the need to reload the server. Occasionally, you will change something and the server won't be able to reload it (such as changes to the schema of a function). In those rare cases, restarting the server will do.
