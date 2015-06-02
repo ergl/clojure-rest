@@ -2,7 +2,8 @@
 *.json
 *.key
 .lein-env
-skase.*
+*.mv.db
+*.trace.db
 *.conf
 
 
