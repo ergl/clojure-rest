@@ -1,0 +1,46 @@
+/* TODO: Add comments */
+
+#error-overlay {
+  display: none;
+}
+
+.show-error-overlay
+#error-overlay {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.75);
+  z-index: 50;
+}
+
+#error-close-container {
+  float: left;
+}
+
+#error-close-icon img {
+  margin-top: .5rem;
+  margin-left: .5rem;
+  width: 1.5rem;
+  height: auto;
+}
+
+#error-dialog {
+position: relative;
+  margin-right: 35%;
+  margin-left: 35%;
+  margin-top: 5%;
+  width: 30%;
+  min-height: 250px;
+  height: 40%;
+	background-color: white;
+}
+
+#error-message{
+	text-align: center;
+	margin: auto;
+	font-size: 1.5rem;
+	padding-top: calc(250px/2);
+}
