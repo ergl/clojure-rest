@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/styles/main-sidebar-style.css">
     <link rel="stylesheet" href="/styles/context-sidebar-style.css">
     <link rel="stylesheet" href="/styles/login-overlay.css">
+	<link rel="stylesheet" href="/styles/error-overlay.css">
     <link rel="stylesheet" href="/styles/user-pane-style.css">
     <link rel="stylesheet" href="/styles/search-pane-style.css">
     <link rel="stylesheet" href="/styles/view-event-pane.css">
@@ -31,6 +32,18 @@
           </p>
         </div>
       </div>
+	  
+	  <div id= "error-overlay">
+		  <div id= "error-dialog">
+			  <div id="error-close-container">
+                <a href="#" id="error-close-icon"><img src="/img/assets/close-icon.png" /></a>
+              </div>
+			  <p id="error-message"></p>
+			  <script id= "error-template" type="x-tmpl-mustache">
+			  	Error: {{message}}
+			  </script>
+		  </div>
+	  </div>
 
     <!-- Login popup overlay -->
     <div id="login-overlay">
