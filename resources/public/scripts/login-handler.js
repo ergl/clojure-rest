@@ -6,7 +6,10 @@ var LoginHandler = (function() {
 	var loginSubmit = function () {
 		var user = document.getElementById('login-user-text').value;
 		var pass = document.getElementById('login-pass-text').value;
-		validateLoginCredentials(user, pass);
+        if (user && pass)
+        	validateLoginCredentials(user, pass);
+		else
+			alert("Debes rellenar usuario y contraseña");
 	};
 
 	// String String -> ()
@@ -42,7 +45,17 @@ var LoginHandler = (function() {
 		var email = document.getElementById('signup-email-text').value;
 		var user = document.getElementById('signup-user-text').value;
 		var pass = document.getElementById('signup-pass-text').value;
-		validateSignupCredentials(email, user,pass);
+        var re = /.*@.*\..*/;
+        if(email && user && pass){
+            if(re.test(email))
+                validateSignupCredentials(email, user,pass);
+            else
+                 alert("Introduce un email correcto");
+        }
+        else{
+            alert("Introduce correctamente todos los datos");
+        }
+		
 	};
 
 
@@ -88,6 +101,39 @@ var LoginHandler = (function() {
 }());
 
 $(function () {
+    
+    var ENTER_KEY_CODE = 13;
+    var enterLoginFunction = function(e){
+         e = e || window.event;
+        if (e.which == ENTER_KEY_CODE) {
+           LoginHandler.loginSubmit();
+        }
+    };
+    var enterSignupFunction = function(e){
+         e = e || window.event;
+        if (e.which == ENTER_KEY_CODE) {
+           LoginHandler.signupSubmit();
+        }
+    };
+    
+    $("#login-user-text").keyup(function(e){
+        enterLoginFunction(e);
+    });
+    $("#login-pass-text").keyup(function(e){
+        enterLoginFunction(e);
+    });
+    
+    $("#signup-email-text").keyup(function(e){
+        enterSignupFunction(e)
+    });
+    $("#signup-user-text").keyup(function(e){
+        enterSignupFunction(e)
+    });
+    $("#signup-pass-text").keyup(function(e){
+        enterSignupFunction(e)
+    });
+    
+    
 	$("#login-submit-button").click(function() {
 		LoginHandler.loginSubmit();
 	});
