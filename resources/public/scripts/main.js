@@ -32,13 +32,26 @@ var Overlays = (function() {
 						? 'signup-email-text' : 'login-user-text').focus();
 	};
 
+	var showErrorDialog = function(message){
+		var template = $("#error-template").html();
+		Mustache.parse(template);
+		$("#error-message").html(Mustache.render(template, {message: message}));
+		$("#container").addClass("show-error-overlay");
+	};
+
+	var hideErrorDialog = function() {
+		$("#container").removeClass("show-error-overlay");
+	};
+
 	return {
 		toggleLoginOverlay: function() {toggleLoginOverlay()},
 		toggleLoginCredentialsPane: function() {toggleLoginCredentialsPane()},
 		toggleUserPane: function() {toggleUserPane()},
 		toggleEventPane: function() {toggleEventPane()},
 		toggleCreatePane: function() {toggleCreatePane()},
-		toggleMenu: function() {toggleMenu()}
+		toggleMenu: function() {toggleMenu()},
+		showErrorDialog: function(message) {showErrorDialog(message)},
+		hideErrorDialog: function() {hideErrorDialog()}
 	}
 
 }());
