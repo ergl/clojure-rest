@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/styles/main-sidebar-style.css">
     <link rel="stylesheet" href="/styles/context-sidebar-style.css">
     <link rel="stylesheet" href="/styles/login-overlay.css">
+    <link rel="stylesheet" href="/styles/error-overlay.css">
     <link rel="stylesheet" href="/styles/user-pane-style.css">
     <link rel="stylesheet" href="/styles/search-pane-style.css">
     <link rel="stylesheet" href="/styles/view-event-pane.css">
@@ -29,6 +30,18 @@
           <p>
             Don't worry, pretty soon you'll be able to browse this site from a phone, but, for the time being, we're sorry to say that you won't be able to use our site.
           </p>
+        </div>
+      </div>
+
+      <div id= "error-overlay">
+        <div id= "error-dialog">
+          <div id="error-close-container">
+            <a href="#" id="error-close-icon"><img src="/img/assets/close-icon.png" /></a>
+          </div>
+          <p id="error-message"></p>
+          <script id= "error-template" type="x-tmpl-mustache">
+            Error: {{message}}
+          </script>
         </div>
       </div>
 
@@ -52,16 +65,16 @@
                 <h1>Welcome!</h1>
                 <p>Authenticate to continue to SaleOkase</p>
                 <div id="login-credentials-input">
-                  <input id="login-user-text" type="text" spellcheck="false" placeholder="username">
+                  <input class="login-input" id="login-user-text" type="text" spellcheck="false" placeholder="username">
                   <div class="login-credential-separator"></div>
-                  <input id="login-pass-text" type="password" placeholder="password">
+                  <input class="login-input" id="login-pass-text" type="password" placeholder="password">
                 </div>
                 <div id="signup-credentials-input">
-                  <input id="signup-email-text" type="email" spellcheck="false" placeholder="email">
+                  <input class="signup-input" id="signup-email-text" type="email" spellcheck="false" placeholder="email">
                   <div class="login-credential-separator"></div>
-                  <input id="signup-user-text" type="text" spellcheck="false" placeholder="username">
+                  <input class="signup-input" id="signup-user-text" type="text" spellcheck="false" placeholder="username">
                   <div class="login-credential-separator"></div>
-                  <input id="signup-pass-text" type="password" placeholder="password">
+                  <input class="signup-input" id="signup-pass-text" type="password" placeholder="password">
                 </div>
               </div>
               <div id="login-submit">
