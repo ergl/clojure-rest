@@ -6,7 +6,11 @@ var LoginHandler = (function() {
 	var loginSubmit = function () {
 		var user = document.getElementById('login-user-text').value;
 		var pass = document.getElementById('login-pass-text').value;
-		validateLoginCredentials(user, pass);
+		if (user && pass) {
+			validateLoginCredentials(user, pass);
+		} else {
+			alert("Debes rellenar usuario y contraseña");
+		}
 	};
 
 	// String String -> ()
@@ -42,7 +46,13 @@ var LoginHandler = (function() {
 		var email = document.getElementById('signup-email-text').value;
 		var user = document.getElementById('signup-user-text').value;
 		var pass = document.getElementById('signup-pass-text').value;
-		validateSignupCredentials(email, user,pass);
+		var re = /.*@.*\..*/; // test for x@x.x
+
+		if (email && user && pass && re.test(email)) {
+			validateSignupCredentials(email, user,pass);
+		} else {
+			alert("Introduce correctamente todos los datos");
+		}
 	};
 
 
@@ -88,6 +98,33 @@ var LoginHandler = (function() {
 }());
 
 $(function () {
+
+	var ENTER_KEY_CODE = 13;
+
+	var enterLoginFunction = function(e) {
+		e = e || window.event;
+		if (e.which == ENTER_KEY_CODE) {
+			LoginHandler.loginSubmit();
+		}
+	};
+
+	var enterSignupFunction = function(e) {
+		e = e || window.event;
+		if (e.which == ENTER_KEY_CODE) {
+			LoginHandler.signupSubmit();
+		}
+	};
+
+	$(".login-input").keyup(function(e) {
+		enterLoginFunction(e);
+	});
+
+
+	$(".signup-input").keyup(function(e) {
+		enterSignupFunction(e);
+	});
+
+
 	$("#login-submit-button").click(function() {
 		LoginHandler.loginSubmit();
 	});
