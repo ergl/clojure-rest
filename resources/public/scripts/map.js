@@ -42,12 +42,13 @@ var map =  (function() {
 		});
 	}
 
-	// Int, Int -> ()
-	// Creates the map at the given lat and lng
-	function createMap(lat, lng) {
+	// () -> ()
+	// Gets the user location and initializes the map to that location
+	// Then continues to watch the user location, updating the map
+	function initialize() {
 		var mapOptions = {
-			center: new google.maps.LatLng(lat, lng),
-			zoom: 10,
+			center: new google.maps.LatLng(40.417, -3.702),
+			zoom: 12,
 			disableDefaultUI: true
 		};
 
@@ -61,23 +62,13 @@ var map =  (function() {
 			var longitude = event.latLng.lng();
 			console.log(latitude + ', '  + longitude);
 		});
-	}
 
-	// () -> ()
-	// Gets the user location and initializes the map to that location
-	function initialize() {
+
 		if (navigator.geolocation) {
-			var success = function (position) {
-				createMap(position.coords.latitude, position.coords.longitude);
-			};
-
-			var error = function () {
-				createMap(40.417, -3.702); // Puerta del Sol, Madrid
-			};
-
-			navigator.geolocation.getCurrentPosition(success, error);
-		} else {
-			createMap(40.417, -3.702); // Puerta del Sol, Madrid
+			navigator.geolocation.watchPosition(function (position) {
+				var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				mapCanvas.panTo(location);
+			});
 		}
 	}
 
