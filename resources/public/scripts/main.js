@@ -63,7 +63,9 @@ $(function() {
 		e = e || window.event;
 		var classList = document.getElementById('container').classList;
 		if (e.keyCode == ESC_KEY_CODE) {
-			if (classList.contains('show-login-overlay')) {
+			if (classList.contains('show-error-overlay')) {
+				Overlays.hideErrorDialog();
+			} else if (classList.contains('show-login-overlay')) {
 				Overlays.toggleLoginOverlay();
 			} else if (classList.contains('show-event-sidebar')) {
 				Overlays.toggleEventPane();
@@ -74,6 +76,10 @@ $(function() {
 			}
 		}
 	}, false);
+
+	$("#error-close-icon").click(function () {
+		Overlays.hideErrorDialog();
+	});
 
 	$("#create-button").click(function () {
 		Overlays.toggleCreatePane();
