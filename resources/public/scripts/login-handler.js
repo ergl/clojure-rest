@@ -9,7 +9,7 @@ var LoginHandler = (function() {
 		if (user && pass) {
 			validateLoginCredentials(user, pass);
 		} else {
-			alert("Debes rellenar usuario y contraseña");
+			Overlays.showErrorDialog("Debes rellenar usuario y contraseña");
 		}
 	};
 
@@ -31,10 +31,10 @@ var LoginHandler = (function() {
 			},
 			statusCode: {
 				400: function() {
-					alert("Uh oh, something went wrong. Please try again!");
+					Overlays.showErrorDialog("Uh oh, something went wrong. Please try again!");
 				},
 				401: function() {
-					alert("Bad username / password combination!");
+					Overlays.showErrorDialog("Bad username / password combination!");
 				}
 			}
 		})
@@ -51,7 +51,7 @@ var LoginHandler = (function() {
 		if (email && user && pass && re.test(email)) {
 			validateSignupCredentials(email, user,pass);
 		} else {
-			alert("Introduce correctamente todos los datos");
+			Overlays.showErrorDialog("Introduce correctamente todos los datos");
 		}
 	};
 
@@ -72,10 +72,10 @@ var LoginHandler = (function() {
 			},
 			statusCode: {
 				400: function() {
-					alert("Seems like something went wrong, please try a different email / username");
+					Overlays.showErrorDialog("Seems like something went wrong, please try a different email / username");
 				},
 				500: function() {
-					alert("Uh oh. Something went really wrong!");
+					Overlays.showErrorDialog("Uh oh. Something went really wrong!");
 				}
 			}
 		})
