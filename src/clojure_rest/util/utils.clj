@@ -88,7 +88,7 @@
                         (has-keys? m (vec (concat k optionals))))))
 
 ;; String -> Boolean
-(defn is-uuid [u]
+(defn uuid? [u]
   (= u
      (re-find #"[a-z0-9]{8}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{12}" u)))
 
