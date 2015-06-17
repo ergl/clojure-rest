@@ -174,11 +174,10 @@
                                                    (into [] results))))))
 
 
-;; {} -> Response[:body val? :status Either<200|400|500>]
+;; {"email" "username" "password"} -> Response[:body val? :status Either<200|400|500>]
 ;; Returns a response with either the contents of the created user, a 400 bad request, or a 500 server error
 (defn create-new-user [content]
   (->> content
-       keywordize-keys
        us/sanitize-signup
        uv/validate-signup
        bind-user-insert
@@ -201,7 +200,6 @@
   (if (uv/user-exists? username)
     (do
       (->> content
-           keywordize-keys
            us/sanitize-update
            uv/validate-update
            (apply-if-present #(bind-to (assoc % :password (hash-pass (% :password)))) :password)
@@ -227,7 +225,6 @@
   (if (uv/user-exists? username)
     (do
       (->> content
-           keywordize-keys
            us/sanitize-add
            uv/validate-add
            (bind-error #(bind-to (bind-user-add username %)))

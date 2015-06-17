@@ -25,6 +25,7 @@
 ;; {} -> [{}?, Error?]
 (defn sanitize-comment [params]
   (>>= params
+       #(s/check-schema % [:author :content :parent :eventsid])
        clean-author
        clean-event-id
        clean-content))

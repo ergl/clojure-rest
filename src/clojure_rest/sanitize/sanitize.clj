@@ -48,7 +48,7 @@
 ;; Any, [] -> [{}?, Error?]
 ;; Any, [], [] -> [{}?, Error?]
 ;; See utils/variadic-comply
-(defn pre-check-adapter
+(defn check-schema
   ([m k] (if (and (map? m)
                   (variadic-comply (keywordize-keys m) k))
            [(keywordize-keys m) nil]
