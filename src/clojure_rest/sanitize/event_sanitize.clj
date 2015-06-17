@@ -39,9 +39,10 @@
        (apply-if-present #(regex-date :finaldate %) :finaldate)))
 
 
-;; {} -> [{}?, Error?]
+;; Any -> [{}?, Error?]
 (defn sanitize-create [params]
   (>>= params
+       s/input->map
        clean-author
        clean-title
        cs/clean-coordinates

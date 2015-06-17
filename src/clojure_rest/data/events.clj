@@ -149,7 +149,6 @@
 ;; Returns a response with either the contents of the created event, a 400 bad request, or a 500 server error
 (defn create-new-event [content]
   (->> content
-       keywordize-keys
        es/sanitize-create
        ev/validate-create
        bind-event-insert
