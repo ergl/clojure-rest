@@ -1,7 +1,7 @@
 (ns clojure-rest.sanitize.user-sanitize
   (:require [clojure-rest.sanitize.sanitize :as s]
             [clojure-rest.util.error :refer [>>=
-                                             >?=
+                                             =>?=
                                              bind-error
                                              apply-if-present
                                              err-bad-request]]))
@@ -27,9 +27,10 @@
   (s/clean-field params :password))
 
 
-;; {} -> [{}?, Error?]
+;; {"email" "username" "password"} -> [{:email :username :password}?, Error?]
 (defn sanitize-signup [params]
   (>>= params
+       s/input->map
        clean-email
        clean-username
        clean-password))
@@ -37,10 +38,10 @@
 
 ;; {} -> [{}?, Error?]
 (defn sanitize-update [params]
-  (>?= params
-       (clean-email :email)
-       (clean-username :username)
-       (clean-password :password)))
+  (=>?= (s/input->map params)
+        (clean-email :email)
+        (clean-username :username)
+        (clean-password :password)))
 
 
 ;; {} -> [{}?, Error?]
@@ -54,4 +55,5 @@
 ;; {} -> [{}?, Error?]
 (defn sanitize-add [content]
   (>>= content
+       #(s/check-schema % [:username])
        clean-username))

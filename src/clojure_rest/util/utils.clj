@@ -62,6 +62,31 @@
 (defn parse-float [s]
   (Float/parseFloat s))
 
+
+;; {} [] -> Boolean
+;; Tests if {} has *at most* [] keys
+(defn has-keys? [m k]
+  (every? (partial contains? m) k))
+
+
+;; {} [] -> Boolean
+;; Tests if {} has *exactly* [] keys
+(defn complies? [m schema]
+  (= (set (keys m)) (set schema)))
+
+
+;; {} [] -> Boolean
+;; {} [] [] -> Boolean
+(defn variadic-comply
+  "If no optionals schema is given, test fulfillment
+  of the schema by the given map.
+  If an optional schema is give, test fulfillment of the schema
+  and then test if the map contains at most k V optional"
+  ([m k] (complies? m k))
+  ([m k optionals] (and (complies? m k)
+                        (has-keys? m (vec (concat k optionals))))))
+
+
 ;; ---------------------------------------------------------------------
 ;; Exponential backoff solution
 ;; Credits go to Eric Normand @ LispCast
