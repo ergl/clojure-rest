@@ -109,7 +109,6 @@
 ;; {:author username :content String :parent UUID?}
 (defn create-new-comment-case [event-id content]
   (->> (assoc content :eventsid event-id)
-       keywordize-keys
        cs/sanitize-comment
        cv/validate-comment
        bind-comment-insert
