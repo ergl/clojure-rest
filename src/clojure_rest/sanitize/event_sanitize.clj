@@ -1,5 +1,6 @@
 (ns clojure-rest.sanitize.event-sanitize
   (:require [clojure-rest.sanitize.sanitize :as s]
+            [clojure-rest.auth :refer [auth-adapter]]
             [clojure-rest.sanitize.coordinate-sanitize :as cs]
             [clojure-rest.util.error :refer :all]))
 
@@ -43,6 +44,7 @@
 (defn sanitize-create [params]
   (>>= params
        s/input->map
+       auth-adapter
        clean-author
        clean-title
        cs/clean-coordinates

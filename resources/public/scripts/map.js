@@ -1,6 +1,7 @@
 var map =  (function() {
 	"use strict";
 
+	var mapCanvas;
 	var eventList = [];
 	var markerContent = "<div class='info-window'><h2><a href='#' id='info-link' onclick='togglePane(PaneEnum.event)'>{{title}}</a></h2><p>{{attending}} user(s) are going.</p></div>";
 
@@ -52,7 +53,7 @@ var map =  (function() {
 			disableDefaultUI: true
 		};
 
-		var mapCanvas = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+		mapCanvas = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
 		setupMarkers(mapCanvas);
 
@@ -70,7 +71,10 @@ var map =  (function() {
 	}
 
 	return {
-		initialize: initialize()
+		initialize: initialize(),
+		reload: function() {
+			setupMarkers(mapCanvas)
+		}
 	};
 }());
 
