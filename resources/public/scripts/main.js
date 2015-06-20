@@ -82,7 +82,7 @@ $(function() {
 	});
 
 	$("#create-button").click(function () {
-		Overlays.toggleCreatePane();
+		CreateEventHandler.setupPane();
 	});
 
 	$("#event-close-arrow").click(function () {

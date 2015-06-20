@@ -57,10 +57,7 @@ var map =  (function() {
 		setupMarkers(mapCanvas);
 
 		google.maps.event.addListener(mapCanvas, 'rightclick', function(event) {
-			Overlays.toggleCreatePane();
-			var latitude = event.latLng.lat();
-			var longitude = event.latLng.lng();
-			console.log(latitude + ', '  + longitude);
+			CreateEventHandler.setupPane(event);
 		});
 
 
