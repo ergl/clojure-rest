@@ -89,10 +89,10 @@
 ;; Adding the issuer key with the appropiate username
 ;; Returns an error if (params :token) is not valid
 (defn- bind-token-validation [params]
-  (let [user-id (validate-token (params :token))]
+  (let [user-id (:username (validate-token (params :token)))]
     (if (nil? user-id)
       [nil err-unauthorized]
-      [(-> params (dissoc :token) (assoc :issuer user-id)) nil])))
+      [(-> params (dissoc :token) (assoc :author user-id)) nil])))
 
 
 ;; {} -> [{}?, Error?]
@@ -114,7 +114,7 @@
        h/wrap-response))
 
 
-;; {} -> [{}?, Error?]
+;; {:token? ...} -> [{:issuer ...}?, Error?]
 ;; Checks if there is a :token key in the supplied map
 ;; If it does, and it is valid, it dissocs said key and assocs the issuer username
 ;; If anything goes wrong, returns an error

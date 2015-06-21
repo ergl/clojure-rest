@@ -1,12 +1,13 @@
 var map =  (function() {
 	"use strict";
 
+	var mapCanvas;
 	var eventList = [];
 	var markerContent = "<div class='info-window'><h2><a href='#' id='info-link' onclick='togglePane(PaneEnum.event)'>{{title}}</a></h2><p>{{attending}} user(s) are going.</p></div>";
 
 	// google.maps.Marker, google.maps.Map, google.maps.InfoWindow, String -> ()
 	function makeInfoWindow(marker, map, infoWindow, content) {
-		google.maps.event.addListener(marker, 'mouseover', function() {
+		google.maps.event.addListener(marker, 'click', function() {
 			infoWindow.setContent(content);
 			infoWindow.open(map, marker);
 		});
@@ -52,15 +53,12 @@ var map =  (function() {
 			disableDefaultUI: true
 		};
 
-		var mapCanvas = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+		mapCanvas = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
 		setupMarkers(mapCanvas);
 
 		google.maps.event.addListener(mapCanvas, 'rightclick', function(event) {
-			Overlays.toggleCreatePane();
-			var latitude = event.latLng.lat();
-			var longitude = event.latLng.lng();
-			console.log(latitude + ', '  + longitude);
+			CreateEventHandler.setupPane(event);
 		});
 
 
@@ -73,7 +71,10 @@ var map =  (function() {
 	}
 
 	return {
-		initialize: initialize()
+		initialize: initialize(),
+		reload: function() {
+			setupMarkers(mapCanvas)
+		}
 	};
 }());
 

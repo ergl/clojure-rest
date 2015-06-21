@@ -93,6 +93,9 @@ var LoginHandler = (function() {
 		},
 		signupSubmit: function() {
 			signupSubmit()
+		},
+		isLogedIn: function() {
+			return document.getElementById('container').classList.contains('logged-in');
 		}
 	}
 }());
