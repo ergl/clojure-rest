@@ -50,6 +50,8 @@ var CreateEventHandler = (function() {
 		if (LoginHandler.isLogedIn()) {
 			latitude = null;
 			longitude = null;
+			document.getElementById('create-event-title').value = "";
+			document.getElementById('create-event-description').value = "";
 			updateAddressInput();
 
 			if (e) {
@@ -142,6 +144,24 @@ var CreateEventHandler = (function() {
 }());
 
 $(function () {
+
+	var ENTER_KEY_CODE = 13;
+
+	var enterSubmitEvent = function(e) {
+		e = e || window.event;
+		if (e.which == ENTER_KEY_CODE) {
+			CreateEventHandler.submit();
+		}
+	};
+
+	$("#create-event-title").keyup(function(e) {
+		enterSubmitEvent(e);
+	});
+
+	$("#create-event-location").keyup(function(e) {
+		enterSubmitEvent(e);
+	});
+
 	$("#submit-new-event").click(function() {
 		CreateEventHandler.submit();
 	});

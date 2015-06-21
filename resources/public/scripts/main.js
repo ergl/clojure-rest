@@ -77,6 +77,10 @@ $(function() {
 		}
 	}, false);
 
+	if (localStorage.getItem('accessToken') !== null) {
+		$("#container").toggleClass('logged-in');
+	}
+
 	$("#error-close-icon").click(function () {
 		Overlays.hideErrorDialog();
 	});
