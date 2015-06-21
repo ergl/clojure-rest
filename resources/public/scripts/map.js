@@ -7,7 +7,7 @@ var map =  (function() {
 
 	// google.maps.Marker, google.maps.Map, google.maps.InfoWindow, String -> ()
 	function makeInfoWindow(marker, map, infoWindow, content) {
-		google.maps.event.addListener(marker, 'mouseover', function() {
+		google.maps.event.addListener(marker, 'click', function() {
 			infoWindow.setContent(content);
 			infoWindow.open(map, marker);
 		});
