@@ -77,16 +77,19 @@ var CreateEventHandler = (function() {
 			initialdate: initialdate
 		};
 
+		console.log(payload);
+
 		$.ajax({
 			type: "POST",
 			url: "api/events",
 			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify(payload),
 			dataType: "json",
-			success: function() {
+			success: function(response) {
 				// TODO: Do anything else?
 				Overlays.toggleCreatePane();
 				map.reload();
+				console.log(response)
 			},
 			statusCode: {
 				400: function() {
@@ -98,8 +101,6 @@ var CreateEventHandler = (function() {
 				}
 			}
 		});
-
-		console.log(payload);
 	};
 
 	// () -> ()
