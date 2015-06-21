@@ -12,7 +12,13 @@
                                                       :name "a"
                                                       :username "a"
                                                       :password "a"}))
-                      (mock/content-type "application/json")))]
+                      (mock/content-type "application/json")))
+
+        user-token ((parse-string
+                      (:body (app (-> (mock/request :post "/api/auth"
+                                                    (generate-string {:username "a"
+                                                                      :password "a"}))
+                                      (mock/content-type "application/json"))))) "token")]
     
     ;; A get request to /api/events should always return 200 no matter what
     (testing "requesting events"
@@ -20,11 +26,11 @@
         (is (= (response :status) 200))))
     
     ;; Creating an event should return its id, title, position and number of attendees
-    (testing "creating an event"
+    (testing "creating an event - the right way"
       (let [response (app (-> (mock/request :post "/api/events"
-                                            (generate-string {:author "a"
+                                            (generate-string {:token user-token
                                                               :title "This is an event title"
-                                                              :content "This is an event description"
+                                                              :content "This is the event description"
                                                               :coordinates "40, -3"
                                                               :initialdate "9999-12-31"}))
                               (mock/content-type "application/json")))]
@@ -41,7 +47,7 @@
         (is (= (response :status) 200))
         (is (= ((parse-string (response :body)) "eventsid") event-id))
         (is (= ((parse-string (response :body)) "author") "a"))
-        (is (= ((parse-string (response :body)) "content") "This is an event description"))
+        (is (= ((parse-string (response :body)) "content") "This is the event description"))
         (is (= ((parse-string (response :body)) "commentcount") 0))))
     
     (testing "searching an event"

@@ -145,8 +145,8 @@
                                                    (vec results))))))
 
 
-;; {} -> Response[:body val? :status Either<200|400|500>]
-;; Returns a response with either the contents of the created event, a 400 bad request, or a 500 server error
+;; {} -> Response[:body val? :status Either<200|400|401>]
+;; Returns a response with either the contents of the created event, a 400 bad request or a 401 not authorized
 (defn create-new-event [content]
   (->> content
        es/sanitize-create

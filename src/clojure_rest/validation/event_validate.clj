@@ -20,10 +20,10 @@
 ;; {} -> [{}?, Error?]
 ;; Check for {{} :author}
 (defn- check-author [params]
-  (v/check-field params :author #(not (uv/user-exists? %))))
+  (v/check-field params :author (complement uv/user-exists?)))
 
 
-;; {} -> {}
+;; {:author ...} -> {:usersid ...}
 ;; Transforms the author from username to uuid
 (defn- username->uuid [params]
   (assoc params :author ((users/get-user-id (params :author)) :usersid)))

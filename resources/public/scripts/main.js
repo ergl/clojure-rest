@@ -77,12 +77,16 @@ $(function() {
 		}
 	}, false);
 
+	if (localStorage.getItem('accessToken') !== null) {
+		$("#container").toggleClass('logged-in');
+	}
+
 	$("#error-close-icon").click(function () {
 		Overlays.hideErrorDialog();
 	});
 
 	$("#create-button").click(function () {
-		Overlays.toggleCreatePane();
+		CreateEventHandler.setupPane();
 	});
 
 	$("#event-close-arrow").click(function () {
