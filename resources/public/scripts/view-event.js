@@ -26,6 +26,14 @@ var ViewEventHandler = (function() {
 					template = $("#event-content-template").html();
 					$("#event-content-wrapper").html(Mustache.render(template, event));
 
+					if (LoginHandler.isLogedIn()) {
+						$("#event-submit").show();
+						$("#event-more").show();
+					} else {
+						$("#event-submit").hide();
+						$("#event-more").hide();
+					}
+
 					Overlays.toggleEventPane();
 				});
 

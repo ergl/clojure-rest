@@ -41,11 +41,11 @@
       <div id="event-title">
         <span>{{title}}</span>
       </div>
+      <div id="event-creator">
+        <span>Organized by: {{author}}</span>
+      </div>
       <div id="event-location">
         <span>{{location}}</span>
-      </div>
-      <div id="event-creator">
-        <span>{{author}}</span>
       </div>
     </script>
 
@@ -53,7 +53,9 @@
       <div id="event-content" data-eventId = "{{eventId}}">
         <div id="event-body">{{content}}</div>
         <div id="comments-title">
-          <button id="retrieve-comments"> Ver {{commentCount}} comentarios</button>
+          <div id="retrieve-comments-wrapper">
+            <button id="retrieve-comments"> Ver {{commentCount}} comentarios</button>
+          </div>
         </div>
       </div>
     </script>
@@ -214,7 +216,9 @@
           <a href="#" class="close-arrow" id="event-close-arrow"><img src="/img/assets/close-arrow.png" /></a>
         </div>
 
-        <div id="event-header"></div>
+        <div id="event-header">
+          Seems like there should be something here...
+        </div>
 
         <div id="event-submit">
           <input type="submit" class="butonTik" value="" />
@@ -249,7 +253,9 @@
           </div>
         </div>
 
-        <div id="event-content-wrapper"></div>
+        <div id="event-content-wrapper">
+          Too spooky
+        </div>
       </div>
 
       <!-- Context sidebar: User Panel -->
