@@ -2,8 +2,6 @@ var map =  (function() {
 	"use strict";
 
 	var mapCanvas;
-	var eventList = [];
-	var markerContent = "<div class='info-window'><h2><a href='#' id='info-link' onclick='togglePane(PaneEnum.event)'>{{title}}</a></h2><p>{{attending}} user(s) are going.</p></div>";
 
 	// google.maps.Marker, google.maps.Map, google.maps.InfoWindow, String -> ()
 	function makeInfoWindow(marker, map, infoWindow, content) {
@@ -21,9 +19,16 @@ var map =  (function() {
 			datatype: "json",
 			success: function(response) {
 				var infoWindow = new google.maps.InfoWindow();
+				google.maps.event.addListener(infoWindow, 'domready', function() {
+					$("a[id^=markerEvent]").click(function (e) {
+						var id = document.getElementById(e.target.id).dataset.eventid;
+						// TODO: Call function to show pane dialog with this id
+					});
+				});
 				for (var i = 0; i < response.length; i++) {
 					var event = {
 						id: response[i].eventsid,
+						markerid: "markerEvent" + i,
 						title: response[i].title,
 						attending: response[i].attending,
 						latitude: response[i].latitude,
@@ -35,9 +40,9 @@ var map =  (function() {
 						map: mapObject
 					});
 
-					makeInfoWindow(eventMarker, mapObject, infoWindow, Mustache.render(markerContent, event));
-
-					eventList.push(event);
+					var template = $('#marker-template').html();
+					var rendered = Mustache.render(template, event);
+					makeInfoWindow(eventMarker, mapObject, infoWindow, rendered);
 				}
 			}
 		});
