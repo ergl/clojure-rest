@@ -82,13 +82,9 @@ body {
 }
 
 /* Marker pop-up element link */
-#info-link {
+[id^=markerEvent] {
   text-decoration: none;
   color: inherit;
-}
-
-#info-link:hover {
-  text-decoration: underline;
 }
 
 @media only screen and (max-width: 660px) {

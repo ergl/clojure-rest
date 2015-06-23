@@ -22,6 +22,12 @@
     <script type="text/javascript" src="/scripts/login-handler.js"></script>
     <script type="text/javascript" src="/scripts/search-handler.js"></script>
     <script type="text/javascript" src="/scripts/view-event.js"></script>
+    <script id="marker-template" type="x-tmpl-mustache">
+      <div class='info-window'>
+        <h2><a href='#' id='{{markerid}}' data-eventid='{{id}}'>{{title}}</a></h2>
+        <p>{{attending}} user(s) are going</p>
+      </div>
+    </script>
   </head>
   <body id="container">
       <!-- Phone notice overlay -->
