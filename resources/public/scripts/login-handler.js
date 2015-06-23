@@ -26,6 +26,7 @@ var LoginHandler = (function() {
 			datatype: "json",
 			success: function(response) {
 				localStorage.setItem('accessToken', response.token);
+				$("#login-button-text").text("LOGOUT");
 				Overlays.toggleLoginOverlay();
 				toggleLoggedClass();
 			},
@@ -87,6 +88,32 @@ var LoginHandler = (function() {
 		$("#container").toggleClass('logged-in');
 	};
 
+	var logout = function() {
+		var authToken = localStorage.getItem('accessToken');
+		$.ajax({
+			type: "DELETE",
+			url: "api/auth/" + authToken,
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({token: authToken}),
+			datatype: "json",
+			success: function(data, textStatus, jqXHR) {
+				if (jqXHR.status == '204') {
+					toggleLoggedClass();
+					$("#login-button-text").text("LOGIN");
+					localStorage.removeItem('accessToken');
+				}
+			},
+			statusCode: {
+				403: function() {
+					Overlays.showErrorDialog("You did something bad, and you know it");
+				},
+				404: function() {
+					Overlays.showErrorDialog("Well this is embarrassing, seems you are already logged out...");
+				}
+			}
+		});
+	};
+
 	return {
 		loginSubmit: function() {
 			loginSubmit()
@@ -96,6 +123,9 @@ var LoginHandler = (function() {
 		},
 		isLogedIn: function() {
 			return document.getElementById('container').classList.contains('logged-in');
+		},
+		logout: function() {
+			logout();
 		}
 	}
 }());
