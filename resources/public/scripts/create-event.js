@@ -88,7 +88,6 @@ var CreateEventHandler = (function() {
 			data: JSON.stringify(payload),
 			dataType: "json",
 			success: function(response) {
-				// TODO: Do anything else?
 				Overlays.toggleCreatePane();
 				map.reload();
 				console.log(response)
