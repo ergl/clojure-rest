@@ -130,4 +130,9 @@ $(function() {
 	$("#submit-event-add-file-button").click(function () {
 		$("#submit-event-add-file").click();
 	});
+
+	$("#retrieve-comments").click(function() {
+		var id = document.getElementById('event-template').dataset.eventId;
+		ViewEventHandler.viewComments(id);
+	})
 });

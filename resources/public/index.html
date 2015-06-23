@@ -22,15 +22,48 @@
     <script type="text/javascript" src="/scripts/login-handler.js"></script>
     <script type="text/javascript" src="/scripts/search-handler.js"></script>
     <script type="text/javascript" src="/scripts/view-event.js"></script>
+
+
+    <!--___________Templates___________-->
+
+    <script id="error-template" type="x-tmpl-mustache">
+      Error: {{message}}
+    </script>
+
     <script id="marker-template" type="x-tmpl-mustache">
       <div class='info-window'>
         <h2><a href='#' id='{{markerid}}' data-eventid='{{id}}'>{{title}}</a></h2>
         <p>{{attending}} user(s) are going</p>
       </div>
     </script>
+
+    <script id="event-header-template" type="x-tmpl-mustache">
+      <div id="event-title">
+        <span>{{title}}</span>
+      </div>
+      <div id="event-creator">
+        <span>Organized by: {{author}}</span>
+      </div>
+      <div id="event-location">
+        <span>{{location}}</span>
+      </div>
+    </script>
+
+    <script id="event-content-template" type="x-tmpl-mustache">
+      <div id="event-content" data-eventId = "{{eventId}}">
+        <div id="event-body">{{content}}</div>
+        <div id="comments-title">
+          <div id="retrieve-comments-wrapper">
+            <button id="retrieve-comments"> Ver {{commentCount}} comentarios</button>
+          </div>
+        </div>
+      </div>
+    </script>
+
   </head>
   <body id="container">
-      <!-- Phone notice overlay -->
+
+      <!--___________Phone notice overlay___________-->
       <div id="phone-overlay">
         <div id="phone-dialog">
           <h1>Phone version isn't quite ready yet!</h1>
@@ -46,19 +79,13 @@
             <a href="#" id="error-close-icon"><img src="/img/assets/close-icon.png" /></a>
           </div>
           <p id="error-message"></p>
-          <script id= "error-template" type="x-tmpl-mustache">
-            Error: {{message}}
-          </script>
         </div>
       </div>
 
-    <!-- Login popup overlay -->
+    <!--___________Login popup overlay___________-->
     <div id="login-overlay">
-        <!-- Popup main box -->
         <div id="dialog-box">
-          <!-- Top popup box-->
           <div id="login-top-panel">
-            <!-- Color portion of popup top box -->
             <div id="login-top-image">
               <div id="login-close-container">
                 <a href="#" id="login-close-icon"><img src="/img/assets/close-icon.png" /></a>
@@ -92,6 +119,7 @@
               </div>
             </div>
           </div>
+
           <!-- Bottom popup box containing the switch panel link -->
           <div id="login-bottom-panel">
             <div id="switch">
@@ -183,19 +211,13 @@
 
       <!-- Context sidebar: View Event Panel -->
       <div class="context-sidebar" id="view-event-pane">
+
         <div id="event-close">
           <a href="#" class="close-arrow" id="event-close-arrow"><img src="/img/assets/close-arrow.png" /></a>
         </div>
+
         <div id="event-header">
-          <div id="event-title">
-            <span>TITULO DEL EVENTO</span>
-          </div>
-          <div id="event-location">
-            <span>LOCALIZACION</span>
-          </div>
-          <div id="event-creator">
-            <span>CREATOR</span>
-          </div>
+          Seems like there should be something here...
         </div>
 
         <div id="event-submit">
@@ -205,6 +227,7 @@
         <div id="event-more">
           <input type="button" class="butonPlus" value="" onclick="toggleAddUser()"/>
         </div>
+
         <div id="componente-usuario">
           <div id="search-user">
             <img class="user-im" src="/img/assets/search.png" />
@@ -230,49 +253,8 @@
           </div>
         </div>
 
-        <div id="event-body">
-          Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla...Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla...Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla...Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla..Cuerpo ejemplo del evento.. bla bla bla.. lo pasaremos muy bien... bla bla bla.. muchos datos muy interesantes.. bla bla bla
-        </div>
-
-        <div id="comments-title">
-          <span>Comentarios</span>
-        </div>
-
-        <div id="event-comments">
-          <div class="event-comment">
-            <a href="#" class="comment-user">
-              User Foo
-            </a>
-            <div class="comment-body">
-              <p>
-                Ayy lmao
-              </p>
-            </div>
-          </div>
-          <div class="event-comment">
-            <a href="#" class="comment-user">
-              User Bar
-            </a>
-            <div class="comment-body">
-              <p>
-                This event sucks
-              </p>
-            </div>
-          </div>
-          <div class="event-comment">
-            <a href="#" class="comment-user">
-              User Baz
-            </a>
-            <div class="comment-body">
-              <p>
-                Had a good chuckle with this!
-              </p>
-            </div>
-          </div>
-          <div id="add-comment">
-            <textarea id="body-comment" spellcheck="false" placeholder="Introduce tu comentario..." onkeypress="cleanupCommentOnEnter(event)"></textarea>
-            <input type="submit" id="submit-comment" onclick="cleanupComment()"/>
-          </div>
+        <div id="event-content-wrapper">
+          Too spooky
         </div>
       </div>
 
@@ -473,4 +455,5 @@
   <script src="/scripts/map.js"></script>
   <script type="text/javascript" src="/scripts/main.js"></script>
   <script type="text/javascript" src="/scripts/create-event.js"></script>
+  <script type="text/javascript" src="/scripts/geocode.js"></script>
 </html>
