@@ -79,6 +79,7 @@ $(function() {
 
 	if (localStorage.getItem('accessToken') !== null) {
 		$("#container").toggleClass('logged-in');
+		$("#login-button-text").text("LOGOUT");
 	}
 
 	$("#error-close-icon").click(function () {
@@ -116,7 +117,11 @@ $(function() {
 	});
 
 	$("#login-button-wrapper").click(function() {
-		Overlays.toggleLoginOverlay();
+		if (LoginHandler.isLogedIn()) {
+			LoginHandler.logout();
+		} else {
+			Overlays.toggleLoginOverlay();
+		}
 	});
 
 	$("#signup-link").click(function() {
@@ -130,4 +135,9 @@ $(function() {
 	$("#submit-event-add-file-button").click(function () {
 		$("#submit-event-add-file").click();
 	});
+
+	$("#retrieve-comments").click(function() {
+		var id = document.getElementById('event-template').dataset.eventId;
+		ViewEventHandler.viewComments(id);
+	})
 });
