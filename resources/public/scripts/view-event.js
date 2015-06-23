@@ -4,7 +4,7 @@ var ViewEventHandler = (function() {
 	var viewEvent = function(id) {
 		$.ajax({
 			type: "GET",
-			url: "api/events/" + eventId,
+			url: "api/events/" + id,
 			datatype: "json",
 			success: function(response) {
 				var event = {
@@ -14,7 +14,7 @@ var ViewEventHandler = (function() {
 					content: response.content,
 					latitude: response.latitude,
 					longitude: response.longitude,
-					commentCount: response.commentCount
+					commentCount: response.commentcount
 				};
 
 				Utils.reverseGeocode(event.latitude, event.longitude, function(results) {
@@ -25,6 +25,8 @@ var ViewEventHandler = (function() {
 
 					template = $("#event-content-template").html();
 					$("#event-content-wrapper").html(Mustache.render(template, event));
+
+					Overlays.toggleEventPane();
 				});
 
 

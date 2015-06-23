@@ -22,7 +22,7 @@ var map =  (function() {
 				google.maps.event.addListener(infoWindow, 'domready', function() {
 					$("a[id^=markerEvent]").click(function (e) {
 						var id = document.getElementById(e.target.id).dataset.eventid;
-						// TODO: Call function to show pane dialog with this id
+						ViewEventHandler.viewEvent(id);
 					});
 				});
 				for (var i = 0; i < response.length; i++) {
