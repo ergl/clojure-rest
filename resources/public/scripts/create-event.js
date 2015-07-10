@@ -33,7 +33,7 @@ var CreateEventHandler = (function() {
 	};
 
 	// String, String, String, Int, Int, String -> ()
-	var sendEvent = function(authToken, title, content, lat, lng, initialdate) {
+	var sendEvent = function(authToken, title, content, lat, lng, initialDate) {
 		var coordinateString = lat + ", " + lng;
 
 		var payload = {
@@ -41,7 +41,7 @@ var CreateEventHandler = (function() {
 			title: title,
 			content: content,
 			coordinates: coordinateString,
-			initialdate: initialdate
+			initialdate: initialDate
 		};
 
 		console.log(payload);
@@ -81,7 +81,8 @@ var CreateEventHandler = (function() {
 		}
 
 		var authToken = localStorage.getItem('accessToken');
-		var initialdate = moment().format('YYYY-MM-DD');
+		var initialDate
+		var initialDate = moment().format('YYYY-MM-DD');
 
 		if (!authToken) {
 			Overlays.showErrorDialog("You monster! - You haven't logged in");
@@ -89,14 +90,14 @@ var CreateEventHandler = (function() {
 		}
 
 		if (latitude && longitude) {
-			sendEvent(authToken, title, content, latitude, longitude, initialdate);
+			sendEvent(authToken, title, content, latitude, longitude, initialDate);
 		} else {
 			Utils.geocode(address, function(lat, lng) {
-				sendEvent(authToken, title, content, lat, lng, initialdate);
+				sendEvent(authToken, title, content, lat, lng, initialDate);
 			});
 		}
 	};
-	
+
 	return {
 		setupPane: function(e) {
 			setupPane(e)
