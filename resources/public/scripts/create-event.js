@@ -6,8 +6,7 @@ var CreateEventHandler = (function() {
 
 	// String -> ()
 	var updateAddressInput = function(content) {
-		content = content || "";
-		document.getElementById('create-event-location').value = content;
+		document.getElementById('create-event-location').value = content || "";
 	};
 
 	// Window.Event -> ()
