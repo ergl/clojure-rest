@@ -11,24 +11,24 @@ var CreateEventHandler = (function() {
 
 	// Window.Event -> ()
 	var setupPane = function(e) {
-		if (LoginHandler.isLogedIn()) {
-			latitude = null;
-			longitude = null;
-			document.getElementById('create-event-title').value = "";
-			document.getElementById('create-event-description').value = "";
-			updateAddressInput();
+		if (!LoginHandler.isLogedIn()) return;
 
-			if (e) {
-				latitude = e.latLng.lat();
-				longitude = e.latLng.lng();
+		latitude = null;
+		longitude = null;
+		document.getElementById('create-event-title').value = "";
+		document.getElementById('create-event-description').value = "";
+		updateAddressInput();
 
-				Utils.reverseGeocode(latitude, longitude, function(results) {
-					updateAddressInput((results[1]) ? results[1].formatted_address : "Try another address maybe?")
-				});
-			}
+		if (e) {
+			latitude = e.latLng.lat();
+			longitude = e.latLng.lng();
 
-			Overlays.toggleCreatePane();
+			Utils.reverseGeocode(latitude, longitude, function(results) {
+				updateAddressInput((results[1]) ? results[1].formatted_address : "Try another address maybe?")
+			});
 		}
+
+		Overlays.toggleCreatePane();
 	};
 
 	// String, String, String, Int, Int, String -> ()
