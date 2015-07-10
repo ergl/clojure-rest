@@ -114,20 +114,15 @@ var LoginHandler = (function() {
 		});
 	};
 
+
 	return {
-		loginSubmit: function() {
-			loginSubmit()
-		},
-		signupSubmit: function() {
-			signupSubmit()
-		},
+		loginSubmit: loginSubmit,
+		signupSubmit: signupSubmit,
 		isLogedIn: function() {
 			return document.getElementById('container').classList.contains('logged-in');
 		},
-		logout: function() {
-			logout();
-		}
-	}
+		logout: logout
+	};
 }());
 
 $(function () {

@@ -35,12 +35,9 @@ var Utils = (function () {
         });
     };
 
+
     return {
-        geocode: function(address, callback) {
-            geocodeWrapper(address, callback)
-        },
-        reverseGeocode: function(lat, lng, callback) {
-            reverseGeocodeWrapper(lat, lng, callback)
-        }
-    }
+        geocode: geocodeWrapper,
+        reverseGeocode: reverseGeocodeWrapper
+    };
 }());

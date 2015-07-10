@@ -117,13 +117,10 @@ var CreateEventHandler = (function() {
 		return paddedString;
 	};
 
+
 	return {
-		setupPane: function(e) {
-			setupPane(e)
-		},
-		submit: function() {
-			eventSubmit();
-		}
+		setupPane: setupPane,
+		submit: eventSubmit
 	};
 }());
 

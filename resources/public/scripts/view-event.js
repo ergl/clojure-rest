@@ -71,13 +71,9 @@ var ViewEventHandler = (function() {
 
 
 	return {
-		viewEvent: function(id) {
-			viewEvent(id)
-		},
-		viewComments: function(id) {
-			viewComments(id)
-		}
-	}
+		viewEvent: viewEvent,
+		viewComments: viewComments
+	};
 }());
 
 // () -> ()

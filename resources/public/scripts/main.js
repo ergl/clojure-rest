@@ -43,17 +43,17 @@ var Overlays = (function() {
 		$("#container").removeClass("show-error-overlay");
 	};
 
-	return {
-		toggleLoginOverlay: function() {toggleLoginOverlay()},
-		toggleLoginCredentialsPane: function() {toggleLoginCredentialsPane()},
-		toggleUserPane: function() {toggleUserPane()},
-		toggleEventPane: function() {toggleEventPane()},
-		toggleCreatePane: function() {toggleCreatePane()},
-		toggleMenu: function() {toggleMenu()},
-		showErrorDialog: function(message) {showErrorDialog(message)},
-		hideErrorDialog: function() {hideErrorDialog()}
-	}
 
+	return {
+		toggleLoginOverlay: toggleLoginOverlay,
+		toggleLoginCredentialsPane: toggleLoginCredentialsPane,
+		toggleUserPane: toggleUserPane,
+		toggleEventPane: toggleEventPane,
+		toggleCreatePane: toggleCreatePane,
+		toggleMenu: toggleMenu,
+		showErrorDialog: showErrorDialog,
+		hideErrorDialog: hideErrorDialog
+	};
 }());
 
 $(function() {

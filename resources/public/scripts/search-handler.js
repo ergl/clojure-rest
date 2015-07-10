@@ -73,10 +73,11 @@ var SearchHandler = (function() {
         });
     };
 
+
     return {
-        searchUsers: function() {searchUsers()},
-        searchEvents: function() {searchEvents()},
-        searchQuery: function() {searchQuery()}
+        searchUsers: searchUsers,
+        searchEvents: searchEvents,
+        searchQuery: searchQuery
     };
 }());
 

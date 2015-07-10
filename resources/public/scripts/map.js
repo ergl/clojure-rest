@@ -75,6 +75,7 @@ var map =  (function() {
 		}
 	}
 
+
 	return {
 		initialize: initialize,
 		reload: function() {
