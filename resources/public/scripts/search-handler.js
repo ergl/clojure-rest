@@ -86,7 +86,7 @@ $(function () {
     var ENTER_KEY_CODE = 13;
     $("#search-input").keyup(function (e) {
         e = e || window.event;
-        if (e.which == ENTER_KEY_CODE) {
+        if (e.which === ENTER_KEY_CODE) {
             SearchHandler.searchQuery();
         }
     });

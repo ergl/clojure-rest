@@ -62,7 +62,7 @@ $(function() {
 	document.addEventListener('keydown', function(e) {
 		e = e || window.event;
 		var classList = document.getElementById('container').classList;
-		if (e.keyCode == ESC_KEY_CODE) {
+		if (e.keyCode === ESC_KEY_CODE) {
 			if (classList.contains('show-error-overlay')) {
 				Overlays.hideErrorDialog();
 			} else if (classList.contains('show-login-overlay')) {

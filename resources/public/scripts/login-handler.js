@@ -131,14 +131,14 @@ $(function () {
 
 	var enterLoginFunction = function(e) {
 		e = e || window.event;
-		if (e.which == ENTER_KEY_CODE) {
+		if (e.which === ENTER_KEY_CODE) {
 			LoginHandler.loginSubmit();
 		}
 	};
 
 	var enterSignupFunction = function(e) {
 		e = e || window.event;
-		if (e.which == ENTER_KEY_CODE) {
+		if (e.which === ENTER_KEY_CODE) {
 			LoginHandler.signupSubmit();
 		}
 	};

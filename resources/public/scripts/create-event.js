@@ -129,7 +129,7 @@ $(function () {
 
 	var enterSubmitEvent = function(e) {
 		e = e || window.event;
-		if (e.which == ENTER_KEY_CODE) {
+		if (e.which === ENTER_KEY_CODE) {
 			CreateEventHandler.submit();
 		}
 	};
