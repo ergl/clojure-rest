@@ -81,8 +81,7 @@ var CreateEventHandler = (function() {
 		}
 
 		var authToken = localStorage.getItem('accessToken');
-		var initialDate
-		var initialDate = moment().format('YYYY-MM-DD');
+		var initialDate = computeDateOfToday();
 
 		if (!authToken) {
 			Overlays.showErrorDialog("You monster! - You haven't logged in");
@@ -98,6 +97,26 @@ var CreateEventHandler = (function() {
 		}
 	};
 
+	var computeDateOfToday = function() {
+		var now = new Date();
+
+		return [
+			now.getFullYear().toString(),
+			padWithZerosIfNecessary((now.getMonth() + 1).toString(), 2),
+			padWithZerosIfNecessary(now.getDate().toString(), 2)
+		].join('-');
+	};
+
+	var padWithZerosIfNecessary = function(aString, desiredLength) {
+		var paddedString = aString;
+
+		while (paddedString.length < desiredLength) {
+			paddedString = '0' + paddedString;
+		}
+
+		return paddedString;
+	};
+
 	return {
 		setupPane: function(e) {
 			setupPane(e)
@@ -105,7 +124,7 @@ var CreateEventHandler = (function() {
 		submit: function() {
 			eventSubmit();
 		}
-	}
+	};
 }());
 
 $(function () {
