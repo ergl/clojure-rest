@@ -134,15 +134,9 @@ $(function () {
 		}
 	};
 
-	$("#create-event-title").keyup(function(e) {
-		enterSubmitEvent(e);
-	});
+	$("#create-event-title").keyup(enterSubmitEvent);
 
-	$("#create-event-location").keyup(function(e) {
-		enterSubmitEvent(e);
-	});
+	$("#create-event-location").keyup(enterSubmitEvent);
 
-	$("#submit-new-event").click(function() {
-		CreateEventHandler.submit();
-	});
+	$("#submit-new-event").click(CreateEventHandler.submit);
 });

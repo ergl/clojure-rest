@@ -91,15 +91,9 @@ $(function () {
         }
     });
 
-    $("#search-button").click(function () {
-        SearchHandler.searchQuery();
-    });
+    $("#search-button").click(SearchHandler.searchQuery);
 
-    $("#search-event-button").click(function () {
-        SearchHandler.searchEvents();
-    });
+    $("#search-event-button").click(SearchHandler.searchEvents);
 
-    $("#search-user-button").click(function () {
-        SearchHandler.searchUsers();
-    });
+    $("#search-user-button").click(SearchHandler.searchUsers);
 });

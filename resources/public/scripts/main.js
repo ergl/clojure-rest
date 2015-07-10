@@ -82,39 +82,25 @@ $(function() {
 		$("#login-button-text").text("LOGOUT");
 	}
 
-	$("#error-close-icon").click(function () {
-		Overlays.hideErrorDialog();
+	$("#error-close-icon").click(Overlays.hideErrorDialog);
+
+	$("#create-button").click(function() {
+	    CreateEventHandler.setupPane();
 	});
 
-	$("#create-button").click(function () {
-		CreateEventHandler.setupPane();
-	});
+	$("#event-close-arrow").click(Overlays.toggleEventPane);
 
-	$("#event-close-arrow").click(function () {
-		Overlays.toggleEventPane();
-	});
+	$("#user-close-arrow").click(Overlays.toggleUserPane);
 
-	$("#user-close-arrow").click(function () {
-		Overlays.toggleUserPane();
-	});
+	$("#create-close-arrow").click(Overlays.toggleCreatePane);
 
-	$("#create-close-arrow").click(function () {
-		Overlays.toggleCreatePane();
-	});
+	$(".comment-user").click(Overlays.toggleUserPane);
 
-	$(".comment-user").click(function () {
-		Overlays.toggleUserPane();
-	});
+	$("#main-sidebar")
+		.mouseover(Overlays.toggleMenu)
+		.mouseout(Overlays.toggleMenu);
 
-	$("#main-sidebar").mouseover(function () {
-		Overlays.toggleMenu();
-	}).mouseout(function () {
-		Overlays.toggleMenu();
-	});
-
-	$("#login-close-icon").click(function() {
-		Overlays.toggleLoginOverlay();
-	});
+	$("#login-close-icon").click(Overlays.toggleLoginOverlay);
 
 	$("#login-button-wrapper").click(function() {
 		if (LoginHandler.isLogedIn()) {
@@ -124,13 +110,9 @@ $(function() {
 		}
 	});
 
-	$("#signup-link").click(function() {
-		Overlays.toggleLoginCredentialsPane();
-	});
+	$("#signup-link").click(Overlays.toggleLoginCredentialsPane);
 
-	$("#login-link").click(function() {
-		Overlays.toggleLoginCredentialsPane();
-	});
+	$("#login-link").click(Overlays.toggleLoginCredentialsPane);
 
 	$("#submit-event-add-file-button").click(function () {
 		$("#submit-event-add-file").click();
@@ -139,5 +121,5 @@ $(function() {
 	$("#retrieve-comments").click(function() {
 		var id = document.getElementById('event-template').dataset.eventId;
 		ViewEventHandler.viewComments(id);
-	})
+	});
 });

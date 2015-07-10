@@ -143,21 +143,13 @@ $(function () {
 		}
 	};
 
-	$(".login-input").keyup(function(e) {
-		enterLoginFunction(e);
-	});
+	$(".login-input").keyup(enterLoginFunction);
 
 
-	$(".signup-input").keyup(function(e) {
-		enterSignupFunction(e);
-	});
+	$(".signup-input").keyup(enterSignupFunction);
 
 
-	$("#login-submit-button").click(function() {
-		LoginHandler.loginSubmit();
-	});
+	$("#login-submit-button").click(LoginHandler.loginSubmit);
 
-	$("#signup-submit-button").click(function() {
-		LoginHandler.signupSubmit();
-	});
+	$("#signup-submit-button").click(LoginHandler.signupSubmit);
 });
