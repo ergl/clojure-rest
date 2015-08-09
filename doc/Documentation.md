@@ -26,7 +26,7 @@ Go ahead and download the `.jar` file and put it on the main project folder (at 
 
 First, pick a spot for your project folder.
 
-Run `git clone https://github.com/SaleOkase/SaleOkase.git`. This command should clone all the source code and assets into the `saleokase` directory.
+Run `git clone https://github.com/ergl/saleokase.git`. This command should clone all the source code and assets into the `saleokase` directory.
 
 If you haven't installed Leiningen yet, you should do it now, as we're going to need it for the rest of the tutorial.
 
@@ -40,14 +40,14 @@ We should configure the *Google Maps API* token. In `resources/public/index.html
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu2jTpsKWwFMvxPz77ZJHMhXWPYsNZueY"></script>
 ```
 
-This access token is only valid for requests coming from [saleokase.github.io](http://saleokase.github.io), so you'll need a valid one for local development. You can get one at the [google developers console](https://console.developers.google.com). If you'd rather not sign up for a developer account, please email me.
+This access token is only valid for requests coming from the old static site, so you'll need a valid one for local development. You can get one at the [google developers console](https://console.developers.google.com).
 
 
 #### Database settings
 
 Go ahead and do `java -jar h2-X.X.XXX.jar` from the console - this should open a browser window with the H2 Console.
 
-![](https://dl.dropboxusercontent.com/u/29178650/h2console.png)
+![](./assets/h2console.png)
 
 Choose a filename, username and password - then remember to put those in `profiles.clj`:
 
@@ -69,7 +69,7 @@ This tells the program to use our database file when running, but skip it and us
 
 Once this is done, click on the *Connect* button to get to the main console.
 
-![](https://dl.dropboxusercontent.com/u/29178650/h2console-1.png)
+![](./assets/h2console-1.png)
 
 Copy the contents of the `schema.sql` file and put them on the text area of the console - then click the *Run* button. Once this is done you can disconnect from the console (by clicking the top left button). You can now stop the database process by pressing `ctrl+C` on the terminal where you ran `java -jar ....`.
 
@@ -167,30 +167,6 @@ Point your terminal to  the `saleokase` folder, and run `lein deps`. This comman
 
 Then, run `lein test` to check that the project does build and runs correctly. If you receive any error, please check the Configuration section. If that does not help, please send me a message or open an issue.
 
-#### Frontend / Client
+With your terminal opened in the project folder, run `lein ring server-headless`. This command will automatically start the backend server.
 
-With your terminal opened in the project folder, run `lein run`. This command should automatically start the backend server and start listening on `http://localhost:5000` (You can change this setting on the `project.clj` file).
-
-Then, open `resources/public` with your favorite text editor. For this tutorial I will be using [Brackets](http://brackets.io).
-
-![](https://dl.dropboxusercontent.com/u/29178650/f1.png)
-
-To open the *live preview*, where you can change the code on the fly and see the updates as soon as they happen, you can press the top-right lightning icon. However, Brackets will open another url, and you won't be able to make requests to the server.
-
-To fix this, you'll have to change the *Live Preview* URL. You can do this in *File* > *Project Settings*.
-
-![](https://dl.dropboxusercontent.com/u/29178650/f2.png)
-
-Here, enter the local url, the port will be 5000 by default, but if you changed it earlier, put that one instead.
-
-![](https://dl.dropboxusercontent.com/u/29178650/f3.png)
-
-Now you're all set!
-
-Ps - If you forgot to set you *Google Maps API* key, you **will** receive an error when opening the page about not having a valid access token for the *Google Maps API* - don't worry, just send me an email.
-
-### Backend / Server
-
-With your terminal opened in the project folder, run `lein ring server`. This command will automatically start the backend server and open your browser on `http://localhost:5000` (You can change this setting on the `project.clj` file).
-
-This command will hotload any changes you make to any clojure file without the need to reload the server. Occasionally, you will change something and the server won't be able to reload it (such as changes to the schema of a function). In those rare cases, restarting the server will do.
+This command will also reload any changes you make to any clojure file without restarting the server. Occasionally, you will change something and the server won't be able to reload it (such as changes to the schema of a function). In those rare cases, restarting the server will do.
