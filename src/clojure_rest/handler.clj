@@ -30,23 +30,15 @@
  	(route/resources "/")
   
   (context "/api" []
-
            (context "/auth" [] auth-routes)
-           
            (context "/users" [] user-routes)
-           
            (context "/events" [] event-routes)
-           
            (context "/comments" [] comment-routes)
-           
            (context "/coordinates" [] coordinate-routes)
-           
+
            (OPTIONS "/" [] (http/options [:options] {:version "0.1.0-SNAPSHOT"}))
-           
            (ANY "/" [] (http/method-not-allowed [:options]))
-           
            (route/not-found {:status err-not-found}))
-  
   (route/not-found {:status err-not-found}))
 
 
