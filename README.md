@@ -1,4 +1,4 @@
-# SaleOkase [![Build Status](https://travis-ci.org/ergl/clojure-rest.svg?branch=master)](https://travis-ci.org/ergl/clojure-rest)
+# SaleOkase [![Build Status](https://travis-ci.org/ergl/saleokase.svg?branch=develop)](https://travis-ci.org/ergl/saleokase)
 
 > "Sale, o k ase?" - Capa
 
