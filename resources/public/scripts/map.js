@@ -79,7 +79,7 @@ var map =  (function() {
 	return {
 		initialize: initialize,
 		reload: function() {
-			setupMarkers(mapCanvas)
+			setupMarkers(mapCanvas);
 		}
 	};
 }());

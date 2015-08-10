@@ -38,7 +38,7 @@ var LoginHandler = (function() {
 					Overlays.showErrorDialog("Bad username / password combination!");
 				}
 			}
-		})
+		});
 	};
 
 	// () -> ()
@@ -79,7 +79,7 @@ var LoginHandler = (function() {
 					Overlays.showErrorDialog("Uh oh. Something went really wrong!");
 				}
 			}
-		})
+		});
 	};
 
 	// () -> ()

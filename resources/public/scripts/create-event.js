@@ -24,7 +24,7 @@ var CreateEventHandler = (function() {
 			longitude = e.latLng.lng();
 
 			Utils.reverseGeocode(latitude, longitude, function(results) {
-				updateAddressInput((results[1]) ? results[1].formatted_address : "Try another address maybe?")
+				updateAddressInput((results[1]) ? results[1].formatted_address : "Try another address maybe?");
 			});
 		}
 
@@ -54,7 +54,7 @@ var CreateEventHandler = (function() {
 			success: function(response) {
 				Overlays.toggleCreatePane();
 				map.reload();
-				console.log(response)
+				console.log(response);
 			},
 			statusCode: {
 				400: function() {
