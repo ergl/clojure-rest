@@ -5,7 +5,7 @@ var ViewEventHandler = (function() {
 		$.ajax({
 			type: "GET",
 			url: "api/events/" + id,
-			datatype: "json",
+			dataType: "json",
 			success: function(response) {
 				var event = {
 					id: id,
@@ -52,7 +52,7 @@ var ViewEventHandler = (function() {
 		$.ajax({
 			type: "GET",
 			url: "api/events/" + eventId + "/comments",
-			datatype: "json",
+			dataType: "json",
 			success: function(response) {
 				var comments = {
 					id: response.commentsId,

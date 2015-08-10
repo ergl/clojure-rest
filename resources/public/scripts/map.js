@@ -16,7 +16,7 @@ var map =  (function() {
 		$.ajax({
 			type: "GET",
 			url: "api/events",
-			datatype: "json",
+			dataType: "json",
 			success: function(response) {
 				var infoWindow = new google.maps.InfoWindow();
 				google.maps.event.addListener(infoWindow, 'domready', function() {

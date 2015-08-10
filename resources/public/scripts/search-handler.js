@@ -36,7 +36,7 @@ var SearchHandler = (function() {
         $.ajax({
             type: "GET",
             url: "api/users/search/" + query,
-            datatype: "json",
+            dataType: "json",
             success: function(response) {
                 for (var i = 0; i < response.length; i++) {
                     var result = {
@@ -55,7 +55,7 @@ var SearchHandler = (function() {
         $.ajax({
             type: "GET",
             url: "api/events/search/" + query,
-            datatype: "json",
+            dataType: "json",
             success: function(response) {
                 for (var i = 0; i < response.length; i++) {
                     var result = {

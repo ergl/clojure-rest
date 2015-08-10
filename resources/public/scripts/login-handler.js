@@ -23,7 +23,7 @@ var LoginHandler = (function() {
 			url: "api/auth",
 			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify({username: user, password: pass}),
-			datatype: "json",
+			dataType: "json",
 			success: function(response) {
 				localStorage.setItem('accessToken', response.token);
 				$("#login-button-text").text("LOGOUT");
@@ -95,7 +95,7 @@ var LoginHandler = (function() {
 			url: "api/auth/" + authToken,
 			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify({token: authToken}),
-			datatype: "json",
+			dataType: "json",
 			success: function(data, textStatus, jqXHR) {
 				if (jqXHR.status === 204) {
 					toggleLoggedClass();
