@@ -6,34 +6,33 @@ var CreateEventHandler = (function() {
 
 	// String -> ()
 	var updateAddressInput = function(content) {
-		content = content || "";
-		document.getElementById('create-event-location').value = content;
+		document.getElementById('create-event-location').value = content || "";
 	};
 
 	// Window.Event -> ()
 	var setupPane = function(e) {
-		if (LoginHandler.isLogedIn()) {
-			latitude = null;
-			longitude = null;
-			document.getElementById('create-event-title').value = "";
-			document.getElementById('create-event-description').value = "";
-			updateAddressInput();
+		if (!LoginHandler.isLogedIn()) return;
 
-			if (e) {
-				latitude = e.latLng.lat();
-				longitude = e.latLng.lng();
+		latitude = null;
+		longitude = null;
+		document.getElementById('create-event-title').value = "";
+		document.getElementById('create-event-description').value = "";
+		updateAddressInput();
 
-				Utils.reverseGeocode(latitude, longitude, function(results) {
-					updateAddressInput((results[1]) ? results[1].formatted_address : "Try another address maybe?")
-				});
-			}
+		if (e) {
+			latitude = e.latLng.lat();
+			longitude = e.latLng.lng();
 
-			Overlays.toggleCreatePane();
+			Utils.reverseGeocode(latitude, longitude, function(results) {
+				updateAddressInput((results[1]) ? results[1].formatted_address : "Try another address maybe?");
+			});
 		}
+
+		Overlays.toggleCreatePane();
 	};
 
 	// String, String, String, Int, Int, String -> ()
-	var sendEvent = function(authToken, title, content, lat, lng, initialdate) {
+	var sendEvent = function(authToken, title, content, lat, lng, initialDate) {
 		var coordinateString = lat + ", " + lng;
 
 		var payload = {
@@ -41,7 +40,7 @@ var CreateEventHandler = (function() {
 			title: title,
 			content: content,
 			coordinates: coordinateString,
-			initialdate: initialdate
+			initialdate: initialDate
 		};
 
 		console.log(payload);
@@ -55,7 +54,7 @@ var CreateEventHandler = (function() {
 			success: function(response) {
 				Overlays.toggleCreatePane();
 				map.reload();
-				console.log(response)
+				console.log(response);
 			},
 			statusCode: {
 				400: function() {
@@ -81,7 +80,7 @@ var CreateEventHandler = (function() {
 		}
 
 		var authToken = localStorage.getItem('accessToken');
-		var initialdate = moment().format('YYYY-MM-DD');
+		var initialDate = computeDateOfToday();
 
 		if (!authToken) {
 			Overlays.showErrorDialog("You monster! - You haven't logged in");
@@ -89,22 +88,39 @@ var CreateEventHandler = (function() {
 		}
 
 		if (latitude && longitude) {
-			sendEvent(authToken, title, content, latitude, longitude, initialdate);
+			sendEvent(authToken, title, content, latitude, longitude, initialDate);
 		} else {
 			Utils.geocode(address, function(lat, lng) {
-				sendEvent(authToken, title, content, lat, lng, initialdate);
+				sendEvent(authToken, title, content, lat, lng, initialDate);
 			});
 		}
 	};
-	
-	return {
-		setupPane: function(e) {
-			setupPane(e)
-		},
-		submit: function() {
-			eventSubmit();
+
+	var computeDateOfToday = function() {
+		var now = new Date();
+
+		return [
+			now.getFullYear().toString(),
+			padWithZerosIfNecessary((now.getMonth() + 1).toString(), 2),
+			padWithZerosIfNecessary(now.getDate().toString(), 2)
+		].join('-');
+	};
+
+	var padWithZerosIfNecessary = function(aString, desiredLength) {
+		var paddedString = aString;
+
+		while (paddedString.length < desiredLength) {
+			paddedString = '0' + paddedString;
 		}
-	}
+
+		return paddedString;
+	};
+
+
+	return {
+		setupPane: setupPane,
+		submit: eventSubmit
+	};
 }());
 
 $(function () {
@@ -113,20 +129,14 @@ $(function () {
 
 	var enterSubmitEvent = function(e) {
 		e = e || window.event;
-		if (e.which == ENTER_KEY_CODE) {
+		if (e.which === ENTER_KEY_CODE) {
 			CreateEventHandler.submit();
 		}
 	};
 
-	$("#create-event-title").keyup(function(e) {
-		enterSubmitEvent(e);
-	});
+	$("#create-event-title").keyup(enterSubmitEvent);
 
-	$("#create-event-location").keyup(function(e) {
-		enterSubmitEvent(e);
-	});
+	$("#create-event-location").keyup(enterSubmitEvent);
 
-	$("#submit-new-event").click(function() {
-		CreateEventHandler.submit();
-	});
+	$("#submit-new-event").click(CreateEventHandler.submit);
 });
