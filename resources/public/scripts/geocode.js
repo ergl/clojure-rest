@@ -5,7 +5,7 @@ var Utils = (function () {
         var geocoder = new google.maps.Geocoder();
         var latlng = new google.maps.LatLng(lat, lng);
         geocoder.geocode({"latLng": latlng}, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
+            if (status === google.maps.GeocoderStatus.OK) {
                 if (callback && typeof(callback) === 'function') {
                     callback(results);
                 } else {
@@ -21,9 +21,9 @@ var Utils = (function () {
     var geocodeWrapper = function(address, callback) {
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode({"address": address}, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                latitude = results[0].geometry.location.A;
-                longitude = results[0].geometry.location.F;
+            if (status === google.maps.GeocoderStatus.OK) {
+                var latitude = results[0].geometry.location.A;
+                var longitude = results[0].geometry.location.F;
                 if (callback && typeof(callback) === 'function') {
                     callback(latitude, longitude);
                 } else {
@@ -35,12 +35,9 @@ var Utils = (function () {
         });
     };
 
+
     return {
-        geocode: function(address, callback) {
-            geocodeWrapper(address, callback)
-        },
-        reverseGeocode: function(lat, lng, callback) {
-            reverseGeocodeWrapper(lat, lng, callback)
-        }
-    }
+        geocode: geocodeWrapper,
+        reverseGeocode: reverseGeocodeWrapper
+    };
 }());

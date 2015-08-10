@@ -36,7 +36,7 @@ var SearchHandler = (function() {
         $.ajax({
             type: "GET",
             url: "api/users/search/" + query,
-            datatype: "json",
+            dataType: "json",
             success: function(response) {
                 for (var i = 0; i < response.length; i++) {
                     var result = {
@@ -55,7 +55,7 @@ var SearchHandler = (function() {
         $.ajax({
             type: "GET",
             url: "api/events/search/" + query,
-            datatype: "json",
+            dataType: "json",
             success: function(response) {
                 for (var i = 0; i < response.length; i++) {
                     var result = {
@@ -73,10 +73,11 @@ var SearchHandler = (function() {
         });
     };
 
+
     return {
-        searchUsers: function() {searchUsers()},
-        searchEvents: function() {searchEvents()},
-        searchQuery: function() {searchQuery()}
+        searchUsers: searchUsers,
+        searchEvents: searchEvents,
+        searchQuery: searchQuery
     };
 }());
 
@@ -85,20 +86,14 @@ $(function () {
     var ENTER_KEY_CODE = 13;
     $("#search-input").keyup(function (e) {
         e = e || window.event;
-        if (e.which == ENTER_KEY_CODE) {
+        if (e.which === ENTER_KEY_CODE) {
             SearchHandler.searchQuery();
         }
     });
 
-    $("#search-button").click(function () {
-        SearchHandler.searchQuery();
-    });
+    $("#search-button").click(SearchHandler.searchQuery);
 
-    $("#search-event-button").click(function () {
-        SearchHandler.searchEvents();
-    });
+    $("#search-event-button").click(SearchHandler.searchEvents);
 
-    $("#search-user-button").click(function () {
-        SearchHandler.searchUsers();
-    });
+    $("#search-user-button").click(SearchHandler.searchUsers);
 });

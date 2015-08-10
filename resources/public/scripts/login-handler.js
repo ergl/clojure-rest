@@ -23,7 +23,7 @@ var LoginHandler = (function() {
 			url: "api/auth",
 			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify({username: user, password: pass}),
-			datatype: "json",
+			dataType: "json",
 			success: function(response) {
 				localStorage.setItem('accessToken', response.token);
 				$("#login-button-text").text("LOGOUT");
@@ -38,7 +38,7 @@ var LoginHandler = (function() {
 					Overlays.showErrorDialog("Bad username / password combination!");
 				}
 			}
-		})
+		});
 	};
 
 	// () -> ()
@@ -79,7 +79,7 @@ var LoginHandler = (function() {
 					Overlays.showErrorDialog("Uh oh. Something went really wrong!");
 				}
 			}
-		})
+		});
 	};
 
 	// () -> ()
@@ -95,9 +95,9 @@ var LoginHandler = (function() {
 			url: "api/auth/" + authToken,
 			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify({token: authToken}),
-			datatype: "json",
+			dataType: "json",
 			success: function(data, textStatus, jqXHR) {
-				if (jqXHR.status == '204') {
+				if (jqXHR.status === 204) {
 					toggleLoggedClass();
 					$("#login-button-text").text("LOGIN");
 					localStorage.removeItem('accessToken');
@@ -114,20 +114,15 @@ var LoginHandler = (function() {
 		});
 	};
 
+
 	return {
-		loginSubmit: function() {
-			loginSubmit()
-		},
-		signupSubmit: function() {
-			signupSubmit()
-		},
+		loginSubmit: loginSubmit,
+		signupSubmit: signupSubmit,
 		isLogedIn: function() {
 			return document.getElementById('container').classList.contains('logged-in');
 		},
-		logout: function() {
-			logout();
-		}
-	}
+		logout: logout
+	};
 }());
 
 $(function () {
@@ -136,33 +131,25 @@ $(function () {
 
 	var enterLoginFunction = function(e) {
 		e = e || window.event;
-		if (e.which == ENTER_KEY_CODE) {
+		if (e.which === ENTER_KEY_CODE) {
 			LoginHandler.loginSubmit();
 		}
 	};
 
 	var enterSignupFunction = function(e) {
 		e = e || window.event;
-		if (e.which == ENTER_KEY_CODE) {
+		if (e.which === ENTER_KEY_CODE) {
 			LoginHandler.signupSubmit();
 		}
 	};
 
-	$(".login-input").keyup(function(e) {
-		enterLoginFunction(e);
-	});
+	$(".login-input").keyup(enterLoginFunction);
 
 
-	$(".signup-input").keyup(function(e) {
-		enterSignupFunction(e);
-	});
+	$(".signup-input").keyup(enterSignupFunction);
 
 
-	$("#login-submit-button").click(function() {
-		LoginHandler.loginSubmit();
-	});
+	$("#login-submit-button").click(LoginHandler.loginSubmit);
 
-	$("#signup-submit-button").click(function() {
-		LoginHandler.signupSubmit();
-	});
+	$("#signup-submit-button").click(LoginHandler.signupSubmit);
 });
