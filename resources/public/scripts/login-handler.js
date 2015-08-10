@@ -97,7 +97,7 @@ var LoginHandler = (function() {
 			data: JSON.stringify({token: authToken}),
 			datatype: "json",
 			success: function(data, textStatus, jqXHR) {
-				if (jqXHR.status == '204') {
+				if (jqXHR.status === 204) {
 					toggleLoggedClass();
 					$("#login-button-text").text("LOGIN");
 					localStorage.removeItem('accessToken');
