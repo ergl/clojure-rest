@@ -1,23 +1,40 @@
 (defproject clojure-rest "0.1.0-SNAPSHOT"
-  :description "REST service for saleokase.github.io"
+  :description "REST service for saleokase"
   :url "http://github.com/ergl/clojure-rest"
   :license {:name "General Public License - v 3"
             :url "https://www.gnu.org/licenses/gpl-3.0-standalone.html"
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.6.0"]
+
+                 ; erlang-style pattern matching
+                 [org.clojure/core.match "0.3.0-alpha4"]
+                 [defun "0.2.0"]
+
+                 ; annotations
+                 [prismatic/schema "1.0.1"]
+
+                 ; routes, responses and web server
                  [compojure "1.3.3"]
                  [ring/ring-json "0.3.1"]
-                 [com.mchange/c3p0 "0.9.2.1"]
-                 ;; Last version has new syntax
-                 ;; TODO: Upgrade to new syntax
-                 [org.clojure/java.jdbc "0.2.3"]
-                 [com.h2database/h2 "1.4.187"]
+                 [ring/ring-jetty-adapter "1.3.2"]
+
+                 ; json de/encoder
                  [cheshire "5.4.0"]
+
+                 ; thread pooling
+                 [com.mchange/c3p0 "0.9.2.1"]
+
+                 ; database and sql
+                 [com.h2database/h2 "1.4.187"]
+                 [org.clojure/java.jdbc "0.2.3"] ; TODO: Upgrade to new syntax
+
+                 ; HMAC, hashing and encription
                  [buddy "0.5.2"]
-                 [buddy/buddy-hashers "0.4.2"]
-                 [environ "1.0.0"]
                  [pandect "0.5.2"]
-                 [ring/ring-jetty-adapter "1.3.2"]]
+                 [buddy/buddy-hashers "0.4.2"]
+
+                 ; environment variables
+                 [environ "1.0.0"]]
   :plugins [[lein-ring "0.9.3"]
             [lein-environ "1.0.0"]]
   :ring {:handler clojure-rest.handler/app
@@ -25,7 +42,7 @@
          :auto-reload? true
          :auto-refresh? false}
   :profiles
-  {:dev {:dependencies [[ring/ring-mock "0.2.0"]]}}
+  {:dev {:dependencies [[ring/ring-mock "0.3.0"]]}}
   :main clojure-rest.app)
 
 ;; documentation may be found here
