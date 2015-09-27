@@ -19,6 +19,7 @@
    :user (env :h2-user)
    :password (env :h2-password)})
 
+
 ;; DatabaseConfig -> ComboPooledDataSource
 ;; Sets up the connection pool for the given database configuration
 (defn pool [config]
@@ -35,6 +36,7 @@
 
 ;; Delays the execution of the pool until called with deref
 (def pooled-db (delay (pool db-config)))
+
 
 ;; () -> ComboPooledDataSource
 ;; Derefences the connection pool
