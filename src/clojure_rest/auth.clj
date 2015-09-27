@@ -9,7 +9,10 @@
             [clojure.java.jdbc :as sql]
             [clojure-rest.util.http :as h]
             [clojure-rest.util.error :refer :all]
-            [clojure-rest.util.utils :refer :all]))
+            [clojure-rest.util.utils :refer :all]
+            [schema.core :as s]
+            [clojure.core.match :refer [match]]
+            [defun :refer [defun-]]))
 
 
 ;; Either<String|nil>
@@ -19,21 +22,46 @@
   (when-let [key (env :secret-key)] key))
 
 
-;; () -> String
-;; Generates a random token with username$timestamp$hmac(sha256, username$timestamp)
-(defn- generate-session [username date]
+(def ^:private auth-schema
+  {:username s/Str :password s/Str})
+
+
+(defn- valid-auth-schema? [schema]
+  (valid-schema? auth-schema schema))
+
+
+(defn- generate-session
+  "
+  () -> Str
+  Generates a random token with username$timestamp$hmac(sha256, username$timestamp)
+  "
+  [username date]
   (str username "$" date "$" (sha256-hmac (str username "$" date) SECRET-KEY)))
 
 
-;; String -> Boolean
-;; Check if token exists in database
-(defn- token-exists? [token]
+;; {} -> [{}?, Error?]
+;; Checks for the :token field in the given map
+(defn- check-token [params]
+  (if (params :token)
+    [params nil]
+    [nil err-unauthorized]))
+
+
+(defn- token-exists?
+  "
+  Str -> Bool
+  Check if token exists in database
+  "
+  [token]
   (v/field-exists-in-table? "sessions" "token" token))
 
 
-;; UUID -> String
-;; Creates a token and inserts it into the session table, then returns that token
-(defn- make-token! [username user-id]
+(defn- make-token!
+  "
+  UUID -> Str
+  Creates a token and inserts it into the session table, then returns that token
+  "
+  [username user-id]
   (try-backoff []
                (let [now (time-now)
                      token (generate-session username now)]
@@ -44,29 +72,40 @@
                  token)))
 
 
-;; [{}?, Error?] -> [String?, Error?]
-;; Gets the user's uuid and generates an auth token
-(defn- bind-token-gen [params]
-  (bind-error (fn [value]
-                (let [user-id (users/get-user-id (value :username))]
-                  (if (nil? user-id)
-                    [nil err-not-found]
-                    [{:token (make-token! (value :username) (user-id :usersid))} nil]))) params))
-
-
-;; String -> ()
-;; Deletes the token from the database
-(defn- revoke-token! [token]
+(defn- revoke-token!
+  "
+  Str -> ()
+  Delete the token from the database
+  "
+  [token]
   (sql/with-connection (db/db-connection)
                        (sql/delete-rows :sessions ["token = ?" token])))
 
 
-;; [{}?, Error?] -> [{}?, Error?]
-;; Checks if the given user / pass combination is correct, returns an error tuple
-(defn- bind-validate [params]
-  (bind-error #(if (users/pass-matches? (% :username) (% :password))
-                 [% nil]
-                 [nil err-unauthorized]) params))
+(defn- validate-auth
+  "
+  {:username Str :password Str} -> Either [:ok {}] | [:err Natural]
+  Check if the given user / pass combination is correct
+  "
+  [{:keys [username password] :as input}]
+  (if (users/pass-matches? username password)
+    [:ok input] [:err err-unauthorized]))
+
+
+(defun- bind-validate
+  ([[:ok content]] (validate-auth content))
+  ([[:err error]] [:err error]))
+
+
+(defn- token-gen [{:keys [username password]}]
+  (if-let [{user-id :usersid} (users/get-user-id username)]
+    [:ok {:token (make-token! username user-id)}]
+    [:err err-not-found]))
+
+
+(defun- bind-token-gen
+  ([[:ok content]] (token-gen content))
+  ([[:err error]] [:err error]))
 
 
 ;; String -> Either<{}|nil>
@@ -95,23 +134,22 @@
       [(-> params (dissoc :token) (assoc :author user-id)) nil])))
 
 
-;; {} -> [{}?, Error?]
-;; Checks for the :token field in the given map
-(defn- check-token [params]
-  (if (params :token)
-    [params nil]
-    [nil err-unauthorized]))
+(defn- process-auth
+  "
+  Given a correct user/pass combination, return an auth token;
+  return error otherwise
+  "
+  [input]
+  (match [(-> [:ok input] bind-validate bind-token-gen)]
+         [[:ok content]] (response content)
+         [[:err error]] (h/empty-response-with-code error)))
 
 
-;; {} -> Response [:body nil :status Natural]
-;; Destructures the given content into username and password for validation ingestion
-(defn auth-handler [content]
-  (->> content
-       clojure.walk/keywordize-keys
-       us/sanitize-auth
-       bind-validate
-       bind-token-gen
-       h/wrap-response))
+(defn auth-handler
+  [content]
+  (match [(clojure.walk/keywordize-keys content)]
+         [(input :guard valid-auth-schema?)] (process-auth input)
+         :else (h/bad-request)))
 
 
 ;; {:token? ...} -> [{:issuer ...}?, Error?]
