@@ -45,14 +45,6 @@
 
 
 ;; {} -> [{}?, Error?]
-;; Checks if the given map contains the username and password fields
-(defn sanitize-auth [content]
-  (->> content
-       (#(if (% :username) [% nil] [nil err-bad-request]))
-       ((fn [c] (bind-error #(if (% :password) [% nil] [nil err-bad-request]) c)))))
-
-
-;; {} -> [{}?, Error?]
 (defn sanitize-add [content]
   (>>= content
        #(s/check-schema % [:username])

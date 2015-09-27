@@ -34,6 +34,11 @@
   (empty-response-with-code err-not-implemented))
 
 
+;; () -> Response[:body nil :status 400]
+(defn bad-request []
+  (empty-response-with-code err-bad-request))
+
+
 ;; () -> Response[:body nil :status 401]
 (defn unauthorized []
   (empty-response-with-code err-unauthorized))
@@ -42,6 +47,7 @@
 ;; () -> Response[:body nil :status 403]
 (defn forbidden []
   (empty-response-with-code err-forbidden))
+
 
 ;; [{}?, Error?] -> Either<Response[:body nil :status err]|Response[:body val]>
 (defn wrap-response [[val err]]
