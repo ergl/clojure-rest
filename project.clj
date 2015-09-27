@@ -4,7 +4,7 @@
   :license {:name "General Public License - v 3"
             :url "https://www.gnu.org/licenses/gpl-3.0-standalone.html"
             :distribution :repo}
-  :dependencies [[org.clojure/clojure "1.6.0"]
+  :dependencies [[org.clojure/clojure "1.7.0"]
                  [compojure "1.4.0"]
                  [ring/ring-json "0.4.0"]
                  [com.mchange/c3p0 "0.9.5"]
