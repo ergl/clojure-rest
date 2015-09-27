@@ -1,14 +1,15 @@
-(ns clojure-rest.util.utils)
+(ns clojure-rest.util.utils
+  (:require [schema.core :as s]))
 
-;; fn {} -> {}
-;; Applies fn to each value in {}
-(defn fmap [f m]
-  (into {} (for [[k v] m] [k (f v)])))
 
-;; fn {} -> {}
-;; Applies fn to each value in {}, but takes the :key as a parameter too
-(defn fkmap [f m]
-  (into {} (for [[k v] m] [k (f k v)])))
+(defn valid-schema?
+  "Wrap prismatic's schema validate to a boolean because why throw an exception?"
+  [schema instance]
+  (try
+    (do (s/validate schema instance) true)
+    (catch Exception e
+      false)))
+
 
 ;; Turns:
 ;; (-!>> val fn1 fn2 ...)
