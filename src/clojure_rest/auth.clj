@@ -16,10 +16,9 @@
             [defun :refer [defun-]]))
 
 
-;; Either<String|nil>
-;; Gets the secret key from the environment variable secret-key, returns nil if not found
-;; (will throw exception at runtime)
 (def ^:private SECRET-KEY
+  "Gets the secret key from the environment, returns nil if not found
+  (will throw exception at runtime, so don't forget to fill it in"
   (when-let [key (env :secret-key)] key))
 
 
@@ -33,19 +32,11 @@
 
 (defn- generate-session
   "
-  () -> Str
+  Str -> Str -> Str
   Generates a random token with username$timestamp$hmac(sha256, username$timestamp)
   "
   [username date]
   (str username "$" date "$" (sha256-hmac (str username "$" date) SECRET-KEY)))
-
-
-;; {} -> [{}?, Error?]
-;; Checks for the :token field in the given map
-(defn- check-token [params]
-  (if (params :token)
-    [params nil]
-    [nil err-unauthorized]))
 
 
 (defn- token-exists?
@@ -59,8 +50,9 @@
 
 (defn- make-token!
   "
-  UUID -> Str
-  Creates a token and inserts it into the session table, then returns that token
+  Str -> UUID -> Str
+  Given an username and its id, generate an auth token, and insert into
+  the session table. Then, return that token
   "
   [username user-id]
   (try-backoff []
@@ -88,17 +80,23 @@
   {:username Str :password Str} -> Either [:ok {}] | [:err Natural]
   Check if the given user / pass combination is correct
   "
-  [{:keys [username password] :as input}]
+  [{:keys [username password] :as auth-map}]
   (if (users/pass-matches? username password)
-    [:ok input] [:err err-unauthorized]))
+    [:ok auth-map] [:err err-unauthorized]))
 
 
 (defun- bind-validate
-  ([[:ok content]] (validate-auth content))
+  ([[:ok input-map]] (validate-auth input-map))
   ([[:err error]] [:err error]))
 
 
-(defn- token-gen [{:keys [username password]}]
+(defn- token-gen
+  "
+  {:username Str :password Str} -> Either [:ok {:token Str}] | [:err Natural]
+  Given a valid username/password, generate an auth token and return it
+  in a map
+  "
+  [{:keys [username password]}]
   (if-let [{user-id :usersid} (users/get-user-id username)]
     [:ok {:token (make-token! username user-id)}]
     [:err err-not-found]))
@@ -109,61 +107,74 @@
   ([[:err error]] [:err error]))
 
 
-;; String -> Either<{}|nil>
-;; Returns the username associated with the given token if that token is less than 6 hours old
-;; Returns nil otherwise
-(defn- validate-token [token]
-  (sql/with-connection (db/db-connection)
-                       (sql/with-query-results results
-                                               ["select username
-                                                from sessions
-                                                inner join users on (sessions.usersid = users.usersid)
-                                                where token = ?
-                                                and createdAt > timestampadd(minute, -21600, current_timestamp)" token]
-                                               (when-not (empty? results)
-                                                 (first results)))))
+(defn- token->username
+  "
+  Str -> Str?
+  Given a valid auth token, return the username associated with it,
+  if the token is less than 6 hours old.
+  Returns nil otherwise
+  "
+  [token]
+  (let [query "select username from sessions s, users u
+              where s.usersid = u.usersid
+              and token = ?
+              and s.createdAt > timestampadd(minute, -21600, current_timestamp)"]
+    (sql/with-connection (db/db-connection)
+                         (sql/with-query-results results
+                                                 [query token]
+                                                 (when-not (empty? results)
+                                                   (:username (first results)))))))
 
 
 (defn- bind-token-validation
   "
-  {:token str ...} -> [{...}? Error?]
+  {:token Str ...} -> [{...}? Error?]
   Takes a map with a token key and returns one without it
   Adding the issuer key with the appropiate username
   Returns an error if the token is not valid
   "
-  [params]
-  (if-let [{user-id :username} (validate-token (:token params))]
-    [(-> params (dissoc :token) (assoc :author user-id)) nil]
+  [token-map]
+  (if-let [username (token->username (:token token-map))]
+    [(-> token-map (dissoc :token) (assoc :author username)) nil]
     [nil err-unauthorized]))
 
 
 (defn- process-auth
   "
-  Given a correct user/pass combination, return an auth token;
-  return error otherwise
+  {:username Str :password Str} -> Response {:status Either 200 | 403 | 404}
+  Given a correct user/pass combination, return an auth token
+  Return error otherwise
   "
-  [input]
-  (match [(-> [:ok input] bind-validate bind-token-gen)]
+  [auth-map]
+  (match [(-> [:ok auth-map] bind-validate bind-token-gen)]
          [[:ok content]] (response content)
          [[:err error]] (h/empty-response-with-code error)))
 
 
 (defn auth-handler
-  [content]
-  (match [(keywordize-keys content)]
-         [(input :guard valid-auth-schema?)] (process-auth input)
+  "
+  Any -> Response {:status Either 200 | 400 | 403 | 404}
+  If given a user / password combination, validate if the password matches,
+  generate an auth token, and return it.
+  "
+  [request-body]
+  (match [(keywordize-keys request-body)]
+         [(req-map :guard valid-auth-schema?)] (process-auth req-map)
          :else (h/bad-request)))
 
 
-;; {:token? ...} -> [{:issuer ...}?, Error?]
-;; Checks if there is a :token key in the supplied map
-;; If it does, and it is valid, it dissocs said key and assocs the issuer username
-;; If anything goes wrong, returns an error
-(defn auth-adapter [content]
-  (->> content
-       keywordize-keys
-       check-token
-       (bind-error bind-token-validation)))
+(defn auth-adapter
+  "
+  {...} -> [{:issuer ...}? Error?]
+  Given a map, check if it contains a :token key.
+  If it does, and it is valid, dissoc it and assoc the issuer username
+  Return 403 otherwise
+  "
+  [input-map]
+  (let [auth-map (keywordize-keys input-map)]
+    (if (contains? auth-map :token)
+      (bind-token-validation auth-map)
+      [nil err-unauthorized])))
 
 
 (defn- process-delete-token
@@ -181,11 +192,11 @@
 
 (defn delete-token
   "
-  str -> {:token str} -> {:status Either 204 | 403 | 404 }
+  Str -> {:token Str} -> Response {:status Either 204 | 403 | 404 }
   Deletes the given token if it exists and the params supply the same token
   as a parameter
   "
-  [token auth-params]
-  (match [token (keywordize-keys auth-params)]
+  [token request-body]
+  (match [token (keywordize-keys request-body)]
          [(token :guard token-exists?) {:token auth-token}] (process-delete-token token auth-token)
          [_ _] {:status err-not-found}))
