@@ -10,6 +10,7 @@
             [clojure-rest.util.http :as h]
             [clojure-rest.util.error :refer :all]
             [clojure-rest.util.utils :refer :all]
+            [clojure.walk :refer [keywordize-keys]]
             [schema.core :as s]
             [clojure.core.match :refer [match]]
             [defun :refer [defun-]]))
@@ -123,15 +124,17 @@
                                                  (first results)))))
 
 
-;; {} -> [{}?, Error?]
-;; Takes a map with a token key and returns one without it
-;; Adding the issuer key with the appropiate username
-;; Returns an error if (params :token) is not valid
-(defn- bind-token-validation [params]
-  (let [user-id (:username (validate-token (params :token)))]
-    (if (nil? user-id)
-      [nil err-unauthorized]
-      [(-> params (dissoc :token) (assoc :author user-id)) nil])))
+(defn- bind-token-validation
+  "
+  {:token str ...} -> [{...}? Error?]
+  Takes a map with a token key and returns one without it
+  Adding the issuer key with the appropiate username
+  Returns an error if the token is not valid
+  "
+  [params]
+  (if-let [{user-id :username} (validate-token (:token params))]
+    [(-> params (dissoc :token) (assoc :author user-id)) nil]
+    [nil err-unauthorized]))
 
 
 (defn- process-auth
@@ -147,7 +150,7 @@
 
 (defn auth-handler
   [content]
-  (match [(clojure.walk/keywordize-keys content)]
+  (match [(keywordize-keys content)]
          [(input :guard valid-auth-schema?)] (process-auth input)
          :else (h/bad-request)))
 
@@ -158,20 +161,31 @@
 ;; If anything goes wrong, returns an error
 (defn auth-adapter [content]
   (->> content
-       clojure.walk/keywordize-keys
+       keywordize-keys
        check-token
        (bind-error bind-token-validation)))
 
 
-;; String, {} -> Response[:status Either<204|403|404>]
-;; Deletes the given token if it exists and the params supply the same token as a parameter
-(defn delete-token [token params]
-  (if (token-exists? token)
-    (->> params
-         clojure.walk/keywordize-keys
-         check-token
-         (bind-error (fn [v] (if (= token (v :token)) [v nil] [nil err-forbidden])))
-         (bind-error (fn [v] (do (revoke-token! (v :token)) [(v :token) nil])))
-         (bind-error (fn [_] [nil status-deleted]))
-         h/wrap-response)
-    {:status err-not-found}))
+(defn- process-delete-token
+  "
+  Given two tokens, if they are equal, delete one of them from the database;
+  return 403 forbidden otherwise
+  "
+  [input-token auth-token]
+  (if-not (= input-token auth-token)
+    (h/forbidden)
+    (do
+      (revoke-token! auth-token)
+      (h/deleted))))
+
+
+(defn delete-token
+  "
+  str -> {:token str} -> {:status Either 204 | 403 | 404 }
+  Deletes the given token if it exists and the params supply the same token
+  as a parameter
+  "
+  [token auth-params]
+  (match [token (keywordize-keys auth-params)]
+         [(token :guard token-exists?) {:token auth-token}] (process-delete-token token auth-token)
+         [_ _] {:status err-not-found}))

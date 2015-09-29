@@ -28,10 +28,9 @@
   (-> (options allowed)
       (status err-not-allowed)))
 
-
-;; () -> Response[:body nil :status 501]
-(defn not-implemented []
-  (empty-response-with-code err-not-implemented))
+;; () -> Response[:body nil :status 204]
+(defn deleted []
+  (empty-response-with-code status-deleted))
 
 
 ;; () -> Response[:body nil :status 400]
@@ -47,6 +46,11 @@
 ;; () -> Response[:body nil :status 403]
 (defn forbidden []
   (empty-response-with-code err-forbidden))
+
+
+;; () -> Response[:body nil :status 501]
+(defn not-implemented []
+  (empty-response-with-code err-not-implemented))
 
 
 ;; [{}?, Error?] -> Either<Response[:body nil :status err]|Response[:body val]>
