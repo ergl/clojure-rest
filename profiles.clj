@@ -1,4 +1,4 @@
-{:dev {:dependencies [[ring/ring-mock "0.2.0"]]
+{:dev {:dependencies [[ring/ring-mock "0.3.0"]]
        :env {:secret-key "your-secret-key"
              :h2-user "your-db-user"
              :h2-password "your-db-pass"
