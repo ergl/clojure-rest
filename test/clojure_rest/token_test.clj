@@ -33,21 +33,21 @@
         (is (= (response :status) 404))))
     
     (testing "trying to revoke a different token from our own should return 403"
-      (let [response (app (-> (mock/request :delete (str "/api/auth/" token-value)
-                                            (generate-string {:token "bogustoken"}))
+      (let [response (app (-> (mock/request :delete (str "/api/auth/" token-value))
+                              (mock/body (generate-string {:token "bogustoken"}))
                               (mock/content-type "application/json")))]
         (is (= (response :status) 403))))
     
     (testing "deleting a valid token should return 204"
-      (let [response (app (-> (mock/request :delete (str "/api/auth/" token-value)
-                                            (generate-string {:token token-value}))
+      (let [response (app (-> (mock/request :delete (str "/api/auth/" token-value))
+                              (mock/body (generate-string {:token token-value}))
                               (mock/content-type "application/json")))]
         (is (= (response :status) 204))))
     
     (testing "deleting an user deletes all his auth tokens"
       (let [delete-response (app (mock/request :delete "/api/users/xyzz"))
-            response (app (-> (mock/request :delete (str "/api/auth/" alt-token-value)
-                                            (generate-string {:token alt-token-value}))
+            response (app (-> (mock/request :delete (str "/api/auth/" alt-token-value))
+                              (mock/body (generate-string {:token alt-token-value}))
                               (mock/content-type "application/json")))]
         (is (= (delete-response :status) 204))
         (is (= (response :status) 404))))))

@@ -29,7 +29,7 @@
                  [org.clojure/java.jdbc "0.2.3"] ; TODO: Upgrade to new syntax
 
                  ; HMAC, hashing and encription
-                 [buddy "0.7.1"]
+                 [buddy "0.7.2"]
                  [pandect "0.5.4"]
                  [buddy/buddy-hashers "0.7.0"]
 
@@ -42,7 +42,7 @@
          :auto-reload? true
          :auto-refresh? false}
   :profiles
-  {:dev {:dependencies [[ring/ring-mock "0.2.0"]]}}
+  {:dev {:dependencies [[ring/ring-mock "0.3.0"]]}}
   :main clojure-rest.app)
 
 ;; documentation may be found here
