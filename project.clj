@@ -11,7 +11,7 @@
                  [defun "0.2.0"]
 
                  ; annotations
-                 [prismatic/schema "1.0.1"]
+                 [prismatic/schema "1.0.4"]
 
                  ; routes, responses and web server
                  [compojure "1.4.0"]
@@ -22,16 +22,15 @@
                  [cheshire "5.5.0"]
 
                  ; thread pooling
-                 [com.mchange/c3p0 "0.9.5"]
+                 [com.mchange/c3p0 "0.9.5.2"]
 
                  ; database and sql
-                 [com.h2database/h2 "1.4.189"]
+                 [com.h2database/h2 "1.4.190"]
                  [org.clojure/java.jdbc "0.2.3"] ; TODO: Upgrade to new syntax
 
-                 ; HMAC, hashing and encription
-                 [buddy "0.7.2"]
+                 ; HMAC, hashing and encryption
                  [pandect "0.5.4"]
-                 [buddy/buddy-hashers "0.7.0"]
+                 [buddy/buddy-hashers "0.8.0"]
 
                  ; environment variables
                  [environ "1.0.1"]]
